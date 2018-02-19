@@ -4,7 +4,7 @@ import { AutocompleteMultiSelectComponent } from './components/autocomplete-mult
 import { BrowserModule } from '@angular/platform-browser';
 import { ClickOutsideDirective } from './directives/click-outside.directive';
 import { fakeBackendProvider } from '../helpers/fake.backend';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './components/login/login.component';
 import { ModuleWithProviders, NgModule } from '@angular/core';
@@ -46,8 +46,9 @@ const ROUTING: ModuleWithProviders = RouterModule.forRoot([
     BrowserModule,
     FormsModule,
     HttpClientModule,
-    UserModule,
-    ROUTING
+    ReactiveFormsModule,
+    ROUTING,
+    UserModule
   ],
   providers: [
     AuthenticationGuard,
