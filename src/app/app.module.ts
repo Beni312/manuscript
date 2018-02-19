@@ -1,6 +1,8 @@
-import { AuthenticationGuard } from './guards/authentication.guard';
 import { AppComponent } from './app.component';
+import { AuthenticationGuard } from './guards/authentication.guard';
+import { AutocompleteMultiSelectComponent } from './components/autocomplete-multi-select/autocomplete-multi-select.component';
 import { BrowserModule } from '@angular/platform-browser';
+import { ClickOutsideDirective } from './directives/click-outside.directive';
 import { fakeBackendProvider } from '../helpers/fake.backend';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -10,7 +12,6 @@ import { PreloadAllModules, RouterModule } from '@angular/router';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { UserModule } from './modules/user/user.module';
 import { UserService } from './services/user.service';
-import { AutocompleteMultiSelectComponent } from './components/autocomplete-multi-select/autocomplete-multi-select.component';
 
 const ROUTING: ModuleWithProviders = RouterModule.forRoot([
     {
@@ -36,9 +37,10 @@ const ROUTING: ModuleWithProviders = RouterModule.forRoot([
 @NgModule({
   declarations: [
     AppComponent,
+    AutocompleteMultiSelectComponent,
+    ClickOutsideDirective,
     LoginComponent,
-    RegistrationComponent,
-    AutocompleteMultiSelectComponent
+    RegistrationComponent
   ],
   imports: [
     BrowserModule,
