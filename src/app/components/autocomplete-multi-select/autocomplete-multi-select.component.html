@@ -2,7 +2,7 @@
   <div class="left">
     <div dropdown-click (clickOutside)="closeDropdown()" (clickInside)="openDropDown()">
       <div class="btn-group">
-        <input #inp id="query" type="search" placeholder="{{ placeholder }}" class="form-control select" [(ngModel)]=query (keyup)=filter() autocomplete="off">
+        <input #inp id="query" type="search" placeholder="{{ placeholder }}" class="form-control select" [(ngModel)]="query" (keyup)=filter() autocomplete="off">
         <span *ngIf="query && query.length > 0" (click)="clearSearch()" id="search-clear" class="glyphicon glyphicon-remove"></span>
       </div>
     </div>
