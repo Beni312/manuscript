@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Preload } from '../models/preload';
 import { Router } from '@angular/router';
-import { Preload } from './preload.service';
 
 @Injectable()
 export class UserService {
@@ -13,31 +13,33 @@ export class UserService {
     return this.httpClient.post('/j_spring_security_check', {username: username, password: password})
       .subscribe((response: any) => {
         if (response.success) {
-          this.loadUserInfoFromServer();
+          this.preload();
         } else {
           this.router.navigate(['login']);
         }
       });
   }
 
-  loadUserInfoFromServer(): Promise<Preload> {
+  private preload(): Promise<Preload> {
     return this.httpClient.post<Preload>('/application/preload', {})
       .toPromise()
       .then(resp => {
-        console.log('Set currentUser: ' , resp);
         localStorage.setItem('currentUser', JSON.stringify(resp));
         this.router.navigate(['']);
         return resp;
       })
       .catch((error) => {
-        console.log('unsuccessful preload: ', error);
+        console.log(error);
         localStorage.removeItem('currentUser');
         return null;
       });
   }
 
-  static getUserInfo(): Preload {
-    console.log('getUserInfo: ', localStorage.getItem('currentUser'));
+  static getPreload(): Preload {
     return JSON.parse(localStorage.getItem('currentUser'));
+  }
+
+  static isLogined(): boolean {
+    return localStorage.getItem('currentUser') != null;
   }
 }

@@ -8,6 +8,7 @@ import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/materialize';
 import 'rxjs/add/operator/dematerialize';
 import { usersData } from './users';
+import { User } from '../app/models/user';
 
 @Injectable()
 export class FakeBackendInterceptor implements HttpInterceptor {
@@ -56,20 +57,20 @@ export class FakeBackendInterceptor implements HttpInterceptor {
 
       if (request.url.endsWith('/application/preload') && request.method === 'POST') {
         let currentUser =localStorage.getItem('fakeBackendCurrentUser');
-        console.log('fake backend preloading, currentUser:', currentUser);
         if (currentUser) {
           let user = this.users.filter(user => {
             if (user.username == currentUser) {
               return user;
             }
-          });
+          })[0];
+
           return Observable.of(
             new HttpResponse(
               {
                 status: 200,
                 body: {
-                  username: user[0].username,
-                  role: user[0].role
+                  user: new User(user.title, user.firstName, user.lastName, user.username, user.role, user.job, user.email),
+                  academicDisciplines: user.academicDisciplines
                 }
               }
             )

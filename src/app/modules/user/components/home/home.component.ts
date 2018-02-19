@@ -13,7 +13,7 @@ export class HomeComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.username = UserService.getUserInfo().username;
+    this.username = UserService.getPreload().user.username;
   }
 
 }

@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateChild, Router, RouterStateSnapshot } from '@angular/router';
+import { Injectable } from '@angular/core';
 import { UserService } from '../services/user.service';
 
 @Injectable()
@@ -9,16 +9,14 @@ export class RoleGuard implements CanActivateChild {
   }
 
   canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    console.log('role guard starting...');
-    let preload = UserService.getUserInfo();
-    console.log('Preload: ', preload);
+    let preload = UserService.getPreload();
 
     if (!preload) {
       this.router.navigate(['login']);
       return false;
     }
 
-    if (childRoute.data.expectedRoles.includes(preload.role)) {
+    if (childRoute.data.expectedRoles.includes(preload.user.role)) {
       return true;
     }
 
