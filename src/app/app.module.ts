@@ -10,6 +10,7 @@ import { PreloadAllModules, RouterModule } from '@angular/router';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { UserModule } from './modules/user/user.module';
 import { UserService } from './services/user.service';
+import { AutocompleteMultiSelectComponent } from './components/autocomplete-multi-select/autocomplete-multi-select.component';
 
 const ROUTING: ModuleWithProviders = RouterModule.forRoot([
     {
@@ -36,7 +37,8 @@ const ROUTING: ModuleWithProviders = RouterModule.forRoot([
   declarations: [
     AppComponent,
     LoginComponent,
-    RegistrationComponent
+    RegistrationComponent,
+    AutocompleteMultiSelectComponent
   ],
   imports: [
     BrowserModule,
