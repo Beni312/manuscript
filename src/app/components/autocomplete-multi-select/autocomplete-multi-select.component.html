@@ -13,7 +13,7 @@
     </ul>
   </div>
   <div style="float:right;" class="selected form-control">
-    <div *ngFor="let item of selected">
+    <div *ngFor="let item of selected" class="item">
       <div>
         <a (click)="remove(item)"><i class="material-icons">delete</i></a>
         <span>{{ item[property] }}</span>

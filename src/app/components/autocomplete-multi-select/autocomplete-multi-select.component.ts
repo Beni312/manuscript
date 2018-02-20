@@ -1,32 +1,39 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, forwardRef, Input, OnChanges, ViewChild } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'app-autocomplete-multi-select',
   templateUrl: './autocomplete-multi-select.component.html',
-  styleUrls: ['./autocomplete-multi-select.component.scss']
+  styleUrls: ['./autocomplete-multi-select.component.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => AutocompleteMultiSelectComponent),
+      multi: true
+    }
+  ]
 })
-export class AutocompleteMultiSelectComponent {
+export class AutocompleteMultiSelectComponent implements ControlValueAccessor, OnChanges {
 
-  public query = '';
+  query = '';
+  filteredList = [];
+  showDropdown = false;
 
-  public filteredList = [];
-  public selected: any = [];
-  public elementRef;
-  public showDropdown = false;
+  @Input('selected')
+  selected: any[] = [];
   @Input()
-  public items: any[];
+  items: any[];
   @Input()
-  public property;
+  property;
   @Input()
-  public placeholder: string;
-  @Output()
-  public update = new EventEmitter<any>();
+  placeholder: string;
 
   @ViewChild('inp')
   input: ElementRef;
 
-  constructor(private myElement: ElementRef) {
-    this.elementRef = myElement;
+  propagateChange:any = () => {};
+
+  constructor() {
   }
 
   clearSearch() {
@@ -51,7 +58,6 @@ export class AutocompleteMultiSelectComponent {
     this.selected.push(item);
     this.query = '';
     this.filteredList = [];
-    this.update.emit(this.selected);
     this.input.nativeElement.focus();
   }
 
@@ -67,4 +73,20 @@ export class AutocompleteMultiSelectComponent {
     this.showDropdown = true;
   }
 
+  writeValue(obj: any): void {
+    if (obj){
+      this.select(obj);
+    }
+  }
+
+  registerOnChange(fn: any): void {
+    this.propagateChange = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+  }
+
+  ngOnChanges(): void {
+    this.propagateChange(this.selected);
+  }
 }
