@@ -17,7 +17,7 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
         path: 'home',
         component: HomeComponent,
         data: {
-          expectedRoles: ['ADMIN', 'REVIEWER', 'EDITOR']
+          expectedRoles: ['ADMIN', 'REVIEWER', 'EDITOR', 'USER']
         }
       },
       {path: '', pathMatch: 'full', redirectTo: 'home'}
