@@ -1,15 +1,103 @@
+import { AcademicDiscipline } from '../../models/academic.discipline';
+import { BasicResponse } from '../../models/basic.response';
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { RegistrationService } from '../../services/registration.service';
+
+export class UserRegistration {
+  user: User;
+  password: Password;
+  academicDisciplines: AcademicDiscipline[];
+}
+
+export class User {
+  title: string;
+  firstName: string;
+  lastName: string;
+  job: string;
+  email: string;
+  username: string;
+}
+
+export class Password {
+  password: string;
+  passwordAgain: string;
+}
 
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
-  styleUrls: ['./registration.component.scss']
+  styleUrls: ['./registration.component.scss'],
+  providers: [RegistrationService]
 })
 export class RegistrationComponent implements OnInit {
 
-  constructor() { }
+  userRegistration: UserRegistration;
+  academicDisciplines: AcademicDiscipline[];
+  selected: AcademicDiscipline[] = [];
+  registrationForm: FormGroup;
+  result: BasicResponse;
 
-  ngOnInit() {
+  constructor(private service: RegistrationService,
+              private fb: FormBuilder) {
   }
 
+  ngOnInit() {
+    this.result = new BasicResponse();
+    this.registrationForm = this.fb.group({
+      user: this.fb.group({
+        title: new FormControl('', {
+          validators: [Validators.required]
+        }),
+        firstName: new FormControl('', {
+          validators: [Validators.required]
+        }),
+        lastName: new FormControl('', {
+          validators: [Validators.required]
+        }),
+        job: new FormControl('', {
+          validators: [Validators.required]
+        }),
+        email: new FormControl('', {
+          validators: [Validators.required, Validators.email]
+        }),
+        username: new FormControl('', {
+          validators: [Validators.required]
+        })
+      }),
+      password: this.fb.group({
+        password: new FormControl('', {
+          validators: [Validators.required]
+        }),
+        passwordAgain: new FormControl('', {
+          validators: [Validators.required]
+        })
+      }),
+      academicDisciplines: this.selected
+    });
+
+    this.service.preload().subscribe(
+      data => {
+        this.academicDisciplines = data.sort((a, b) => {
+          if (a.academicDisciplineName < b.academicDisciplineName) {
+            return -1;
+          } else if (a.academicDisciplineName > b.academicDisciplineName) {
+            return 1;
+          }
+          return 0;
+        });
+      },
+      err => console.log(err)
+    );
+  }
+
+  register() {
+    this.userRegistration = this.registrationForm.value;
+    this.service.register(this.userRegistration).subscribe(result => {
+        this.result = result;
+      }, error => {
+        this.result = error;
+      }
+    );
+  }
 }

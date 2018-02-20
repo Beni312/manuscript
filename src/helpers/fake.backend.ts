@@ -9,11 +9,13 @@ import 'rxjs/add/operator/materialize';
 import 'rxjs/add/operator/dematerialize';
 import { usersData } from './users';
 import { User } from '../app/models/user';
+import { academicDisciplineData } from './academic.disciplines';
 
 @Injectable()
 export class FakeBackendInterceptor implements HttpInterceptor {
 
   private users: any[] = usersData;
+  private academicDisciplines: any[] = academicDisciplineData;
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return Observable.of(null).mergeMap(() => {
@@ -56,7 +58,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
       }
 
       if (request.url.endsWith('/application/preload') && request.method === 'POST') {
-        let currentUser =localStorage.getItem('fakeBackendCurrentUser');
+        let currentUser = localStorage.getItem('fakeBackendCurrentUser');
         if (currentUser) {
           let user = this.users.filter(user => {
             if (user.username == currentUser) {
@@ -89,6 +91,77 @@ export class FakeBackendInterceptor implements HttpInterceptor {
           );
         }
       }
+      if (request.url.endsWith('/registration/preload') && request.method === 'POST') {
+        return Observable.of(
+          new HttpResponse(
+            {
+              status: 200,
+              body: this.academicDisciplines
+            }
+          )
+        );
+      }
+
+      if (request.url.endsWith('/registration/create') && request.method === 'POST') {
+        const params = request.body;
+        let usernameUsed = false;
+        this.users.forEach(item => {
+          if (item.username === params.user.username) {
+            usernameUsed = true;
+          }
+        });
+
+        if (usernameUsed){
+          return Observable.of(
+            new HttpResponse(
+              {
+                status: 403,
+                body: {
+                  errors: null,
+                  exceptionMessage: 'Username is already used!'
+                }
+              }
+            )
+          );
+        }
+        if (params.password.password !== params.password.passwordAgain) {
+          return Observable.of(
+            new HttpResponse(
+              {
+                status: 403,
+                body: {
+                  errors: null,
+                  exceptionMessage: 'Password parity check failed. The given passwords are not matched.'
+                }
+              }
+            )
+          );
+        }
+
+        this.users.push({
+          'username': params.user.username,
+          'password': params.password.password,
+          'role': 'user',
+          'title': params.user.title,
+          'firstName': params.user.firstName,
+          'lastName': params.user.lastName,
+          'job': params.user.job,
+          'email': params.user.email,
+          'academicDisciplines': params.academicDisciplines
+        });
+        return Observable.of(
+          new HttpResponse(
+            {
+              status: 200,
+              body: {
+                success: true,
+                successMessage: 'User created'
+              }
+            }
+          )
+        );
+      }
+
       return next.handle(request);
     })
       .materialize()
