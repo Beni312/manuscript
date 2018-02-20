@@ -1,0 +1,25 @@
+.sidenav-area {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  mat-toolbar {
+    z-index: 999;
+  }
+
+  .sidenav-container {
+    flex: 1;
+  }
+
+  .sidenav-content {
+    padding: 40px 50px 50px 50px;
+  }
+}
+
+.menuItems {
+  min-width: 185px;
+}

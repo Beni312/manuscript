@@ -6,6 +6,8 @@ import { RouterModule } from '@angular/router';
 import { RoleGuard } from '../../guards/role.guard';
 import { UserComponent } from './user.component';
 import { UserService } from '../../services/user.service';
+import { MaterialModule } from '../material/material.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
   {
@@ -28,7 +30,9 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
 @NgModule({
   imports: [
     CommonModule,
+    BrowserAnimationsModule,
     HttpClientModule,
+    MaterialModule,
     SecureRoutes
   ],
   declarations: [

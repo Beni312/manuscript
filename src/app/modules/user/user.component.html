@@ -1,1 +1,19 @@
-<router-outlet></router-outlet>
+<div class="sidenav-area">
+  <mat-toolbar color="primary">
+    <button mat-icon-button (click)="snav.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+  </mat-toolbar>
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav #snav [mode]="'side'" [fixedInViewport]="true" [fixedTopGap]="64">
+      <mat-nav-list class="menuItems">
+        <a mat-list-item routerLink="/home" >Home</a>
+      </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <div class="sidenav-content">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
