@@ -7,7 +7,7 @@
   <mat-sidenav-container class="sidenav-container">
     <mat-sidenav #snav [mode]="'side'" [fixedInViewport]="true" [fixedTopGap]="64">
       <mat-nav-list class="menuItems">
-        <a mat-list-item routerLink="/home" >Home</a>
+        <a mat-list-item *ngFor="let menuItem of menuItems" routerLink="{{ '/' + menuItem.path }}" >{{ menuItem.label }}</a>
       </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content>

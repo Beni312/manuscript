@@ -21,21 +21,24 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
         path: 'home',
         component: HomeComponent,
         data: {
-          expectedRoles: ['ADMIN', 'REVIEWER', 'EDITOR', 'AUTHOR']
+          expectedRoles: ['ADMIN', 'REVIEWER', 'EDITOR', 'AUTHOR'],
+          label: 'Home'
         }
       },
       {
         path: 'profile',
         component: ProfileComponent,
         data: {
-          expectedRoles: ['ADMIN', 'REVIEWER', 'EDITOR', 'AUTHOR']
+          expectedRoles: ['ADMIN', 'REVIEWER', 'EDITOR', 'AUTHOR'],
+          label: 'Profile'
         }
       },
       {
         path: 'submission',
         component: SubmissionComponent,
         data: {
-          expectedRoles: ['ADMIN', 'REVIEWER', 'EDITOR', 'AUTHOR']
+          expectedRoles: ['ADMIN', 'REVIEWER', 'EDITOR', 'AUTHOR'],
+          label: 'Submission'
         }
       },
       {path: '', pathMatch: 'full', redirectTo: 'home'}
