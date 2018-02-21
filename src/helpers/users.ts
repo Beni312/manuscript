@@ -21,8 +21,9 @@ export let usersData = [
 
   },
   {
-    username: 'user',
-    password: 'user',
+    username: 'author',
+    password: 'author',
+    role: 'author',
     title: 'Mr',
     firstName: '',
     lastName: '',
@@ -41,8 +42,9 @@ export let usersData = [
 
   },
   {
-    username: 'valami',
-    password: 'pass',
+    username: 'reviewer',
+    password: 'reviewer',
+    role: 'reviewer',
     title: '',
     firstName: '',
     lastName: '',

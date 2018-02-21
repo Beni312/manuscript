@@ -8,6 +8,8 @@ import { UserComponent } from './user.component';
 import { UserService } from '../../services/user.service';
 import { MaterialModule } from '../material/material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ProfileComponent } from './components/profile/profile.component';
+import { SubmissionComponent } from './components/submission/submission.component';
 
 const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
   {
@@ -19,7 +21,21 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
         path: 'home',
         component: HomeComponent,
         data: {
-          expectedRoles: ['ADMIN', 'REVIEWER', 'EDITOR', 'USER']
+          expectedRoles: ['ADMIN', 'REVIEWER', 'EDITOR', 'AUTHOR']
+        }
+      },
+      {
+        path: 'profile',
+        component: ProfileComponent,
+        data: {
+          expectedRoles: ['ADMIN', 'REVIEWER', 'EDITOR', 'AUTHOR']
+        }
+      },
+      {
+        path: 'submission',
+        component: SubmissionComponent,
+        data: {
+          expectedRoles: ['ADMIN', 'REVIEWER', 'EDITOR', 'AUTHOR']
         }
       },
       {path: '', pathMatch: 'full', redirectTo: 'home'}
@@ -37,7 +53,9 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
   ],
   declarations: [
     UserComponent,
-    HomeComponent
+    HomeComponent,
+    ProfileComponent,
+    SubmissionComponent
   ],
   providers: [
     RoleGuard,
