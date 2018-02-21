@@ -71,8 +71,9 @@ export class FakeBackendInterceptor implements HttpInterceptor {
               {
                 status: 200,
                 body: {
-                  user: new User(user.title, user.firstName, user.lastName, user.username, user.role, user.job, user.email),
-                  academicDisciplines: user.academicDisciplines
+                  user: new User(user.title, user.firstName, user.lastName, user.username, user.job, user.email),
+                  academicDisciplines: user.academicDisciplines,
+                  role: user.role
                 }
               }
             )

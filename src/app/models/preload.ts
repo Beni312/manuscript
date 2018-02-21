@@ -4,6 +4,7 @@ import { User } from './user';
 export class Preload {
   user: User;
   academicDisciplines: AcademicDiscipline[];
+  role: string;
 
   constructor(user: User, academicDisciplines: AcademicDiscipline[]) {
     this.user = user;

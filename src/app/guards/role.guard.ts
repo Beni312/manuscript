@@ -16,7 +16,7 @@ export class RoleGuard implements CanActivateChild {
       return false;
     }
 
-    if (childRoute.data.expectedRoles.includes(preload.user.role.toUpperCase())) {
+    if (childRoute.data.expectedRoles.includes(preload.role.toUpperCase())) {
       return true;
     }
 
