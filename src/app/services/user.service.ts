@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Preload } from '../models/preload';
 import { Router } from '@angular/router';
@@ -10,8 +10,11 @@ export class UserService {
   }
 
   login(username: string, password: string) {
-    return this.httpClient.post('/j_spring_security_check', {username: username, password: password})
-      .subscribe((response: any) => {
+    return this.httpClient.post(
+      '/j_spring_security_check',
+      {username: username, password: password},
+      {headers: new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'})}
+    ).subscribe((response: any) => {
         if (response.success) {
           this.preload();
         } else {
