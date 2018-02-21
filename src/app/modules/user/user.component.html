@@ -3,6 +3,10 @@
     <button mat-icon-button (click)="snav.toggle()">
       <mat-icon>menu</mat-icon>
     </button>
+    <span class="fill-space"></span>
+    <button mat-icon-button id="logout-button" (click)="logout()">
+      <mat-icon>exit_to_app</mat-icon>
+    </button>
   </mat-toolbar>
   <mat-sidenav-container class="sidenav-container">
     <mat-sidenav #snav [mode]="'side'" [fixedInViewport]="true" [fixedTopGap]="64">

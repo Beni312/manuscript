@@ -42,4 +42,12 @@ export class UserService {
   static isLogined(): boolean {
     return localStorage.getItem('currentUser') != null;
   }
+
+  logout() {
+    localStorage.removeItem('currentUser');
+    this.httpClient.post('/logout', {}).subscribe(() => {
+      this.router.navigate(['login']);
+    });
+  }
+
 }

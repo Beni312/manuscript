@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuService } from '../../services/menu.service';
 import { SidebarItemDefinition } from '../../models/sidebar.item.definition';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-user',
@@ -12,10 +13,14 @@ export class UserComponent implements OnInit {
 
   public menuItems: SidebarItemDefinition[] = [];
 
-  constructor(private menuService: MenuService) {
+  constructor(private menuService: MenuService, private userService: UserService) {
   }
 
   ngOnInit(): void {
     this.menuItems = this.menuService.getSidebarItemsDefinitions();
+  }
+
+  logout() {
+    this.userService.logout();
   }
 }

@@ -163,6 +163,20 @@ export class FakeBackendInterceptor implements HttpInterceptor {
         );
       }
 
+      if (request.url.endsWith('/logout') && request.method === 'POST') {
+        localStorage.removeItem('fakeBackendCurrentUser');
+        return Observable.of(
+          new HttpResponse(
+            {
+              status: 200,
+              body: {
+                success: true
+              }
+            }
+          )
+        );
+      }
+
       return next.handle(request);
     })
       .materialize()
