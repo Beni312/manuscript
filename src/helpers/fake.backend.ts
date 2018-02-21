@@ -8,7 +8,6 @@ import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/materialize';
 import 'rxjs/add/operator/dematerialize';
 import { usersData } from './users';
-import { User } from '../app/models/user';
 import { academicDisciplineData } from './academic.disciplines';
 
 @Injectable()
@@ -71,8 +70,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
               {
                 status: 200,
                 body: {
-                  user: new User(user.title, user.firstName, user.lastName, user.username, user.job, user.email),
-                  academicDisciplines: user.academicDisciplines,
+                  username: user.username,
                   role: user.role
                 }
               }
