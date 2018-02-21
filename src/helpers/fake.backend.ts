@@ -9,6 +9,8 @@ import 'rxjs/add/operator/materialize';
 import 'rxjs/add/operator/dematerialize';
 import { usersData } from './users';
 import { academicDisciplineData } from './academic.disciplines';
+import { User } from '../app/models/user';
+import { BasicResponse } from '../app/models/basic.response';
 
 @Injectable()
 export class FakeBackendInterceptor implements HttpInterceptor {
@@ -42,17 +44,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
             )
           );
         } else {
-          return Observable.of(
-            new HttpResponse(
-              {
-                status: 403,
-                body: {
-                  success: false,
-                  errorMessage: 'Wrong username or password. Please try again.(login)'
-                }
-              }
-            )
-          );
+          return this.getBasicResponse('Wrong username or password. Please try again.(login)', null);
         }
       }
 
@@ -72,18 +64,6 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                 body: {
                   username: user.username,
                   role: user.role
-                }
-              }
-            )
-          );
-        } else {
-          return Observable.of(
-            new HttpResponse(
-              {
-                status: 403,
-                body: {
-                  success: false,
-                  errorMessage: 'Wrong username or password. Please try again.(preload)'
                 }
               }
             )
@@ -111,30 +91,11 @@ export class FakeBackendInterceptor implements HttpInterceptor {
         });
 
         if (usernameUsed){
-          return Observable.of(
-            new HttpResponse(
-              {
-                status: 403,
-                body: {
-                  errors: null,
-                  exceptionMessage: 'Username is already used!'
-                }
-              }
-            )
-          );
+          return this.getBasicResponse('Username is already used!', null);
         }
+
         if (params.password.password !== params.password.passwordAgain) {
-          return Observable.of(
-            new HttpResponse(
-              {
-                status: 403,
-                body: {
-                  errors: null,
-                  exceptionMessage: 'Password parity check failed. The given passwords are not matched.'
-                }
-              }
-            )
-          );
+          return this.getBasicResponse('Password parity check failed. The given passwords are not matched.', null);
         }
 
         this.users.push({
@@ -148,38 +109,98 @@ export class FakeBackendInterceptor implements HttpInterceptor {
           'email': params.user.email,
           'academicDisciplines': params.academicDisciplines
         });
-        return Observable.of(
-          new HttpResponse(
-            {
-              status: 200,
-              body: {
-                success: true,
-                successMessage: 'User created'
-              }
-            }
-          )
-        );
+        return this.getBasicResponse(null, 'User created');
       }
 
       if (request.url.endsWith('/logout') && request.method === 'POST') {
         localStorage.removeItem('fakeBackendCurrentUser');
-        return Observable.of(
-          new HttpResponse(
-            {
-              status: 200,
-              body: {
-                success: true
-              }
-            }
-          )
-        );
+        return this.getBasicResponse(null, 'You are successfully logged out');
       }
+
+      if (request.url.endsWith('/personaldatasettings/preload') && request.method === 'POST') {
+        let currentUser = localStorage.getItem('fakeBackendCurrentUser');
+        if (currentUser) {
+          let user = this.users.filter(user => {
+            if (user.username == currentUser) {
+              return user;
+            }
+          })[0];
+          return Observable.of(
+            new HttpResponse(
+              {
+                status: 200,
+                body: {
+                  exceptionMessage: null,
+                  successMessage: null,
+                  user: new User(user.title, user.firstName, user.lastName, user.username, user.job, user.email),
+                  academicDisciplines: user.academicDisciplines
+                }
+              }
+            )
+          );
+        }
+      }
+
+      if (request.url.endsWith('/personaldatasettings/savepersonaldata') && request.method === 'POST') {
+        let currentUser = localStorage.getItem('fakeBackendCurrentUser');
+        if (currentUser) {
+          let params = request.body;
+          let user = this.users.filter(user => {
+            if (user.username == currentUser) {
+              return user;
+            }
+          })[0];
+          user.title = params.title;
+          user.firstName = params.firstName;
+          user.lastName = params.lastName;
+          user.job = params.job;
+          user.email = params.email;
+          return this.getBasicResponse(null, 'Your personal data has been updated successfully!');
+        }
+      }
+
+      if (request.url.endsWith('/personaldatasettings/changepassword') && request.method === 'POST') {
+        let currentUser = localStorage.getItem('fakeBackendCurrentUser');
+        if (currentUser) {
+          let params = request.body;
+          let user = this.users.filter(user => {
+            if (user.username == currentUser) {
+              return user;
+            }
+          })[0];
+
+          if (params.password.password != params.password.passwordAgain) {
+            return this.getBasicResponse('The given passwords are not matched!', null);
+          }
+          if (params.password.password != user.password) {
+            return this.getBasicResponse('Your password is wrong...', null);
+          }
+          user.password = params.password.password;
+          return this.getBasicResponse(null, 'Your password has changed successfully!');
+        }
+      }
+
+
 
       return next.handle(request);
     })
       .materialize()
       .delay(500)
       .dematerialize();
+  }
+
+  getBasicResponse(exceptionMessage: string, successMessage: string): Observable<HttpResponse<BasicResponse>> {
+    return Observable.of(
+      new HttpResponse(
+        {
+          status: 200,
+          body: {
+            exceptionMessage: exceptionMessage,
+            successMessage: successMessage
+          }
+        }
+      )
+    );
   }
 }
 
