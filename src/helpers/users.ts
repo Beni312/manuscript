@@ -4,10 +4,10 @@ export let usersData = [
     password: 'admin',
     role: 'ADMIN',
     title: 'Dr',
-    firstName: '',
-    lastName: '',
-    job: '',
-    email: '',
+    firstName: 'admin',
+    lastName: 'admin',
+    job: 'admin',
+    email: 'admin@gmail.com',
     academicDisciplines: [
       {
         academicDisciplinesId: '01',
