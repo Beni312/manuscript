@@ -10,6 +10,7 @@ import { ProfileService } from '../../services/profile.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { RoleGuard } from '../../guards/role.guard';
+import { SharedModule } from '../shared/shared.module';
 import { SubmissionComponent } from './components/submission/submission.component';
 import { UserComponent } from './user.component';
 import { UserService } from '../../services/user.service';
@@ -59,6 +60,7 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
     ReactiveFormsModule,
     HttpClientModule,
     MaterialModule,
+    SharedModule,
     SecureRoutes
   ],
   declarations: [

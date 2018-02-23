@@ -31,7 +31,7 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
   @ViewChild('inp')
   input: ElementRef;
 
-  propagateChange:any = () => {};
+  propagateChange: any = () => {};
 
   constructor() {
   }
@@ -74,7 +74,7 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
   }
 
   writeValue(obj: any): void {
-    if (obj){
+    if (obj) {
       this.select(obj);
     }
   }
