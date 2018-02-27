@@ -13,25 +13,25 @@ import { UserModule } from './modules/user/user.module';
 import { UserService } from './services/user.service';
 
 const ROUTING: ModuleWithProviders = RouterModule.forRoot([
-    {
-      path: 'login',
-      component: LoginComponent,
-      canActivate: [AuthenticationGuard]
-    },
-    {
-      path: 'registration',
-      component: RegistrationComponent,
-      canActivate: [AuthenticationGuard]
-    },
-    {
-      path: '**',
-      pathMatch: 'full',
-      redirectTo: 'login'
-    }
-  ], {
-    useHash: true,
-    preloadingStrategy: PreloadAllModules
-  });
+  {
+    path: 'login',
+    component: LoginComponent,
+    canActivate: [AuthenticationGuard]
+  },
+  {
+    path: 'registration',
+    component: RegistrationComponent,
+    canActivate: [AuthenticationGuard]
+  },
+  {
+    path: '**',
+    pathMatch: 'full',
+    redirectTo: 'login'
+  }
+], {
+  useHash: true,
+  preloadingStrategy: PreloadAllModules
+});
 
 @NgModule({
   declarations: [

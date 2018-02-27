@@ -54,7 +54,7 @@ export class ProfileComponent implements OnInit {
     });
 
     this.academicDisciplinesForm = this.fb.group({
-      academicDisciplines: this.selectedAcademicDisciplines
+      academicDisciplines: this.preload.academicDisciplines
     });
   }
 

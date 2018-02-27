@@ -8,33 +8,33 @@
     </div>
 
     <div class="form-group">
-    <mat-form-field>
-      <input matInput type="text" placeholder="First name" maxlength="50" formControlName="firstName">
-    </mat-form-field>
+      <mat-form-field>
+        <input matInput type="text" placeholder="First name" maxlength="50" formControlName="firstName">
+      </mat-form-field>
     </div>
 
     <div class="form-group">
-    <mat-form-field>
-      <input matInput type="text" placeholder="Last name" maxlength="50" formControlName="lastName">
-    </mat-form-field>
+      <mat-form-field>
+        <input matInput type="text" placeholder="Last name" maxlength="50" formControlName="lastName">
+      </mat-form-field>
     </div>
 
     <div class="form-group">
-    <mat-form-field>
-      <input matInput type="text" placeholder="Job" maxlength="50" formControlName="job">
-    </mat-form-field>
+      <mat-form-field>
+        <input matInput type="text" placeholder="Job" maxlength="50" formControlName="job">
+      </mat-form-field>
     </div>
 
     <div class="form-group">
-    <mat-form-field>
-      <input matInput type="text" placeholder="Email" maxlength="50" formControlName="email">
-    </mat-form-field>
+      <mat-form-field>
+        <input matInput type="text" placeholder="Email" maxlength="50" formControlName="email">
+      </mat-form-field>
     </div>
 
     <div class="form-group">
-    <mat-form-field>
-      <input matInput type="text" placeholder="Username" maxlength="50" formControlName="username">
-    </mat-form-field>
+      <mat-form-field>
+        <input matInput type="text" placeholder="Username" maxlength="50" formControlName="username">
+      </mat-form-field>
     </div>
   </div>
 
@@ -42,4 +42,33 @@
   <button mat-raised-button color="primary" (click)="save()">Reset</button>
   <button mat-raised-button (click)="resetForm()">Reset</button>
 
+</form>
+
+<!--<form [formGroup]="academicDisciplinesForm">-->
+  <!--<app-autocomplete-multi-select-->
+    <!--[items]="preload.academicDisciplines"-->
+    <!--[property]="'academicDisciplineName'"-->
+    <!--[selected]="preload.academicDisciplines"-->
+    <!--formControlName="academicDisciplines"-->
+    <!--[placeholder]="'Choose academic disciplines'">-->
+  <!--</app-autocomplete-multi-select>-->
+
+<!--</form>-->
+
+<form [formGroup]="changePasswordForm">
+  <div class="form-group">
+    <mat-form-field>
+      <input matInput type="password" placeholder="Old password" formControlName="oldPassword">
+    </mat-form-field>
+  </div>
+  <div formGroupName="password">
+    <div class="form-group">
+      <mat-form-field>
+        <input matInput type="password" placeholder="Password" formControlName="password">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="password" placeholder="Password again" formControlName="passwordAgain">
+      </mat-form-field>
+    </div>
+  </div>
 </form>
