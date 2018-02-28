@@ -101,7 +101,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
         this.users.push({
           'username': params.user.username,
           'password': params.password.password,
-          'role': 'user',
+          'role': 'author',
           'title': params.user.title,
           'firstName': params.user.firstName,
           'lastName': params.user.lastName,
