@@ -1,13 +1,23 @@
-.form-login {
-  max-width: 650px;
-  margin: 0 auto;
+.input {
+  width: 100%;
 }
 
-.form-group {
-  padding-left: 2px;
-  padding-right: 2px;
+button {
+  width: 70%;
+  display: block;
+  margin: 23px auto 10px auto;
 }
 
-.form-control {
-  height: 40px;
+.login-title {
+  text-align: center;
 }
+
+mat-card-content {
+  max-width: 500px;
+}
+
+.login-card {
+  max-width: 500px;
+  margin: 100px auto;
+}
+

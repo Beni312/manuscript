@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import {
-  MatButtonModule,
+  MatButtonModule, MatCardModule,
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
   MatListModule,
   MatMenuModule,
-  MatSidenavModule,
+  MatSidenavModule, MatTabsModule,
   MatToolbarModule
 } from '@angular/material';
 import { NgModule } from '@angular/core';
@@ -19,7 +19,9 @@ const importExport = [
   MatListModule,
   MatMenuModule,
   MatSidenavModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatTabsModule,
+  MatCardModule
 ];
 
 @NgModule({

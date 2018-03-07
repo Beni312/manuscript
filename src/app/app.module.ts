@@ -5,6 +5,7 @@ import { fakeBackendProvider } from '../helpers/fake.backend';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './components/login/login.component';
+import { MaterialModule } from './modules/material/material.module';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule } from '@angular/router';
 import { RegistrationComponent } from './components/registration/registration.component';
@@ -43,6 +44,7 @@ const ROUTING: ModuleWithProviders = RouterModule.forRoot([
     BrowserModule,
     FormsModule,
     HttpClientModule,
+    MaterialModule,
     ReactiveFormsModule,
     ROUTING,
     SharedModule,
