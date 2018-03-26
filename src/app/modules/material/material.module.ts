@@ -1,27 +1,35 @@
 import { CommonModule } from '@angular/common';
 import {
-  MatButtonModule, MatCardModule,
+  MatButtonModule,
+  MatCardModule,
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
   MatListModule,
   MatMenuModule,
-  MatSidenavModule, MatTabsModule,
+  MatPaginatorModule,
+  MatSidenavModule,
+  MatSortModule,
+  MatTableModule,
+  MatTabsModule,
   MatToolbarModule
 } from '@angular/material';
 import { NgModule } from '@angular/core';
 
 const importExport = [
   MatButtonModule,
+  MatCardModule,
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
   MatListModule,
   MatMenuModule,
+  MatPaginatorModule,
   MatSidenavModule,
-  MatToolbarModule,
+  MatSortModule,
+  MatTableModule,
   MatTabsModule,
-  MatCardModule
+  MatToolbarModule
 ];
 
 @NgModule({

@@ -1,74 +1,110 @@
-<form [formGroup]="personalDataForm">
+<mat-card>
+  <mat-card-header>
+    <mat-card-title><h2>Personal data</h2></mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="personalDataForm">
+      <div formGroupName="user">
+        <div class="row">
+          <mat-form-field class="col-md-1 mb-3">
+            <input matInput type="text" placeholder="Title" maxlength="50" formControlName="title">
+          </mat-form-field>
+          <mat-form-field class="col-md-5 mb-3">
+            <input matInput type="text" placeholder="First name" formControlName="firstName">
+          </mat-form-field>
+          <mat-form-field class="col-md-6 mb-3">
+            <input matInput type="text" placeholder="Last name" formControlName="lastName">
+          </mat-form-field>
+        </div>
+        <div class="row">
+          <mat-form-field class="col-md-6 mb-3">
+            <input matInput type="text" placeholder="Job" maxlength="50" formControlName="job">
+          </mat-form-field>
+          <mat-form-field class="col-md-6 mb-3">
+            <input matInput type="text" placeholder="Email" maxlength="50" formControlName="email">
+          </mat-form-field>
+        </div>
+        <div class="row">
+          <mat-form-field class="col-md-6 mb-3">
+            <input matInput type="text" placeholder="Username" maxlength="50" formControlName="username">
+          </mat-form-field>
+        </div>
+      </div>
 
-  <div formGroupName="user">
-    <div class="form-group">
-      <mat-form-field>
-        <input matInput type="text" placeholder="Title" maxlength="50" formControlName="title">
-      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="save()">Save</button>
+      <button mat-raised-button (click)="resetForm()">Reset</button>
+    </form>
+  </mat-card-content>
+</mat-card>
+
+<mat-card>
+  <mat-card-header>
+    <mat-card-title><h2>Change password</h2></mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="changePasswordForm">
+      <div class="row">
+        <mat-form-field class="col-md-6 mb-3">
+          <input matInput type="password" placeholder="Old password" formControlName="oldPassword">
+        </mat-form-field>
+      </div>
+      <div class="row" formGroupName="password">
+        <mat-form-field class="col-md-6 mb-3">
+          <input matInput type="password" placeholder="Password" formControlName="password">
+        </mat-form-field>
+        <mat-form-field class="col-md-6 mb-3">
+          <input matInput type="password" placeholder="Password again" formControlName="passwordAgain">
+        </mat-form-field>
+      </div>
+
+      <button mat-raised-button color="primary" (click)="changePassword()">Change password</button>
+    </form>
+
+  </mat-card-content>
+</mat-card>
+
+<mat-card>
+  <mat-card-header>
+    <mat-card-title><h2>Academic disciplines</h2></mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="example-container mat-elevation-z8">
+      <mat-table #table [dataSource]="dataSource" matSort id="academicDisciplinesTable">
+
+        <!-- Id Column -->
+        <ng-container matColumnDef="academicDisciplineId">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Id </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.academicDisciplineId}} </mat-cell>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="academicDisciplineName">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.academicDisciplineName}} </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+      <mat-paginator #paginator
+                     [showFirstLastButtons]="true"
+                     [pageSize]="10"
+                     [pageSizeOptions]="[5, 10, 25, 100]">
+      </mat-paginator>
     </div>
+  </mat-card-content>
+</mat-card>
 
-    <div class="form-group">
-      <mat-form-field>
-        <input matInput type="text" placeholder="First name" maxlength="50" formControlName="firstName">
-      </mat-form-field>
-    </div>
-
-    <div class="form-group">
-      <mat-form-field>
-        <input matInput type="text" placeholder="Last name" maxlength="50" formControlName="lastName">
-      </mat-form-field>
-    </div>
-
-    <div class="form-group">
-      <mat-form-field>
-        <input matInput type="text" placeholder="Job" maxlength="50" formControlName="job">
-      </mat-form-field>
-    </div>
-
-    <div class="form-group">
-      <mat-form-field>
-        <input matInput type="text" placeholder="Email" maxlength="50" formControlName="email">
-      </mat-form-field>
-    </div>
-
-    <div class="form-group">
-      <mat-form-field>
-        <input matInput type="text" placeholder="Username" maxlength="50" formControlName="username">
-      </mat-form-field>
-    </div>
-  </div>
-
-
-  <button mat-raised-button color="primary" (click)="save()">Reset</button>
-  <button mat-raised-button (click)="resetForm()">Reset</button>
-
-</form>
 
 <!--<form [formGroup]="academicDisciplinesForm">-->
-  <!--<app-autocomplete-multi-select-->
-    <!--[items]="preload.academicDisciplines"-->
-    <!--[property]="'academicDisciplineName'"-->
-    <!--[selected]="preload.academicDisciplines"-->
-    <!--formControlName="academicDisciplines"-->
-    <!--[placeholder]="'Choose academic disciplines'">-->
-  <!--</app-autocomplete-multi-select>-->
+<!--<app-autocomplete-multi-select-->
+<!--[items]="preload.academicDisciplines"-->
+<!--[property]="'academicDisciplineName'"-->
+<!--[selected]="preload.academicDisciplines"-->
+<!--formControlName="academicDisciplines"-->
+<!--[placeholder]="'Choose academic disciplines'">-->
+<!--</app-autocomplete-multi-select>-->
 
 <!--</form>-->
 
-<form [formGroup]="changePasswordForm">
-  <div class="form-group">
-    <mat-form-field>
-      <input matInput type="password" placeholder="Old password" formControlName="oldPassword">
-    </mat-form-field>
-  </div>
-  <div formGroupName="password">
-    <div class="form-group">
-      <mat-form-field>
-        <input matInput type="password" placeholder="Password" formControlName="password">
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput type="password" placeholder="Password again" formControlName="passwordAgain">
-      </mat-form-field>
-    </div>
-  </div>
-</form>
+

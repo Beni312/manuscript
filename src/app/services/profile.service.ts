@@ -12,7 +12,7 @@ export class PersonalDataPreload extends BasicResponse {
 
 export class ChangePassword {
   password: Password;
-  oldapassword: string;
+  oldPassword: string;
 }
 
 @Injectable()
@@ -26,7 +26,7 @@ export class ProfileService {
   }
 
   savePersonalData(user: User) {
-    return this.httpClient.post<BasicResponse>('/personaldatasettings/save', user);
+    return this.httpClient.post<BasicResponse>('/personaldatasettings/savepersonaldata', user);
   }
 
   changePassword(changePassword: ChangePassword) {
