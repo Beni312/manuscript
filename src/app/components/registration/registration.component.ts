@@ -29,13 +29,13 @@ export class RegistrationComponent implements OnInit {
   selected: AcademicDiscipline[] = [];
   registrationForm: FormGroup;
   result: BasicResponse;
+  isSubmitted: boolean;
 
   constructor(private service: RegistrationService,
               private fb: FormBuilder) {
   }
 
   ngOnInit() {
-    this.result = new BasicResponse();
     this.registrationForm = this.fb.group({
       user: this.fb.group({
         title: new FormControl('', {
@@ -85,11 +85,15 @@ export class RegistrationComponent implements OnInit {
 
   register() {
     this.userRegistration = this.registrationForm.value;
-    this.service.register(this.userRegistration).subscribe(result => {
-        this.result = result;
-      }, error => {
-        this.result = error;
-      }
-    );
+    if (this.registrationForm.valid) {
+      this.service.register(this.userRegistration).subscribe(result => {
+          this.result = result;
+        }, error => {
+          this.result = error;
+        }
+      );
+    } else {
+      this.isSubmitted = true;
+    }
   }
 }

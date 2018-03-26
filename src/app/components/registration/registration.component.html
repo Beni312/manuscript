@@ -1,65 +1,73 @@
-<form class="registration-form" [formGroup]="registrationForm" #formDir="ngForm">
-  <div *ngIf="!result.successMessage">
-    <div class="registration-title">
-      <h1>Registration</h1>
-    </div>
-    <div formGroupName="user">
-      <div class="form-group col-md-2">
-        <input type="text" class="form-control" placeholder="Title" formControlName="title">
-      </div>
-      <div class="form-group col-md-5">
-        <input type="text" class="form-control" id="firstName" placeholder="First name" formControlName="firstName">
-      </div>
-      <div class="form-group col-md-5">
-        <input type="text" class="form-control" placeholder="Last name" formControlName="lastName">
-      </div>
-      <div class="form-group col-md-12">
-        <div>
-          <input type="text" class="form-control" placeholder="Job" formControlName="job">
+<mat-card class="registration-card" *ngIf="!result?.successMessage">
+  <mat-card-header>
+    <mat-card-title><h1>Registration</h1></mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="registrationForm">
+      <div formGroupName="user">
+        <div class="form-group">
+          <mat-form-field id="title">
+            <input matInput type="text" placeholder="Title" formControlName="title">
+          </mat-form-field>
+        </div>
+
+        <div class="form-group">
+          <mat-form-field id="firstName">
+            <input matInput type="text" placeholder="First name" formControlName="firstName">
+          </mat-form-field>
+        </div>
+        <div class="form-group">
+          <mat-form-field id="lastName">
+            <input matInput type="text" placeholder="Last name" formControlName="lastName">
+          </mat-form-field>
+        </div>
+        <div class="form-group">
+          <mat-form-field id="job">
+            <input matInput type="text" placeholder="Job" formControlName="job">
+          </mat-form-field>
+        </div>
+        <div class="form-group">
+          <mat-form-field id="email">
+            <input matInput type="text" placeholder="Enter email" formControlName="email">
+          </mat-form-field>
+        </div>
+        <div class="form-group">
+          <mat-form-field id="username">
+            <input matInput type="text" placeholder="Username" formControlName="username">
+          </mat-form-field>
         </div>
       </div>
-      <div class="form-group col-md-12">
-        <div>
-          <input type="email" class="form-control" placeholder="Enter email" formControlName="email">
-        </div>
+
+      <div formGroupName="password">
+        <mat-form-field id="password">
+          <input matInput type="password" placeholder="Password" formControlName="password">
+        </mat-form-field>
+
+        <mat-form-field id="passwordAgain">
+          <input matInput type="password" placeholder="Password again" formControlName="passwordAgain">
+        </mat-form-field>
       </div>
-      <div class="form-group col-md-12">
-        <div>
-          <input type="text" class="form-control" placeholder="Username" formControlName="username">
-        </div>
-      </div>
-    </div>
-    <div formGroupName="password">
-      <div class="form-group col-md-6">
-        <div>
-          <input type="password" class="form-control" placeholder="Password" formControlName="password">
-        </div>
-      </div>
-      <div class="form-group col-md-6">
-        <div>
-          <input type="password" class="form-control" placeholder="Password again" formControlName="passwordAgain">
-        </div>
-      </div>
-    </div>
-    <div class="form-group">
+
       <app-autocomplete-multi-select
         [items]="academicDisciplines"
         [property]="'academicDisciplineName'"
         [selected]="selected"
         formControlName="academicDisciplines"
-        [placeholder]="'Choose academic disciplines'">
+        [placeholder]="'Choose academic disciplines'"
+        [inputWidth]="'100%'">
       </app-autocomplete-multi-select>
-    </div>
-    <div class="form-group col-sm-10 reg-div">
-      <button (click)="register()" [disabled]="registrationForm.invalid" class="btn btn-primary btn-block btn-reg">Register</button>
-      <div *ngIf="formDir.submitted && !result.successMessage && result.exceptionMessage">
+
+      <button mat-raised-button color="primary" type="submit" (click)="register()" id="regBtn">
+        Register
+      </button>
+      <div *ngIf="result?.exceptionMessage">
         {{ result.exceptionMessage }}
       </div>
-    </div>
-  </div>
-</form>
+    </form>
+  </mat-card-content>
+</mat-card>
 
-<div [hidden]="!result.successMessage">
+<div [hidden]="!result?.successMessage">
   Success registration!
   You can login in <a routerLink="/login">this</a> link
 </div>

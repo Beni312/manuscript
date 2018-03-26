@@ -1,8 +1,9 @@
 import { AutocompleteMultiSelectComponent } from './components/autocomplete-multi-select/autocomplete-multi-select.component';
 import { ClickOutsideDirective } from './directives/click-outside.directive';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MaterialModule } from '../material/material.module';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 
 const declareExport = [
   AutocompleteMultiSelectComponent,
@@ -12,7 +13,9 @@ const declareExport = [
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    MaterialModule,
+    ReactiveFormsModule
   ],
   declarations: [
     declareExport

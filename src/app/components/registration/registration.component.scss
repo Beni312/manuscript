@@ -1,38 +1,29 @@
-.form-login {
-  max-width: 350px;
-  margin: 0 auto;
-}
-
-.form-control {
-  height: 40px;
-}
-
-form.registration-form {
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-div.registration-title, div.login-title {
-  text-align: center;
-  padding-top: 20px;
-  padding-bottom: 25px;
+mat-form-field {
+  width: 100%;
 }
 
 .form-group {
-  padding-left: 2px;
-  padding-right: 2px;
+  margin-bottom: 0;
 }
 
-#academicDisciplonesBtn {
-  height: 40px;
+button {
+  width: 70%;
+  display: block;
+  margin: 23px auto 10px auto;
 }
 
-.btn-reg {
-  width: 200px;
+.registration-card {
+  max-width: 550px;
+  width: 27%;
+  min-width: 400px;
+  margin: 55px auto;
+}
+
+#regBtn {
   margin-top: 50px;
-  align-content: center;
 }
 
-.reg-div {
-  text-align: center;
-}
+
+
+
+

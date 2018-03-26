@@ -90,6 +90,11 @@ export class FakeBackendInterceptor implements HttpInterceptor {
           }
         });
 
+        // console.log(params);
+        // if (!params.user.title || !params.firstName || !params.user.lastName || !params.user.username || !params.user.job || !params.user.email || !params.password.password || !params.password.passwordAgain) {
+        //   return this.getBasicResponse('Field is required', null);
+        // }
+
         if (usernameUsed){
           return this.getBasicResponse('Username is already used!', null);
         }

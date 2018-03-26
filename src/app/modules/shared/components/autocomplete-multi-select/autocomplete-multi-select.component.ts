@@ -1,4 +1,4 @@
-import { Component, ElementRef, forwardRef, Input, OnChanges, ViewChild } from '@angular/core';
+import { Component, forwardRef, Input, OnChanges } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
@@ -27,9 +27,8 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
   property;
   @Input()
   placeholder: string;
-
-  @ViewChild('inp')
-  input: ElementRef;
+  @Input()
+  inputWidth: string = '200px';
 
   propagateChange: any = () => {};
 
@@ -38,27 +37,22 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
 
   clearSearch() {
     this.query = '';
-    this.input.nativeElement.focus();
+    this.filter();
   }
 
   filter() {
-    if (this.query !== '' && this.query.length > 0) {
-      this.filteredList = this.items.filter(el => {
-        this.showDropdown = true;
-        if (el !== undefined) {
-          return el[this.property].toLowerCase().indexOf(this.query.toLowerCase()) > -1 && this.selected.indexOf(el) === -1;
-        }
-      });
-    } else {
-      this.filteredList = [];
-    }
+    this.filteredList = this.items.filter(el => {
+      if (el !== undefined) {
+        return el[this.property].toLowerCase().indexOf(this.query.toLowerCase()) > -1 && this.selected.indexOf(el) === -1;
+      }
+    });
+    this.showDropdown = true;
   }
 
   select(item) {
     this.selected.push(item);
     this.query = '';
-    this.filteredList = [];
-    this.input.nativeElement.focus();
+    this.filter();
   }
 
   remove(item) {

@@ -1,18 +1,20 @@
 <div>
-  <div class="left">
+  <div>
     <div dropdown-click (clickOutside)="closeDropdown()" (clickInside)="openDropDown()">
-      <div class="btn-group">
-        <input #inp id="query" type="search" placeholder="{{ placeholder }}" class="form-control select" [(ngModel)]="query" (keyup)=filter() autocomplete="off">
-        <span *ngIf="query && query.length > 0" (click)="clearSearch()" id="search-clear" class="glyphicon glyphicon-remove"></span>
-      </div>
+      <mat-form-field [ngStyle]="{'width': inputWidth}" #field>
+        <input matInput id="query" type="search" placeholder="{{ placeholder }}" [(ngModel)]="query" (keyup)="filter()" (click)="filter()" autocomplete="off">
+        <button mat-button *ngIf="query" matSuffix mat-icon-button aria-label="Clear" (click)="clearSearch()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
     </div>
     <ul *ngIf="filteredList.length > 0 && showDropdown">
       <li #scrollBar>
-        <div *ngFor="let item of filteredList" (click)="select(item)">{{ item[property] }}</div>
+        <div *ngFor="let item of filteredList" (click)="writeValue(item)">{{ item[property] }}</div>
       </li>
     </ul>
   </div>
-  <div style="float:right;" class="selected form-control">
+  <div class="selected form-control" [ngStyle]="{'width': inputWidth}">
     <div *ngFor="let item of selected" class="item">
       <div>
         <a (click)="remove(item)"><i class="material-icons">delete</i></a>
