@@ -68,7 +68,7 @@
     <mat-card-title><h2>Academic disciplines</h2></mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <div class="example-container mat-elevation-z8">
+    <div class="mat-elevation-z8">
       <mat-table #table [dataSource]="dataSource" matSort id="academicDisciplinesTable">
 
         <!-- Id Column -->
@@ -94,17 +94,5 @@
     </div>
   </mat-card-content>
 </mat-card>
-
-
-<!--<form [formGroup]="academicDisciplinesForm">-->
-<!--<app-autocomplete-multi-select-->
-<!--[items]="preload.academicDisciplines"-->
-<!--[property]="'academicDisciplineName'"-->
-<!--[selected]="preload.academicDisciplines"-->
-<!--formControlName="academicDisciplines"-->
-<!--[placeholder]="'Choose academic disciplines'">-->
-<!--</app-autocomplete-multi-select>-->
-
-<!--</form>-->
 
 

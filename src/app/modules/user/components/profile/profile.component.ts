@@ -17,7 +17,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   academicDisciplinesForm: FormGroup;
   changePasswordForm: FormGroup;
   selectedAcademicDisciplines: AcademicDiscipline[];
-  displayedColumns = ['academicDisciplineId', 'academicDisciplineName'];
+  displayedColumns = ['academicDisciplineName'];
   dataSource: MatTableDataSource<AcademicDiscipline>;
 
   @ViewChild(MatSort) sort: MatSort;
