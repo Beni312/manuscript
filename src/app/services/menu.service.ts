@@ -14,7 +14,7 @@ export class MenuService {
     let role = UserService.getPreload().role;
     this.router.config[0].children.forEach(item => {
       if (item.data && item.data.expectedRoles.includes(role.toUpperCase())) {
-        sidebarItemDefinitions.push(new SidebarItemDefinition(item.path, item.data.label, item.component));
+        sidebarItemDefinitions.push(new SidebarItemDefinition(item.path, item.data.label, item.component, item.data.icon));
       }
     });
     return sidebarItemDefinitions;

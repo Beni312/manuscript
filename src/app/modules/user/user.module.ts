@@ -26,7 +26,8 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
         component: HomeComponent,
         data: {
           expectedRoles: ['ADMIN', 'REVIEWER', 'EDITOR', 'AUTHOR'],
-          label: 'Home'
+          label: 'Home',
+          icon: 'home'
         }
       },
       {
@@ -34,7 +35,8 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
         component: ProfileComponent,
         data: {
           expectedRoles: ['ADMIN', 'REVIEWER', 'EDITOR', 'AUTHOR'],
-          label: 'Profile'
+          label: 'Profile',
+          icon: 'account_circle'
         },
         resolve: {
           preload: PersonalDataPreloadResolver
@@ -45,7 +47,8 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
         component: SubmissionComponent,
         data: {
           expectedRoles: ['ADMIN', 'REVIEWER', 'EDITOR', 'AUTHOR'],
-          label: 'Submission'
+          label: 'Submission',
+          icon: 'content_paste'
         }
       },
       {path: '', pathMatch: 'full', redirectTo: 'home'}

@@ -9,9 +9,9 @@
     </button>
   </mat-toolbar>
   <mat-sidenav-container class="sidenav-container">
-    <mat-sidenav #snav [mode]="'side'" [fixedInViewport]="true" [fixedTopGap]="64">
+    <mat-sidenav class="mat-elevation-z8" #snav [mode]="'side'" [fixedInViewport]="true" [fixedTopGap]="64">
       <mat-nav-list class="menuItems">
-        <a mat-list-item *ngFor="let menuItem of menuItems" routerLink="{{ '/' + menuItem.path }}" >{{ menuItem.label }}</a>
+        <a mat-list-item *ngFor="let menuItem of menuItems" routerLink="{{ '/' + menuItem.path }}" ><mat-icon color="primary" class="menu-icon">{{menuItem.icon}}</mat-icon>{{ menuItem.label }}</a>
       </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content>

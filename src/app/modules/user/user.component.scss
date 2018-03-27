@@ -18,6 +18,10 @@
   .sidenav-content {
     padding: 40px 50px 50px 50px;
   }
+
+  mat-sidenav {
+    width: 240px;
+  }
 }
 
 .menuItems {
@@ -26,4 +30,9 @@
 
 .fill-space {
   flex: 1 1 auto;
+}
+
+.menu-icon {
+  margin-right: 10pt;
+  margin-left: 10pt;
 }
