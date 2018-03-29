@@ -8,6 +8,7 @@ import {
   MatListModule,
   MatMenuModule,
   MatPaginatorModule,
+  MatProgressSpinnerModule,
   MatSidenavModule,
   MatSortModule,
   MatTableModule,
@@ -27,6 +28,7 @@ const importExport = [
   MatPaginatorModule,
   MatSidenavModule,
   MatSortModule,
+  MatProgressSpinnerModule,
   MatTableModule,
   MatTabsModule,
   MatToolbarModule

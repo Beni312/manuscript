@@ -10,3 +10,8 @@
 </nav>
 
 <router-outlet></router-outlet>
+
+<div class="loading-indicator" *ngIf="progressSpinnerStatus">
+  <mat-spinner>
+  </mat-spinner>
+</div>
