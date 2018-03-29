@@ -1,3 +1,37 @@
-<p>
-  submission works!
-</p>
+<div class="mat-elevation-z8">
+  <mat-table #table [dataSource]="dataSource" matSort id="submissionsTable">
+
+    <ng-container matColumnDef="title">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Title</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.title}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="creationDate">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Creation date</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.creationDate | date:'dd/MM/yyyy hh:mm' }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="lastModifyDate">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Last modify date</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.lastModifyDate | date:'dd/MM/yyyy hh:mm' }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="manuscriptAbstract">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Manuscript abstract</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.manuscriptAbstract}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="submitter">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Submitter</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.submitter}}</mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator
+                 [showFirstLastButtons]="true"
+                 [pageSize]="10"
+                 [pageSizeOptions]="[5, 10, 25, 100]">
+  </mat-paginator>
+</div>

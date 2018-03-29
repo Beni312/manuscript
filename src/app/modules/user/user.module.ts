@@ -14,6 +14,8 @@ import { SharedModule } from '../shared/shared.module';
 import { SubmissionComponent } from './components/submission/submission.component';
 import { UserComponent } from './user.component';
 import { UserService } from '../../services/user.service';
+import { SubmissionPreloadResolver } from './components/submission/submission.preload.service';
+import { SubmissionService } from '../../services/submission.service';
 
 const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
   {
@@ -49,6 +51,9 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
           expectedRoles: ['ADMIN', 'REVIEWER', 'EDITOR', 'AUTHOR'],
           label: 'Submission',
           icon: 'content_paste'
+        },
+        resolve: {
+          preload: SubmissionPreloadResolver
         }
       },
       {path: '', pathMatch: 'full', redirectTo: 'home'}
@@ -76,6 +81,8 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
     PersonalDataPreloadResolver,
     ProfileService,
     RoleGuard,
+    SubmissionPreloadResolver,
+    SubmissionService,
     UserService
   ]
 })

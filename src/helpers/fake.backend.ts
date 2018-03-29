@@ -1,22 +1,28 @@
-import { Injectable } from '@angular/core';
+import { academicDisciplineData } from './academic.disciplines';
+import { Author } from '../app/models/author';
+import { BasicResponse } from '../app/models/basic.response';
 import { HTTP_INTERCEPTORS, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Keyword } from '../app/models/keyword';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/delay';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/materialize';
 import 'rxjs/add/operator/dematerialize';
-import { usersData } from './users';
-import { academicDisciplineData } from './academic.disciplines';
+import { submissionData } from './submissions';
+import { Submission } from '../app/models/submission';
+import { SubmissionPreloadResponse } from '../app/models/submission.preload.response';
 import { User } from '../app/models/user';
-import { BasicResponse } from '../app/models/basic.response';
+import { usersData } from './users';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class FakeBackendInterceptor implements HttpInterceptor {
 
   private users: any[] = usersData;
   private academicDisciplines: any[] = academicDisciplineData;
+  private submissions: any[] = submissionData;
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return Observable.of(null).mergeMap(() => {
@@ -187,8 +193,44 @@ export class FakeBackendInterceptor implements HttpInterceptor {
         }
       }
 
+      if (request.url.endsWith('/submission/preload') && request.method === 'POST') {
+        let currentUser = localStorage.getItem('fakeBackendCurrentUser');
+        if (currentUser) {
+          let user = this.users.filter(user => {
+            if (user.username == currentUser) {
+              return user;
+            }
+          })[0];
 
+          let submissions = this.submissions.filter(submission => {
+            if (submission.authors.includes(user.userId)) {
+              return submission;
+            }
+          });
 
+          let response: Submission[] = [];
+          submissions.forEach(submission => {
+            response.push(new Submission(
+              submission.submissionId,
+              submission.title,
+              submission.creationDate,
+              submission.lastModifyDate,
+              submission.manuscriptAbstract,
+              this.getAuthorsByIds(submission.authors),
+              <Keyword[]>submission.keywords,
+              submission.academicDisciplines,
+              this.getUserById(submission.submitter).username));
+          });
+          return Observable.of(
+            new HttpResponse(
+              {
+                status: 200,
+                body: new SubmissionPreloadResponse(response)
+              }
+            )
+          );
+        }
+      }
       return next.handle(request);
     })
       .materialize()
@@ -208,6 +250,35 @@ export class FakeBackendInterceptor implements HttpInterceptor {
         }
       )
     );
+  }
+
+  getUserById(id: number) {
+    return this.users.filter(user => {
+      if (user.userId == id) {
+        return user;
+      }
+    })[0];
+  }
+
+  getUsersByIds(ids: number[]) {
+    return this.users.filter(user => {
+      if (ids.includes(user.userId)) {
+        return new Author(user.userId, user.email, user.firstName, user.lastName);
+      }
+    });
+  }
+
+  getAuthorsByIds(ids: number[]) {
+    let authors: Author[] = [];
+    this.getUsersByIds(ids).forEach(user => {
+      authors.push(new Author(user.userId, user.email, user.firstName, user.lastName));
+    });
+    return authors;
+  }
+
+  getAuthorById(id: number) {
+    let user = this.getUserById(id);
+    return new Author(user.userId, user.email, user.firstName, user.lastName);
   }
 }
 

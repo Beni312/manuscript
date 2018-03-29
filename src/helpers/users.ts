@@ -1,5 +1,6 @@
 export let usersData = [
   {
+    userId: 0,
     username: 'admin',
     password: 'admin',
     role: 'ADMIN',
@@ -9,18 +10,14 @@ export let usersData = [
     job: 'admin',
     email: 'admin@gmail.com',
     academicDisciplines: [
-      {
-        academicDisciplineId: '01',
-        academicDisciplineName: 'Architecture01'
-      },
-      {
-        academicDisciplineId: '02',
-        academicDisciplineName: 'Architecture02'
-      }
+      {academicDisciplineId: '02004013', academicDisciplineName: 'Painting'},
+      {academicDisciplineId: '02004014', academicDisciplineName: 'Printmaking'},
+      {academicDisciplineId: '02004015', academicDisciplineName: 'Sculpture'}
     ]
 
   },
   {
+    userId: 1,
     username: 'author',
     password: 'author',
     role: 'author',
@@ -30,18 +27,40 @@ export let usersData = [
     job: '',
     email: '',
     academicDisciplines: [
-      {
-        academicDisciplineId: '01',
-        academicDisciplineName: 'Architecture01'
-      },
-      {
-        academicDisciplineId: '02',
-        academicDisciplineName: 'Architecture02'
-      }
+      {academicDisciplineId: '02021003', academicDisciplineName: 'Other French and Francophone Language and Literature'},
+      {academicDisciplineId: '02022', academicDisciplineName: 'German Language and Literature'},
+      {academicDisciplineId: '02022001', academicDisciplineName: 'German Linguistics'},
+      {academicDisciplineId: '02022002', academicDisciplineName: 'German Literature'},
+      {academicDisciplineId: '02022003', academicDisciplineName: 'Other German Language and Literature'},
+      {academicDisciplineId: '02023', academicDisciplineName: 'History'},
+      {academicDisciplineId: '02023001', academicDisciplineName: 'African History'},
+      {academicDisciplineId: '02023002', academicDisciplineName: 'Asian History'},
+      {academicDisciplineId: '02023003', academicDisciplineName: 'Canadian History'},
+      {academicDisciplineId: '02023004', academicDisciplineName: 'Cultural History'},
+      {academicDisciplineId: '02023005', academicDisciplineName: 'Diplomatic History'},
+      {academicDisciplineId: '02023006', academicDisciplineName: 'European History'},
+      {academicDisciplineId: '02023007', academicDisciplineName: 'Genealogy'},
+      {academicDisciplineId: '02023008', academicDisciplineName: 'History of Gender'},
+      {academicDisciplineId: '02023009', academicDisciplineName: 'History of the Pacific Islands'},
+      {academicDisciplineId: '02023010', academicDisciplineName: 'History of Religion'},
+      {academicDisciplineId: '02023011', academicDisciplineName: 'History of Science, Technology, and Medicine'},
+      {academicDisciplineId: '02023012', academicDisciplineName: 'Intellectual History'},
+      {academicDisciplineId: '02023013', academicDisciplineName: 'Islamic World and Near East History'},
+      {academicDisciplineId: '02023014', academicDisciplineName: 'Labor History'},
+      {academicDisciplineId: '02023015', academicDisciplineName: 'Latin American History'},
+      {academicDisciplineId: '02023016', academicDisciplineName: 'Legal'},
+      {academicDisciplineId: '02023017', academicDisciplineName: 'Medieval History'},
+      {academicDisciplineId: '02023018', academicDisciplineName: 'Military History'},
+      {academicDisciplineId: '02023019', academicDisciplineName: 'Oral History'},
+      {academicDisciplineId: '02023020', academicDisciplineName: 'Political History'},
+      {academicDisciplineId: '02023021', academicDisciplineName: 'Public History'},
+      {academicDisciplineId: '02023022', academicDisciplineName: 'Social History'},
+      {academicDisciplineId: '02023023', academicDisciplineName: 'United States History'}
     ]
 
   },
   {
+    userId: 2,
     username: 'reviewer',
     password: 'reviewer',
     role: 'reviewer',
