@@ -1,4 +1,4 @@
-<div class="mat-elevation-z8">
+<div class="mat-elevation-z8" hidden="{{preload.submissions.length > 0}}">
   <mat-table #table [dataSource]="dataSource" matSort id="submissionsTable">
 
     <ng-container matColumnDef="title">

@@ -11,6 +11,7 @@ import { PreloadAllModules, RouterModule } from '@angular/router';
 import { ProgressInterceptor, ProgressSpinnerService } from './services/progress.spinner.service';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { SharedModule } from './modules/shared/shared.module';
+import { ToasterModule } from 'angular5-toaster/dist';
 import { UserModule } from './modules/user/user.module';
 import { UserService } from './services/user.service';
 
@@ -49,6 +50,7 @@ const ROUTING: ModuleWithProviders = RouterModule.forRoot([
     ReactiveFormsModule,
     ROUTING,
     SharedModule,
+    ToasterModule,
     UserModule
   ],
   providers: [
