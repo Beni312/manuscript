@@ -1,0 +1,19 @@
+.mat-table {
+  overflow-y: auto;
+  max-height: 300px;
+}
+
+.mat-header-row {
+  top: 0;
+  position: sticky;
+  z-index: 1;
+  background-color: inherit;
+}
+
+.container-fluid {
+  margin-top: 20px;
+}
+
+#keyWord {
+  margin: 20px 0 20px;
+}

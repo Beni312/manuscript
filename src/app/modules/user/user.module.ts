@@ -12,10 +12,11 @@ import { RouterModule } from '@angular/router';
 import { RoleGuard } from '../../guards/role.guard';
 import { SharedModule } from '../shared/shared.module';
 import { SubmissionComponent } from './components/submission/submission.component';
-import { UserComponent } from './user.component';
-import { UserService } from '../../services/user.service';
+import { SubmissionDetailsComponent } from './components/submission/submission-details/submission.details.component';
 import { SubmissionPreloadResolver } from './components/submission/submission.preload.service';
 import { SubmissionService } from '../../services/submission.service';
+import { UserComponent } from './user.component';
+import { UserService } from '../../services/user.service';
 
 const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
   {
@@ -72,10 +73,11 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
     SecureRoutes
   ],
   declarations: [
-    UserComponent,
     HomeComponent,
     ProfileComponent,
-    SubmissionComponent
+    SubmissionComponent,
+    SubmissionDetailsComponent,
+    UserComponent
   ],
   providers: [
     PersonalDataPreloadResolver,

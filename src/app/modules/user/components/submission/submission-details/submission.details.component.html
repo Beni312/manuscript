@@ -1,0 +1,47 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-6">
+      <h4>Authors</h4>
+      <div class="mat-elevation-z8">
+        <mat-table #table [dataSource]="dataSource" matSort>
+
+          <ng-container matColumnDef="firstName">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> First name </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.firstName}}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="lastName">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Last name </mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.lastName }}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="email">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> E-mail </mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.email}}</mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;" class="element-row"></mat-row>
+        </mat-table>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <h4>Academic disciplines</h4>
+      <div class="mat-elevation-z8">
+        <mat-table #table [dataSource]="dataSource2" matSort>
+
+          <ng-container matColumnDef="academicDisciplineName">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.academicDisciplineName}}</mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns2"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns2;" class="element-row"></mat-row>
+        </mat-table>
+      </div>
+    </div>
+  </div>
+  <div id="keyWord">
+    Keywords: <span *ngFor="let item of data.keywords"> {{item}}</span>
+  </div>
+</div>
