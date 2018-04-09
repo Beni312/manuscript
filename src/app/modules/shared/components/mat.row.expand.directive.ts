@@ -46,7 +46,7 @@ export class MatRowExpandDirective {
         isExpandable = false;
       }
     });
-    if (isExpandable) {
+    if (isExpandable || this.opened) {
       this.toggle();
     }
   }
