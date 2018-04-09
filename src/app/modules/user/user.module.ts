@@ -16,6 +16,7 @@ import { SubmissionDetailsComponent } from './components/submission/submission-d
 import { SubmissionPreloadResolver } from './components/submission/submission.preload.service';
 import { SubmissionService } from '../../services/submission.service';
 import { UserComponent } from './user.component';
+import { UserManagementComponent } from './components/user.management/user.management.component';
 import { UserService } from '../../services/user.service';
 
 const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
@@ -49,12 +50,21 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
         path: 'submission',
         component: SubmissionComponent,
         data: {
-          expectedRoles: ['ADMIN', 'REVIEWER', 'EDITOR', 'AUTHOR'],
+          expectedRoles: ['REVIEWER', 'EDITOR', 'AUTHOR'],
           label: 'Submission',
           icon: 'content_paste'
         },
         resolve: {
           preload: SubmissionPreloadResolver
+        }
+      },
+      {
+        path: 'user-management',
+        component: UserManagementComponent,
+        data: {
+          expectedRoles: ['ADMIN'],
+          label: 'User management',
+          icon: 'group'
         }
       },
       {path: '', pathMatch: 'full', redirectTo: 'home'}
@@ -77,7 +87,8 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
     ProfileComponent,
     SubmissionComponent,
     SubmissionDetailsComponent,
-    UserComponent
+    UserComponent,
+    UserManagementComponent
   ],
   providers: [
     PersonalDataPreloadResolver,
