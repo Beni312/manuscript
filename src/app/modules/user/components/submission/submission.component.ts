@@ -16,7 +16,7 @@ import { SlideRowAnimation } from '../../../shared/components/mat.row.expand.dir
 export class SubmissionComponent implements OnInit, AfterViewInit {
 
   preload: SubmissionPreloadResponse;
-  displayedColumns = ['title', 'creationDate', 'lastModifyDate', 'manuscriptAbstract', 'submitter'];
+  displayedColumns = ['title', 'creationDate', 'lastModifyDate', 'manuscriptAbstract', 'submitter', 'actions'];
   dataSource: MatTableDataSource<Submission>;
 
   @ViewChild(MatSort) sort: MatSort;
@@ -41,5 +41,22 @@ export class SubmissionComponent implements OnInit, AfterViewInit {
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     }
+  }
+
+  delete(item) {
+    this.submissionService.remove(item).subscribe(response => {
+      if (!response.exceptionMessage) {
+        this.toasterService.pop('success', response.successMessage);
+        this.reload();
+      } else {
+        this.toasterService.pop('warning', response.exceptionMessage);
+      }
+    });
+  }
+
+  reload() {
+    this.submissionService.preload().subscribe(resp => {
+      this.dataSource = new MatTableDataSource<Submission>(resp.submissions);
+    })
   }
 }

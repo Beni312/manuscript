@@ -231,6 +231,38 @@ export class FakeBackendInterceptor implements HttpInterceptor {
           );
         }
       }
+
+      if (request.url.endsWith('/submission/uploadsubmission') && request.method === 'POST') {
+
+      }
+
+      if (request.url.endsWith('/submission/save') && request.method === 'POST') {
+
+      }
+
+      if (request.url.endsWith('/submission/remove') && request.method === 'POST') {
+        let submissionId = request.body;
+        let isExists = false;
+        let hasPermission = false;
+        this.submissions = this.submissions.filter(item => {
+          if (item.submissionId == submissionId) {
+            isExists = true;
+            if (this.getUserById(item.submitter).username == localStorage.getItem('fakeBackendCurrentUser')) {
+              hasPermission = true;
+              return false;
+            }
+          }
+          return true;
+        });
+        if (!isExists) {
+          return this.getBasicResponse('The submission not exists!', 'Submission deleted');
+        }
+        if (!hasPermission) {
+          return this.getBasicResponse('You don' + "'" + 't have permission to delete this submission!', 'Submission deleted');
+        }
+        return this.getBasicResponse(null, 'Submission deleted');
+      }
+
       return next.handle(request);
     })
       .materialize()

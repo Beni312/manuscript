@@ -38,9 +38,17 @@ export class MatRowExpandDirective {
   constructor(public vcRef: ViewContainerRef) {
   }
 
-  @HostListener('click')
-  onClick(): void {
-    this.toggle();
+  @HostListener('click', ['$event'])
+  onClick(event): void {
+    let isExpandable = true;
+    event.path.forEach(item => {
+      if (item.classList && item.classList.contains('ignore')) {
+        isExpandable = false;
+      }
+    });
+    if (isExpandable) {
+      this.toggle();
+    }
   }
 
   toggle(): void {
