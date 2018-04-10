@@ -1,4 +1,4 @@
-import {Directive, HostBinding, HostListener, Input, TemplateRef, ViewContainerRef} from '@angular/core';
+import { Directive, HostBinding, HostListener, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
 export const SlideRowAnimation = trigger('detailExpand', [
@@ -11,10 +11,10 @@ export const SlideRowAnimation = trigger('detailExpand', [
   selector: '[matRowExpand]'
 })
 export class MatRowExpandDirective {
+  private static current: MatRowExpandDirective;
   private row: any;
   private tRef: TemplateRef<any>;
   private opened: boolean;
-  private static current: MatRowExpandDirective;
 
   @HostBinding('class.expanded')
   get expanded(): boolean {
@@ -41,11 +41,25 @@ export class MatRowExpandDirective {
   @HostListener('click', ['$event'])
   onClick(event): void {
     let isExpandable = true;
-    event.path.forEach(item => {
-      if (item.classList && item.classList.contains('ignore')) {
+
+    // TODO ezt megcsinálni normálisabban
+    for (let index = 0, count = event.target.classList.length; index < count; index++) {
+      if (event.target.classList.item(index) && event.target.classList.item(index) == 'ignore') {
+        isExpandable = false;
+      }
+    }
+
+    event.target.parentElement.parentElement.parentElement.classList.forEach(item => {
+      if (item == 'ignore') {
         isExpandable = false;
       }
     });
+    event.target.parentElement.classList.forEach(item => {
+      if (item == 'ignore') {
+        isExpandable = false;
+      }
+    });
+
     if (isExpandable || this.opened) {
       this.toggle();
     }
@@ -74,7 +88,7 @@ export class MatRowExpandDirective {
   private render(): void {
     this.vcRef.clear();
     if (this.tRef && this.row) {
-      this.vcRef.createEmbeddedView(this.tRef, { $implicit: this.row });
+      this.vcRef.createEmbeddedView(this.tRef, {$implicit: this.row});
     }
   }
 }
