@@ -1,9 +1,10 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { PersonalDataPreload, ProfileService } from '../../../../services/profile.service';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import { AcademicDiscipline } from '../../../../models/academic.discipline';
+import { ActivatedRoute } from '@angular/router';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { PersonalDataPreload, ProfileService } from '../../../../services/profile.service';
+import { ToasterService } from 'angular5-toaster/dist';
 
 @Component({
   selector: 'app-profile',
@@ -24,7 +25,10 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
 
-  constructor(private profileService: ProfileService, private fb: FormBuilder, private activatedRoute: ActivatedRoute) {
+  constructor(private profileService: ProfileService,
+              private fb: FormBuilder,
+              private activatedRoute: ActivatedRoute,
+              private toasterService: ToasterService) {
     this.preload = this.activatedRoute.snapshot.data['preload'];
     this.dataSource = new MatTableDataSource<AcademicDiscipline>(this.preload.academicDisciplines);
   }
@@ -72,13 +76,26 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   }
 
   save() {
-    this.profileService.savePersonalData(this.personalDataForm.value).subscribe(response => {
-      console.log(response);
-    });
+    if (this.personalDataForm.valid) {
+      this.profileService.savePersonalData(this.personalDataForm.value).subscribe(response => {
+        if (!response.exceptionMessage) {
+          this.personalDataForm.reset(this.personalDataForm.value);
+          this.toasterService.pop('success', response.successMessage);
+        } else {
+          this.toasterService.pop('error', response.exceptionMessage);
+        }
+      });
+    }
   }
 
   changePassword() {
-    this.profileService.changePassword(this.changePasswordForm.value);
+    this.profileService.changePassword(this.changePasswordForm.value).subscribe(response => {
+      if (!response.exceptionMessage) {
+        this.toasterService.pop('success', response.successMessage);
+      } else {
+        this.toasterService.pop('error', response.exceptionMessage);
+      }
+    });
   }
 
   updateAcademicDisciplines() {
@@ -86,6 +103,8 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   }
 
   resetForm() {
-    this.personalDataForm.reset(this.activatedRoute.snapshot.data['preload']);
+    this.profileService.preload().subscribe(response => {
+      this.personalDataForm.reset(response);
+    });
   }
 }

@@ -165,9 +165,11 @@ export class FakeBackendInterceptor implements HttpInterceptor {
           user.title = params.user.title;
           user.firstName = params.user.firstName;
           user.lastName = params.user.lastName;
+          user.username = params.user.username;
           user.job = params.user.job;
           user.email = params.user.email;
           this.users.push(user);
+          localStorage.setItem('fakeBackendCurrentUser', user.username);
           return this.getBasicResponse(null, 'Your personal data has been updated successfully!');
         }
       }
@@ -185,7 +187,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
           if (params.password.password != params.password.passwordAgain) {
             return this.getBasicResponse('The given passwords are not matched!', null);
           }
-          if (params.password.password != user.password) {
+          if (params.oldPassword != user.password) {
             return this.getBasicResponse('Your password is wrong...', null);
           }
           user.password = params.password.password;

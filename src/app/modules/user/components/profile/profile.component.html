@@ -31,7 +31,7 @@
         </div>
       </div>
 
-      <button mat-raised-button color="primary" (click)="save()">Save</button>
+      <button mat-raised-button color="primary" (click)="save()" [disabled]="!personalDataForm.dirty">Save</button>
       <button mat-raised-button (click)="resetForm()">Reset</button>
     </form>
   </mat-card-content>
