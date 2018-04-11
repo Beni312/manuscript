@@ -4,6 +4,7 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { PersonalDataPreload, ProfileService } from '../../../../services/profile.service';
+import { PermissionHandler } from '../permission.component';
 import { ToasterService } from 'angular5-toaster/dist';
 
 @Component({
@@ -11,7 +12,7 @@ import { ToasterService } from 'angular5-toaster/dist';
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent implements OnInit, AfterViewInit {
+export class ProfileComponent extends PermissionHandler implements OnInit, AfterViewInit {
 
   preload: PersonalDataPreload;
   personalDataForm: FormGroup;
@@ -29,6 +30,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
               private fb: FormBuilder,
               private activatedRoute: ActivatedRoute,
               private toasterService: ToasterService) {
+    super();
     this.preload = this.activatedRoute.snapshot.data['preload'];
     this.dataSource = new MatTableDataSource<AcademicDiscipline>(this.preload.academicDisciplines);
   }
