@@ -7,7 +7,7 @@
       <div formGroupName="user">
         <div class="row">
           <mat-form-field class="col-md-1 mb-3">
-            <input matInput type="text" placeholder="Title" maxlength="50" formControlName="title">
+            <input matInput type="text" placeholder="Title" formControlName="title">
           </mat-form-field>
           <mat-form-field class="col-md-5 mb-3">
             <input matInput type="text" placeholder="First name" formControlName="firstName">
@@ -18,15 +18,15 @@
         </div>
         <div class="row">
           <mat-form-field class="col-md-6 mb-3">
-            <input matInput type="text" placeholder="Job" maxlength="50" formControlName="job">
+            <input matInput type="text" placeholder="Job" formControlName="job">
           </mat-form-field>
           <mat-form-field class="col-md-6 mb-3">
-            <input matInput type="text" placeholder="Email" maxlength="50" formControlName="email">
+            <input matInput type="text" placeholder="Email" formControlName="email">
           </mat-form-field>
         </div>
         <div class="row">
           <mat-form-field class="col-md-6 mb-3">
-            <input matInput type="text" placeholder="Username" maxlength="50" formControlName="username">
+            <input matInput type="text" placeholder="Username" formControlName="username">
           </mat-form-field>
         </div>
       </div>
@@ -71,13 +71,11 @@
     <div class="mat-elevation-z8">
       <mat-table #table [dataSource]="dataSource" matSort id="academicDisciplinesTable">
 
-        <!-- Id Column -->
         <ng-container matColumnDef="academicDisciplineId">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Id </mat-header-cell>
           <mat-cell *matCellDef="let element"> {{element.academicDisciplineId}} </mat-cell>
         </ng-container>
 
-        <!-- Name Column -->
         <ng-container matColumnDef="academicDisciplineName">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
           <mat-cell *matCellDef="let element"> {{element.academicDisciplineName}} </mat-cell>
