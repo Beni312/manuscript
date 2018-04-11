@@ -24,7 +24,7 @@ export let usersData = [
     title: 'Mr',
     firstName: 'John',
     lastName: 'Smith',
-    job: '',
+    job: 'author',
     email: 'john.smith@asd.com',
     academicDisciplines: [
       {academicDisciplineId: '02021003', academicDisciplineName: 'Other French and Francophone Language and Literature'},
@@ -67,7 +67,7 @@ export let usersData = [
     title: '',
     firstName: '',
     lastName: '',
-    job: '',
+    job: 'reviewer',
     email: '',
     academicDisciplines: [
       {academicDisciplineId: '02015003', academicDisciplineName: 'Korean Studies'},
@@ -114,7 +114,7 @@ export let usersData = [
     title: 'Mr',
     firstName: 'John',
     lastName: 'Smith',
-    job: '',
+    job: 'author',
     email: 'john.smith@asd.com',
     academicDisciplines: [
       {academicDisciplineId: '02021003', academicDisciplineName: 'Other French and Francophone Language and Literature'},
@@ -157,7 +157,7 @@ export let usersData = [
     title: 'Mr',
     firstName: 'John',
     lastName: 'Smith',
-    job: '',
+    job: 'author',
     email: 'john.smith@asd.com',
     academicDisciplines: [
       {academicDisciplineId: '02021003', academicDisciplineName: 'Other French and Francophone Language and Literature'},
@@ -200,7 +200,7 @@ export let usersData = [
     title: 'Mr',
     firstName: 'John',
     lastName: 'Smith',
-    job: '',
+    job: 'author',
     email: 'john.smith@asd.com',
     academicDisciplines: [
       {academicDisciplineId: '02021003', academicDisciplineName: 'Other French and Francophone Language and Literature'},
@@ -243,7 +243,7 @@ export let usersData = [
     title: 'Mr',
     firstName: 'John',
     lastName: 'Smith',
-    job: '',
+    job: 'author',
     email: 'john.smith@asd.com',
     academicDisciplines: [
       {academicDisciplineId: '02021003', academicDisciplineName: 'Other French and Francophone Language and Literature'},
@@ -286,7 +286,7 @@ export let usersData = [
     title: 'Mr',
     firstName: 'John',
     lastName: 'Smith',
-    job: '',
+    job: 'author',
     email: 'john.smith@asd.com',
     academicDisciplines: [
       {academicDisciplineId: '02021003', academicDisciplineName: 'Other French and Francophone Language and Literature'},
@@ -329,7 +329,7 @@ export let usersData = [
     title: 'Mr',
     firstName: 'John',
     lastName: 'Smith',
-    job: '',
+    job: 'author',
     email: 'john.smith@asd.com',
     academicDisciplines: [
       {academicDisciplineId: '02021003', academicDisciplineName: 'Other French and Francophone Language and Literature'},
@@ -372,7 +372,7 @@ export let usersData = [
     title: 'Mr',
     firstName: 'John',
     lastName: 'Smith',
-    job: '',
+    job: 'author',
     email: 'john.smith@asd.com',
     academicDisciplines: [
       {academicDisciplineId: '02021003', academicDisciplineName: 'Other French and Francophone Language and Literature'},
@@ -415,7 +415,7 @@ export let usersData = [
     title: 'Mr',
     firstName: 'John',
     lastName: 'Smith',
-    job: '',
+    job: 'author',
     email: 'john.smith@asd.com',
     academicDisciplines: [
       {academicDisciplineId: '02021003', academicDisciplineName: 'Other French and Francophone Language and Literature'},
@@ -458,7 +458,7 @@ export let usersData = [
     title: 'Mr',
     firstName: 'John',
     lastName: 'Smith',
-    job: '',
+    job: 'author',
     email: 'john.smith@asd.com',
     academicDisciplines: [
       {academicDisciplineId: '02021003', academicDisciplineName: 'Other French and Francophone Language and Literature'},
@@ -501,7 +501,7 @@ export let usersData = [
     title: 'Mr',
     firstName: 'John',
     lastName: 'Smith',
-    job: '',
+    job: 'author',
     email: 'john.smith@asd.com',
     academicDisciplines: [
       {academicDisciplineId: '02021003', academicDisciplineName: 'Other French and Francophone Language and Literature'},
@@ -534,6 +534,5 @@ export let usersData = [
       {academicDisciplineId: '02023022', academicDisciplineName: 'Social History'},
       {academicDisciplineId: '02023023', academicDisciplineName: 'United States History'}
     ]
-
   }
 ];
