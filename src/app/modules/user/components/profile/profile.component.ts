@@ -52,9 +52,6 @@ export class ProfileComponent extends PermissionHandler implements OnInit, After
         }),
         email: new FormControl(this.preload.user.email, {
           validators: [Validators.required, Validators.email]
-        }),
-        username: new FormControl(this.preload.user.username, {
-          validators: [Validators.required]
         })
       })
     });

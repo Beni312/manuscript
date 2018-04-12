@@ -24,11 +24,6 @@
             <input matInput type="text" placeholder="Email" formControlName="email">
           </mat-form-field>
         </div>
-        <div class="row">
-          <mat-form-field class="col-md-6 mb-3">
-            <input matInput type="text" placeholder="Username" formControlName="username">
-          </mat-form-field>
-        </div>
       </div>
 
       <button mat-raised-button color="primary" (click)="save()" [disabled]="!personalDataForm.dirty">Save</button>

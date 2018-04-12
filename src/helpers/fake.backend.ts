@@ -161,15 +161,11 @@ export class FakeBackendInterceptor implements HttpInterceptor {
               return user;
             }
           })[0];
-          this.users.splice(this.users.indexOf(user), 1);
           user.title = params.user.title;
           user.firstName = params.user.firstName;
           user.lastName = params.user.lastName;
-          user.username = params.user.username;
           user.job = params.user.job;
           user.email = params.user.email;
-          this.users.push(user);
-          localStorage.setItem('fakeBackendCurrentUser', user.username);
           return this.getBasicResponse(null, 'Your personal data has been updated successfully!');
         }
       }
