@@ -8,6 +8,7 @@ const bodyParser = require("body-parser");
 
 const port = process.env.PORT || '3000';
 app.use(busboy());
+app.use(bodyParser.json());
 var urlencodedParser = bodyParser.urlencoded({ extended: true });
 
 app.use(session({
@@ -18,7 +19,6 @@ app.use(session({
 }));
 
 var auth = function(req, res, next) {
-  console.log(sess);
   if (sess && sess.username)
     return next();
   else
@@ -62,7 +62,6 @@ app.post('/j_spring_security_check', urlencodedParser, (request, response) => {
 
 app.post('/application/preload', auth, (request, response) => {
   let currentUser = sess.username;
-  console.log(currentUser);
   if (currentUser) {
     fs.readFile('users.json', 'utf8', function(err, data) {
       if (err) {
@@ -96,6 +95,147 @@ app.post('/logout', (request, response) => {
   })
 });
 
+app.post('/registration/preload', (request, response) => {
+  fs.readFile('academic.disciplines.json', 'utf8', function(err, data) {
+    let academicDisciplines = JSON.parse(data);
+    response.status(200).send(academicDisciplines);
+  });
+});
+
+app.post('/registration/create', (request, response) => {
+  let params = request.body;
+  let usernameUsed = false;
+  fs.readFile('users.json', 'utf8', function(err, data) {
+    let users = JSON.parse(data);
+    _.forEach(users, function(value) {
+      if (value.username == params.user.username) {
+        usernameUsed = true;
+      }
+    });
+    if (usernameUsed) {
+      response.status(403).send({exceptionMessage: 'Username is already used!'});
+      return;
+    }
+    if (params.password.password != params.password.passwordAgain) {
+      response.status(403).send({exceptionMessage: 'Password parity check failed. The given passwords are not matched.'});
+      return;
+    }
+
+    users.push({
+      userId: users.length + 1,
+      username: params.user.username, 
+      password: params.password.password,
+      role: 'author',
+      title: params.user.title,
+      firstName: params.user.firstName,
+      lastName: params.user.lastName,
+      email: params.user.email, 
+      academicDisciplines: params.academicDisciplines
+    })
+
+    fs.writeFile('users.json', JSON.stringify(users),function(err) {
+      if (err) {
+        response.send(err);
+      } else {
+        response.status(200).send({successMessage: 'User created'});
+      }
+    });
+  });
+});
+
+app.post('/personaldatasettings/preload', (request, response) => {
+  let user = getUserByUsername(sess.username);
+  response.status(200).send({
+    exceptionMessage: null,
+    successMessage: null,
+    user: {
+      title: user.title,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      username: user.username,
+      job: user.job,
+      email: user.email
+    },
+    academicDisciplines: user.academicDisciplines
+  })
+});
+
+app.post('/personaldatasettings/savepersonaldata', (request, response) => {
+  let params = request.body;
+  fs.readFile('users.json', 'utf8', function(err, data) {
+    let users = JSON.parse(data);
+    _.forEach(users, function(value) {
+      if (value.username == sess.username) {
+        value.title = params.user.title;
+        value.firstName = params.user.firstName;
+        value.lastName = params.user.lastName;
+        value.job = params.user.job;
+        value.email = params.user.email;
+      }
+    });
+    fs.writeFile('users.json', JSON.stringify(users));
+    response.status(200).send({
+      successMessage: 'Your personal data has been updated successfully!'
+    });
+  });
+});
+
+app.post('/personaldatasettings/changepassword', (request, response) => {
+  let params = request.body;
+
+  let user = getUserByUsername(sess.username);
+  if (user.password != params.oldPassword) {
+    response.status(403).send({
+      exceptionMessage: 'Your password is wrong.'
+    });
+    return;
+  }
+
+  if (params.password.password != params.password.passwordAgain) {
+    response.status(403).send({
+      exceptionMessage: 'The given passwords are not matched!'
+    });
+    return;
+  }
+
+  fs.readFile('users.json', 'utf8', function(err, data) {
+    let users = JSON.parse(data);
+    _.forEach(users, function(value) {
+      if (value.username == sess.username) {
+        value.password = params.password.password;
+      }
+    });
+    fs.writeFile('users.json', JSON.stringify(users));
+    response.status(200).send({
+      successMessage: 'Your password has changed successfully!'
+    });
+  });
+});
+
+app.post('/submission/preload', (request, response) => {
+  let user = getUserByUsername(sess.username);
+
+  fs.readFile('submissions.json', 'utf8', function(err, data) {
+    let submissions = JSON.parse(data);
+    let userSubmissions = [];
+    _.forEach(submissions, function(value) {
+      if (value.authors.includes(user.userId)) {
+        userSubmissions.push({
+          submissionId: value.submissionId,
+          title: value.title,
+          creationDate: value.creationDate,
+          lastModifyDate: value.lastModifyDate,
+          manuscriptAbstract: value.manuscriptAbstract,
+          authors: getAuthorsByIds(value.authors),
+          keywords: value.keywords,
+          academicDisciplines: value.academicDisciplines,
+          submitter: getUserById(value.submitter).username
+        });
+      }
+    });
+    response.status(200).send({submissions: userSubmissions});
+  });
+});
 
 app.post('/submission/uploadsubmission', (request, response) => {
   var fstream;
@@ -110,20 +250,56 @@ app.post('/submission/uploadsubmission', (request, response) => {
     response.send('OK');
 });
 
-app.post('/submission/uploadsubmission', (request, response) => {
-  obj.newSubmission = 'submission';
-  fs.writeFile('submissions.json', JSON.stringify(obj), function (err) {
-    console.log(err);
-  });
-});
-//
-// function getUserByUsername(username) {
-//   let user = localStorage.getItem('fakeBackendCurrentUser');
-//
-// },
-//
-// function getUsersByIds(ids) {
-// },
+function getUserByUsername(username) {
+  let user;
+  var users = JSON.parse(fs.readFileSync('users.json', 'utf8'));
 
+  _.forEach(users, function(value) {
+    if (value.username == username) {
+      user = value;
+    }
+  });
+  return user;
+}
+
+function getUserById(id) {
+  let user;
+  var users = JSON.parse(fs.readFileSync('users.json', 'utf8'));
+
+  _.forEach(users, function(value) {
+    if (value.userId == id) {
+      user = value;
+    }
+  });
+  return user;
+}
+
+function getUsersByIds(ids) {
+  let filteredUsers = [];
+  var users = JSON.parse(fs.readFileSync('users.json', 'utf8'));
+
+  _.forEach(users, function(value) {
+    if (ids.includes(value.userId)) {
+      filteredUsers.push(value);
+    }
+  });
+  return filteredUsers;
+}
+
+function getAuthorsByIds(ids) {
+  let authors = [];
+  let users = getUsersByIds(ids);
+
+  _.forEach(users, function(value) {
+    authors.push({
+      userId: value.userId,
+      email: value.email,
+      firstName: value.firstName,
+      lastName: value.lastName
+    });
+  });
+  console.log(authors);
+  return authors;
+}
 
 app.listen(port);

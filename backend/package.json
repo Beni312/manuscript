@@ -4,13 +4,12 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "develop": "nodemon server.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "nodemon": "^1.17.3",
-    "parse-json": "^4.0.0"
+    "nodemon": "^1.17.3"
   },
   "dependencies": {
     "connect-busboy": "0.0.2",
