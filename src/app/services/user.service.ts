@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Preload } from '../models/preload';
 import { Router } from '@angular/router';
@@ -9,22 +9,29 @@ export class UserService {
   constructor(private httpClient: HttpClient, private router: Router) {
   }
 
-  login(username: string, password: string) {
-    return this.httpClient.post(
-      '/j_spring_security_check',
-      {username: username, password: password},
-      {headers: new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'})}
+  login(username, password) {
+    const body = new HttpParams()
+      .set('username', username)
+      .set('password', password);
+
+    return this.httpClient.post('/j_spring_security_check',
+      body.toString(),
+      {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded'),
+        withCredentials: true
+      }
     ).subscribe((response: any) => {
-        if (response.success) {
-          this.preload();
-        } else {
-          this.router.navigate(['login']);
-        }
-      });
+      if (response.success) {
+        this.preload();
+      } else {
+        this.router.navigate(['login']);
+      }
+    });
   }
 
   private preload(): Promise<Preload> {
-    return this.httpClient.post<Preload>('/application/preload', {})
+    return this.httpClient.post<Preload>('/application/preload', {}, {withCredentials: true})
       .toPromise()
       .then(resp => {
         localStorage.setItem('currentUser', JSON.stringify(resp));

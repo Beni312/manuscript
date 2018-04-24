@@ -1,7 +1,6 @@
 import { AppComponent } from './app.component';
 import { AuthenticationGuard } from './guards/authentication.guard';
 import { BrowserModule } from '@angular/platform-browser';
-import { fakeBackendProvider } from '../helpers/fake.backend';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './components/login/login.component';
@@ -57,9 +56,9 @@ const ROUTING: ModuleWithProviders = RouterModule.forRoot([
     AuthenticationGuard,
     UserService,
     ProgressSpinnerService,
-    {provide: HTTP_INTERCEPTORS, useClass: ProgressInterceptor, multi: true, deps: [ProgressSpinnerService]},
+    {provide: HTTP_INTERCEPTORS, useClass: ProgressInterceptor, multi: true, deps: [ProgressSpinnerService]}
 
-    fakeBackendProvider
+    // fakeBackendProvider
   ],
   bootstrap: [AppComponent]
 })
