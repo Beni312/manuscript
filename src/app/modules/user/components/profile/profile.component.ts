@@ -77,23 +77,19 @@ export class ProfileComponent extends PermissionHandler implements OnInit, After
   save() {
     if (this.personalDataForm.valid) {
       this.profileService.savePersonalData(this.personalDataForm.value).subscribe(response => {
-        if (!response.exceptionMessage) {
-          this.personalDataForm.reset(this.personalDataForm.value);
-          this.toasterService.pop('success', response.successMessage);
-        } else {
-          this.toasterService.pop('error', response.exceptionMessage);
-        }
+        this.personalDataForm.reset(this.personalDataForm.value);
+        this.toasterService.pop('success', response.successMessage);
+      }, error => {
+        this.toasterService.pop('error', error.error.exceptionMessage);
       });
     }
   }
 
   changePassword() {
     this.profileService.changePassword(this.changePasswordForm.value).subscribe(response => {
-      if (!response.exceptionMessage) {
-        this.toasterService.pop('success', response.successMessage);
-      } else {
-        this.toasterService.pop('error', response.exceptionMessage);
-      }
+      this.toasterService.pop('success', response.successMessage);
+    }, error => {
+      this.toasterService.pop('error', error.error.exceptionMessage);
     });
   }
 
