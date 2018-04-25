@@ -16,9 +16,8 @@ export class ProgressInterceptor implements HttpInterceptor {
             this.progressSpinnerService.decrease();
           }
         },
-        err => {
+        () => {
           this.progressSpinnerService.decrease();
-          console.log(err);
         }
       );
   }

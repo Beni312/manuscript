@@ -1,5 +1,7 @@
+import { BasicResponse } from '../models/basic.response';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import { Preload } from '../models/preload';
 import { Router } from '@angular/router';
 
@@ -9,28 +11,22 @@ export class UserService {
   constructor(private httpClient: HttpClient, private router: Router) {
   }
 
-  login(username, password) {
+  login(username, password): Observable<BasicResponse> {
     const body = new HttpParams()
       .set('username', username)
       .set('password', password);
 
-    return this.httpClient.post('/j_spring_security_check',
+    return this.httpClient.post<BasicResponse>('/j_spring_security_check',
       body.toString(),
       {
         headers: new HttpHeaders()
           .set('Content-Type', 'application/x-www-form-urlencoded'),
         withCredentials: true
       }
-    ).subscribe((response: any) => {
-      if (response.success) {
-        this.preload();
-      } else {
-        this.router.navigate(['login']);
-      }
-    });
+    );
   }
 
-  private preload(): Promise<Preload> {
+  public preload(): Promise<Preload> {
     return this.httpClient.post<Preload>('/application/preload', {}, {withCredentials: true})
       .toPromise()
       .then(resp => {
