@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FileDropModule } from 'ngx-file-drop';
 import { HomeComponent } from './components/home/home.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from '../material/material.module';
@@ -76,9 +77,10 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
   imports: [
     CommonModule,
     BrowserAnimationsModule,
-    ReactiveFormsModule,
+    FileDropModule,
     HttpClientModule,
     MaterialModule,
+    ReactiveFormsModule,
     SharedModule,
     SecureRoutes
   ],

@@ -237,6 +237,34 @@ app.post('/submission/preload', (request, response) => {
   });
 });
 
+app.post('/submission/remove', (request, response) => {
+  let id = request.body.submissionId;
+  let hasPermission = false;
+
+  fs.readFile('submissions.json', 'utf8', function(err, data) {
+    let submissions = JSON.parse(data);
+    let filteredSubmissions = _.filter(submissions, function(value) {
+      if (value.submissionId != id) {
+        return value;
+      } else {
+        if (getUserById(value.submitter).username == sess.username) {
+          hasPermission = true;
+        }
+      }
+    });
+    if (hasPermission){
+      fs.writeFile('submissions.json', JSON.stringify(filteredSubmissions));
+      response.status(200).send({
+        successMessage: 'Submission deleted'
+      });
+    } else {
+      response.status(403).send({
+        exceptionMessage: "You don't have permission to delete this submission!"
+      });
+    }
+  });
+});
+
 app.post('/submission/uploadsubmission', (request, response) => {
   var fstream;
   request.pipe(request.busboy);
@@ -247,7 +275,9 @@ app.post('/submission/uploadsubmission', (request, response) => {
     //   response.redirect('back');
     // });
 });
-    response.send('OK');
+    response.status(200).send({
+      successMessage: 'success'
+    })
 });
 
 function getUserByUsername(username) {
@@ -298,7 +328,6 @@ function getAuthorsByIds(ids) {
       lastName: value.lastName
     });
   });
-  console.log(authors);
   return authors;
 }
 

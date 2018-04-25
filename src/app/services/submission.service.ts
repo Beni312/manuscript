@@ -15,6 +15,14 @@ export class SubmissionService {
   }
 
   remove(id: string) {
-    return this.httpClient.post<BasicResponse>('/submission/remove', id);
+    return this.httpClient.post<BasicResponse>('/submission/remove', {submissionId: id});
+  }
+
+  uploadFile(file: File) {
+    console.log(file);
+    let formData: FormData = new FormData();
+    formData.append(file.name, file, file.name);
+
+    return this.httpClient.post<BasicResponse>('/submission/uploadsubmission', formData);
   }
 }

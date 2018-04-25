@@ -54,3 +54,8 @@
     <app-expand [data]="element"></app-expand>
   </div>
 </ng-template>
+
+<div class="center">
+  <file-drop headertext="Drop file here" (onFileDrop)="dropped($event)">
+  </file-drop>
+</div>
