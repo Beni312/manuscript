@@ -2,10 +2,11 @@ import { AcademicDiscipline } from '../../../../models/academic.discipline';
 import { ActivatedRoute } from '@angular/router';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { PersonalDataPreload, ProfileService } from '../../../../services/profile.service';
 import { PermissionHandler } from '../permission.component';
 import { ToasterService } from 'angular5-toaster/dist';
+import { UpdateAcademicDisciplinesComponent } from './update.academic.disciplines/update.academic.disciplines.component';
 
 @Component({
   selector: 'app-profile',
@@ -16,9 +17,7 @@ export class ProfileComponent extends PermissionHandler implements OnInit, After
 
   preload: PersonalDataPreload;
   personalDataForm: FormGroup;
-  academicDisciplinesForm: FormGroup;
   changePasswordForm: FormGroup;
-  selectedAcademicDisciplines: AcademicDiscipline[];
   displayedColumns = ['academicDisciplineName'];
   dataSource: MatTableDataSource<AcademicDiscipline>;
 
@@ -29,7 +28,8 @@ export class ProfileComponent extends PermissionHandler implements OnInit, After
   constructor(private profileService: ProfileService,
               private fb: FormBuilder,
               private activatedRoute: ActivatedRoute,
-              private toasterService: ToasterService) {
+              private toasterService: ToasterService,
+              private dialog: MatDialog) {
     super();
     this.preload = this.activatedRoute.snapshot.data['preload'];
     this.dataSource = new MatTableDataSource<AcademicDiscipline>(this.preload.academicDisciplines);
@@ -63,10 +63,6 @@ export class ProfileComponent extends PermissionHandler implements OnInit, After
       }),
       oldPassword: new FormControl('', {validators: [Validators.required]})
     });
-
-    this.academicDisciplinesForm = this.fb.group({
-      academicDisciplines: this.preload.academicDisciplines
-    });
   }
 
   ngAfterViewInit(): void {
@@ -94,12 +90,38 @@ export class ProfileComponent extends PermissionHandler implements OnInit, After
   }
 
   updateAcademicDisciplines() {
-    this.profileService.updateAcademicDisciplines(this.academicDisciplinesForm.value);
+    this.profileService.getAcademicDisciplines().subscribe(response => {
+      const dialogRef = this.dialog.open(UpdateAcademicDisciplinesComponent, {
+        width: '600px',
+        autoFocus: false,
+        data: {
+          all: response,
+          selected: this.preload.academicDisciplines
+        }
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (!result) {
+          return;
+        }
+        this.profileService.updateAcademicDisciplines(result).subscribe(response => {
+          this.reloadAcademicDisciplines();
+          this.toasterService.pop('success', response.successMessage);
+        });
+      });
+    });
   }
 
   resetForm() {
     this.profileService.preload().subscribe(response => {
       this.personalDataForm.reset(response);
+    });
+  }
+
+  reloadAcademicDisciplines() {
+    this.profileService.preload().subscribe(response => {
+      this.dataSource.data = response.academicDisciplines;
+      this.preload.academicDisciplines = response.academicDisciplines;
     });
   }
 }

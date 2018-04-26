@@ -16,6 +16,7 @@ import { SubmissionComponent } from './components/submission/submission.componen
 import { SubmissionDetailsComponent } from './components/submission/submission-details/submission.details.component';
 import { SubmissionPreloadResolver } from './components/submission/submission.preload.service';
 import { SubmissionService } from '../../services/submission.service';
+import { UpdateAcademicDisciplinesComponent } from './components/profile/update.academic.disciplines/update.academic.disciplines.component';
 import { UserComponent } from './user.component';
 import { UserManagementComponent } from './components/user.management/user.management.component';
 import { UserService } from '../../services/user.service';
@@ -89,6 +90,7 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
     ProfileComponent,
     SubmissionComponent,
     SubmissionDetailsComponent,
+    UpdateAcademicDisciplinesComponent,
     UserComponent,
     UserManagementComponent
   ],
@@ -99,6 +101,9 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
     SubmissionPreloadResolver,
     SubmissionService,
     UserService
+  ],
+  entryComponents: [
+    UpdateAcademicDisciplinesComponent
   ]
 })
 export class UserModule {

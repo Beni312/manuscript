@@ -160,6 +160,13 @@ app.post('/personaldatasettings/preload', (request, response) => {
   })
 });
 
+app.post('/personaldatasettings/academicdisciplines', (request, response) => {
+  fs.readFile('academic.disciplines.json', 'utf8', function(err, data) {
+    let academicDisciplines = JSON.parse(data);
+    response.status(200).send(academicDisciplines);
+  });
+});
+
 app.post('/personaldatasettings/savepersonaldata', (request, response) => {
   let params = request.body;
   fs.readFile('users.json', 'utf8', function(err, data) {
@@ -208,6 +215,22 @@ app.post('/personaldatasettings/changepassword', (request, response) => {
     fs.writeFile('users.json', JSON.stringify(users));
     response.status(200).send({
       successMessage: 'Your password has changed successfully!'
+    });
+  });
+});
+
+app.post('/personaldatasettings/updatedisciplines', (request, response) => {
+  let academicDisciplines = request.body;
+  fs.readFile('users.json', 'utf8', function(err, data) {
+    let users = JSON.parse(data);
+    _.forEach(users, function(value) {
+      if (value.username == sess.username) {
+        value.academicDisciplines = academicDisciplines;
+      }
+    });
+    fs.writeFile('users.json', JSON.stringify(users));
+    response.status(200).send({
+      successMessage: 'Your academic disciplines are updated!'
     });
   });
 });

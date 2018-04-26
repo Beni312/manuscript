@@ -36,4 +36,8 @@ export class ProfileService {
   updateAcademicDisciplines(academicDisciplines: AcademicDiscipline[]) {
     return this.httpClient.post<BasicResponse>('/personaldatasettings/updatedisciplines', academicDisciplines);
   }
+
+  getAcademicDisciplines() {
+    return this.httpClient.post<AcademicDiscipline[]>('/personaldatasettings/academicdisciplines', JSON.stringify({}));
+  }
 }
