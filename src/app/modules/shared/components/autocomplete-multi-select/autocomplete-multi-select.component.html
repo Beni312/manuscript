@@ -14,7 +14,7 @@
       </li>
     </ul>
   </div>
-  <div class="selected form-control" [ngStyle]="{'width': inputWidth}">
+  <div class="selected form-control" [ngStyle]="{'width': inputWidth, 'height': selectedItemsHeight }">
     <div *ngFor="let item of selected" class="item">
       <div>
         <a (click)="remove(item)"><i class="material-icons">delete</i></a>

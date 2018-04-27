@@ -28,6 +28,8 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
   placeholder: string;
   @Input()
   inputWidth: string = '200px';
+  @Input()
+  selectedItemsHeight = '120px';
 
   propagateChange: any = () => {};
 
