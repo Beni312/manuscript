@@ -8,8 +8,8 @@
         </button>
       </mat-form-field>
     </div>
-    <ul *ngIf="filteredList.length > 0 && showDropdown">
-      <li #scrollBar>
+    <ul [hidden]="!(filteredList.length > 0 && showDropdown)">
+      <li #dropdown>
         <div *ngFor="let item of filteredList" (click)="select(item)">{{ item[property] }}</div>
       </li>
     </ul>

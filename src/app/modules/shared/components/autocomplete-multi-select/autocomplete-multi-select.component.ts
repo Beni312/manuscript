@@ -1,5 +1,6 @@
-import { Component, forwardRef, Input, OnChanges } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, forwardRef, Input, OnChanges, Renderer2, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { MatFormField } from '@angular/material';
 
 @Component({
   selector: 'app-autocomplete-multi-select',
@@ -13,7 +14,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     }
   ]
 })
-export class AutocompleteMultiSelectComponent implements ControlValueAccessor, OnChanges {
+export class AutocompleteMultiSelectComponent implements ControlValueAccessor, OnChanges, AfterViewInit {
 
   query = '';
   filteredList = [];
@@ -30,10 +31,17 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
   inputWidth: string = '200px';
   @Input()
   selectedItemsHeight = '120px';
+  @Input()
+  toOrder: boolean = true;
+
+  @ViewChild('field')
+  field: MatFormField;
+  @ViewChild('dropdown')
+  dropdown: ElementRef;
 
   propagateChange: any = () => {};
 
-  constructor() {
+  constructor(private renderer: Renderer2) {
   }
 
   clearSearch() {
@@ -44,7 +52,7 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
   filter() {
     this.filteredList = this.items.filter(el => {
       if (el !== undefined) {
-        return el[this.property].toLowerCase().indexOf(this.query.toLowerCase()) > -1 && (this.selected.indexOf(el) === -1 || !this.isSelected(el));
+        return (el[this.property].toLowerCase().indexOf(this.query.toLowerCase())) > -1 && !this.isSelected(el);
       }
     });
   }
@@ -91,6 +99,25 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
   }
 
   ngOnChanges(): void {
+    if (this.items && this.toOrder) {
+      this.items = this.items.sort((a, b) => {
+        if (a[this.property] < b[this.property]) {
+          return -1;
+        } else if (a[this.property] > b[this.property]) {
+          return 1;
+        }
+        return 0;
+      })
+    }
     this.propagateChange(this.selected);
+  }
+
+  ngAfterViewInit(): void {
+    let width = this.field._elementRef.nativeElement.clientWidth + 3;
+    this.renderer.setStyle(
+      this.dropdown.nativeElement,
+      'width',
+      width + 'px'
+    )
   }
 }

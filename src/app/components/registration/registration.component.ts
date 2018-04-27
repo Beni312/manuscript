@@ -70,14 +70,7 @@ export class RegistrationComponent implements OnInit {
 
     this.service.preload().subscribe(
       data => {
-        this.academicDisciplines = data.sort((a, b) => {
-          if (a.academicDisciplineName < b.academicDisciplineName) {
-            return -1;
-          } else if (a.academicDisciplineName > b.academicDisciplineName) {
-            return 1;
-          }
-          return 0;
-        });
+        this.academicDisciplines = data;
       },
       err => console.log(err)
     );
