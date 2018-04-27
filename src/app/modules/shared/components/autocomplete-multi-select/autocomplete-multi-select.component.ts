@@ -19,7 +19,6 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
   filteredList = [];
   showDropdown = false;
 
-  @Input()
   selected: any[] = [];
   @Input()
   items: any[];
@@ -43,7 +42,7 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
   filter() {
     this.filteredList = this.items.filter(el => {
       if (el !== undefined) {
-        return el[this.property].toLowerCase().indexOf(this.query.toLowerCase()) > -1 && !this.isSelected(el);
+        return el[this.property].toLowerCase().indexOf(this.query.toLowerCase()) > -1 && (this.selected.indexOf(el) === -1 || !this.isSelected(el));
       }
     });
   }
@@ -76,9 +75,9 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
     this.showDropdown = true;
   }
 
-  writeValue(obj: any): void {
+  writeValue(obj): void {
     if (obj) {
-      this.select(obj);
+      this.selected = obj;
     }
   }
 

@@ -10,7 +10,7 @@
     </div>
     <ul *ngIf="filteredList.length > 0 && showDropdown">
       <li #scrollBar>
-        <div *ngFor="let item of filteredList" (click)="writeValue(item)">{{ item[property] }}</div>
+        <div *ngFor="let item of filteredList" (click)="select(item)">{{ item[property] }}</div>
       </li>
     </ul>
   </div>

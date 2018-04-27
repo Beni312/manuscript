@@ -17,18 +17,18 @@ export class UpdateAcademicDisciplinesComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) private data: any,
               private dialogRef: MatDialogRef<UpdateAcademicDisciplinesComponent>,
               private fb: FormBuilder) {
-    this.selected = Object.assign([], data.selected);
+    this.selected = new Array(Object.assign([], data.selected));
     this.all = data.all;
   }
 
   ngOnInit(): void {
     this.academicDisciplinesForm = this.fb.group({
-      academicDisciplines: []
+      academicDisciplines: this.selected
     });
   }
 
   update() {
-    this.dialogRef.close(this.selected);
+    this.dialogRef.close(this.academicDisciplinesForm.value.academicDisciplines);
   }
 
   cancel() {
