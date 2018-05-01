@@ -40,6 +40,7 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
   dropdown: ElementRef;
 
   propagateChange: any = () => {};
+  propagateTouch: any = () => {};
 
   constructor(private renderer: Renderer2) {
   }
@@ -70,24 +71,23 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
   select(item) {
     this.selected.push(item);
     this.query = '';
-    this.filter();
+    this.filteredList.splice(this.filteredList.indexOf(item), 1);
   }
 
   remove(item) {
     this.selected.splice(this.selected.indexOf(item), 1);
+    this.filter();
   }
 
-  closeDropdown() {
-    this.showDropdown = false;
-  }
-
-  openDropDown() {
-    this.showDropdown = true;
+  setShowDropdown(clickOutside: boolean) {
+    this.propagateTouch();
+    this.showDropdown = !clickOutside;
   }
 
   writeValue(obj): void {
     if (obj) {
       this.selected = obj;
+      this.filter();
     }
   }
 
@@ -96,6 +96,7 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
   }
 
   registerOnTouched(fn: any): void {
+    this.propagateTouch = fn;
   }
 
   ngOnChanges(): void {
@@ -107,17 +108,17 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
           return 1;
         }
         return 0;
-      })
+      });
     }
     this.propagateChange(this.selected);
   }
 
   ngAfterViewInit(): void {
-    let width = this.field._elementRef.nativeElement.clientWidth + 3;
+    const width = this.field._elementRef.nativeElement.clientWidth + 3;
     this.renderer.setStyle(
       this.dropdown.nativeElement,
       'width',
       width + 'px'
-    )
+    );
   }
 }

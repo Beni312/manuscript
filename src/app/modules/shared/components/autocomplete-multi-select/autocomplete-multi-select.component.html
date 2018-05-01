@@ -1,15 +1,15 @@
 <div>
   <div>
-    <div dropdown-click (clickOutside)="closeDropdown()" (clickInside)="openDropDown()">
+    <div dropdown-click (clickOutside)="setShowDropdown($event)" (clickInside)="setShowDropdown($event)">
       <mat-form-field [ngStyle]="{'width': inputWidth}" #field>
-        <input matInput id="query" type="search" placeholder="{{ placeholder }}" [(ngModel)]="query" (keyup)="filter()" (click)="filter()" autocomplete="off">
+        <input matInput id="query" type="search" placeholder="{{ placeholder }}" [(ngModel)]="query" (keyup)="filter()" autocomplete="off">
         <button mat-button *ngIf="query" matSuffix mat-icon-button aria-label="Clear" (click)="clearSearch()">
           <mat-icon>close</mat-icon>
         </button>
       </mat-form-field>
     </div>
-    <ul [hidden]="!(filteredList.length > 0 && showDropdown)">
-      <li #dropdown>
+    <ul [hidden]="!showDropdown">
+      <li #dropdown class="mat-elevation-z8">
         <div *ngFor="let item of filteredList" (click)="select(item)">{{ item[property] }}</div>
       </li>
     </ul>
