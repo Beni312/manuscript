@@ -87,7 +87,6 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
   writeValue(obj): void {
     if (obj) {
       this.selected = obj;
-      this.filter();
     }
   }
 
@@ -109,6 +108,7 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
         }
         return 0;
       });
+      this.filter();
     }
     this.propagateChange(this.selected);
   }
