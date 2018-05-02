@@ -11,6 +11,7 @@ import { UserService } from '../../services/user.service';
 })
 export class UserComponent implements OnInit {
 
+  public static currentPage: string;
   public menuItems: SidebarItemDefinition[] = [];
 
   constructor(private menuService: MenuService, private userService: UserService) {
@@ -22,5 +23,9 @@ export class UserComponent implements OnInit {
 
   logout() {
     this.userService.logout();
+  }
+
+  get currentPage() {
+    return UserComponent.currentPage;
   }
 }

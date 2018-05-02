@@ -1,5 +1,6 @@
 import { ActivatedRouteSnapshot, CanActivateChild, Router, RouterStateSnapshot } from '@angular/router';
 import { Injectable } from '@angular/core';
+import { UserComponent } from '../modules/user/user.component';
 import { UserService } from '../services/user.service';
 
 @Injectable()
@@ -17,6 +18,7 @@ export class RoleGuard implements CanActivateChild {
     }
 
     if (childRoute.data.expectedRoles.includes(preload.role.toUpperCase())) {
+      UserComponent.currentPage = childRoute.data.label;
       return true;
     }
 
