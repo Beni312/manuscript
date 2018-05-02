@@ -114,7 +114,7 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
   }
 
   ngAfterViewInit(): void {
-    const width = this.field._elementRef.nativeElement.clientWidth + 3;
+    const width = this.field._elementRef.nativeElement.clientWidth;
     this.renderer.setStyle(
       this.dropdown.nativeElement,
       'width',

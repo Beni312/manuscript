@@ -1,7 +1,7 @@
-<div>
+<div [ngStyle]="{'width': inputWidth}">
   <div>
     <div dropdown-click (clickOutside)="setShowDropdown($event)" (clickInside)="setShowDropdown($event)">
-      <mat-form-field [ngStyle]="{'width': inputWidth}" #field>
+      <mat-form-field #field>
         <input matInput id="query" type="search" placeholder="{{ placeholder }}" [(ngModel)]="query" (keyup)="filter()" autocomplete="off">
         <button mat-button *ngIf="query" matSuffix mat-icon-button aria-label="Clear" (click)="clearSearch()">
           <mat-icon>close</mat-icon>
@@ -14,7 +14,7 @@
       </li>
     </ul>
   </div>
-  <div class="selected form-control" [ngStyle]="{'width': inputWidth, 'height': selectedItemsHeight }">
+  <div class="selected form-control" [ngStyle]="{'height': selectedItemsHeight }">
     <div *ngFor="let item of selected" class="item">
       <div>
         <a (click)="remove(item)"><i class="material-icons">delete</i></a>
