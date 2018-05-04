@@ -2,8 +2,8 @@ import { AcademicDiscipline } from '../models/academic.discipline';
 import { BasicResponse } from '../models/basic.response';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Password } from '../modules/core/components/registration/registration.component';
 import { User } from '../models/user';
-import { Password } from '../components/registration/registration.component';
 
 export class PersonalDataPreload extends BasicResponse {
   user: User;

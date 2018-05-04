@@ -1,20 +1,19 @@
-import { AppComponent } from './app.component';
 import { AuthenticationGuard } from './guards/authentication.guard';
+import { AppComponent } from './app.component';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CoreModule } from './modules/core/core.module';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { LoginComponent } from './components/login/login.component';
+import { LoginComponent } from './modules/core/components/login/login.component';
 import { MaterialModule } from './modules/material/material.module';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule } from '@angular/router';
 import { ProgressInterceptor, ProgressSpinnerService } from './services/progress.spinner.service';
-import { RegistrationComponent } from './components/registration/registration.component';
+import { RegistrationComponent } from './modules/core/components/registration/registration.component';
 import { SharedModule } from './modules/shared/shared.module';
 import { ToasterModule } from 'angular5-toaster/dist';
 import { UserModule } from './modules/user/user.module';
-import { UserService } from './services/user.service';
 
-const ROUTING: ModuleWithProviders = RouterModule.forRoot([
+const Routes: ModuleWithProviders = RouterModule.forRoot([
   {
     path: 'login',
     component: LoginComponent,
@@ -30,35 +29,28 @@ const ROUTING: ModuleWithProviders = RouterModule.forRoot([
     pathMatch: 'full',
     redirectTo: 'login'
   }
-], {
+],{
   useHash: true,
   preloadingStrategy: PreloadAllModules
 });
 
 @NgModule({
   declarations: [
-    AppComponent,
-    LoginComponent,
-    RegistrationComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
-    FormsModule,
+    CoreModule,
     HttpClientModule,
     MaterialModule,
-    ReactiveFormsModule,
-    ROUTING,
+    Routes,
     SharedModule,
     ToasterModule,
     UserModule
   ],
   providers: [
-    AuthenticationGuard,
-    UserService,
     ProgressSpinnerService,
     {provide: HTTP_INTERCEPTORS, useClass: ProgressInterceptor, multi: true, deps: [ProgressSpinnerService]}
-
-    // fakeBackendProvider
   ],
   bootstrap: [AppComponent]
 })

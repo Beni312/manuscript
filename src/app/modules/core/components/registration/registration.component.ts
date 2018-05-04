@@ -1,9 +1,9 @@
-import { AcademicDiscipline } from '../../models/academic.discipline';
-import { BasicResponse } from '../../models/basic.response';
+import { AcademicDiscipline } from '../../../../models/academic.discipline';
+import { BasicResponse } from '../../../../models/basic.response';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { RegistrationService } from '../../services/registration.service';
-import { User } from '../../models/user';
+import { RegistrationService } from '../../../../services/registration.service';
+import { User } from '../../../../models/user';
 
 export class UserRegistration {
   user: User;

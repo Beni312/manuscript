@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
-import { UserRegistration } from '../components/registration/registration.component';
-import { HttpClient } from '@angular/common/http';
 import { AcademicDiscipline } from '../models/academic.discipline';
-import { Observable } from 'rxjs/Observable';
 import { BasicResponse } from '../models/basic.response';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { UserRegistration } from '../modules/core/components/registration/registration.component';
 
 @Injectable()
 export class RegistrationService {
