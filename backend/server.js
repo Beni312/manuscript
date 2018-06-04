@@ -123,13 +123,13 @@ app.post('/registration/create', (request, response) => {
 
     users.push({
       userId: users.length + 1,
-      username: params.user.username, 
+      username: params.user.username,
       password: params.password.password,
       role: 'author',
       title: params.user.title,
       firstName: params.user.firstName,
       lastName: params.user.lastName,
-      email: params.user.email, 
+      email: params.user.email,
       academicDisciplines: params.academicDisciplines
     })
 
@@ -238,11 +238,11 @@ app.post('/personaldatasettings/updatedisciplines', (request, response) => {
 app.post('/submission/preload', (request, response) => {
   let user = getUserByUsername(sess.username);
 
-  fs.readFile('submissions.json', 'utf8', function(err, data) {
+  fs.readFile('submissions.json', 'utf8', (err, data) => {
     let submissions = JSON.parse(data);
     let userSubmissions = [];
-    _.forEach(submissions, function(value) {
-      if (value.authors.includes(user.userId)) {
+    if (user.role == 'ADMIN' || user.role == 'EDITOR') {
+      _.forEach(submissions, (value) => {
         userSubmissions.push({
           submissionId: value.submissionId,
           title: value.title,
@@ -254,8 +254,24 @@ app.post('/submission/preload', (request, response) => {
           academicDisciplines: value.academicDisciplines,
           submitter: getUserById(value.submitter).username
         });
-      }
-    });
+      });
+    } else {
+      _.forEach(submissions, (value) => {
+        if (value.authors.includes(user.userId) || value.submitter == user.userId) {
+          userSubmissions.push({
+            submissionId: value.submissionId,
+            title: value.title,
+            creationDate: value.creationDate,
+            lastModifyDate: value.lastModifyDate,
+            manuscriptAbstract: value.manuscriptAbstract,
+            authors: getAuthorsByIds(value.authors),
+            keywords: value.keywords,
+            academicDisciplines: value.academicDisciplines,
+            submitter: getUserById(value.submitter).username
+          });
+        }
+      });
+    }
     response.status(200).send({submissions: userSubmissions});
   });
 });

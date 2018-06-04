@@ -2,7 +2,7 @@ import { UserService } from '../../../services/user.service';
 
 export class PermissionHandler {
 
-  hasRole(roles: string[]): boolean {
+  hasPermission(roles: string[]): boolean {
     if (!UserService.isLogined()) {
       return false;
     }

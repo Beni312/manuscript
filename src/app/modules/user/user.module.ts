@@ -52,7 +52,7 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
         path: 'submission',
         component: SubmissionComponent,
         data: {
-          expectedRoles: ['REVIEWER', 'EDITOR', 'AUTHOR'],
+          expectedRoles: ['REVIEWER', 'EDITOR', 'AUTHOR', 'ADMIN'],
           label: 'Submission',
           icon: 'content_paste'
         },

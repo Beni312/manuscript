@@ -160,7 +160,7 @@
       {"academicDisciplineId": "02023017", "academicDisciplineName": "Medieval History"},
       {"academicDisciplineId": "02023018", "academicDisciplineName": "Military History"}
     ],
-    "submitter": 1
+    "submitter": 3
   },
   {
     "submissionId": "8",
@@ -232,6 +232,6 @@
       {"academicDisciplineId": "02023017", "academicDisciplineName": "Medieval History"},
       {"academicDisciplineId": "02023018", "academicDisciplineName": "Military History"}
     ],
-    "submitter": 1
+    "submitter": 3
   }
 ]

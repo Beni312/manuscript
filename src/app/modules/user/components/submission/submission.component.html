@@ -55,7 +55,7 @@
   </div>
 </ng-template>
 
-<div class="center">
+<div class="center" *ngIf="hasPermission(['AUTHOR'])">
   <file-drop headertext="Drop file here" (onFileDrop)="dropped($event)">
   </file-drop>
 </div>

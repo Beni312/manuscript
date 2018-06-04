@@ -1,12 +1,13 @@
 import { ActivatedRoute } from '@angular/router';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { FileSystemFileEntry, UploadEvent, UploadFile } from 'ngx-file-drop';
+import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { PermissionHandler } from '../permission.component';
+import { SlideRowAnimation } from '../../../shared/components/mat.row.expand.directive';
 import { Submission } from '../../../../models/submission';
 import { SubmissionPreloadResponse } from '../../../../models/submission.preload.response';
 import { SubmissionService } from '../../../../services/submission.service';
 import { ToasterService } from 'angular5-toaster/dist';
-import { SlideRowAnimation } from '../../../shared/components/mat.row.expand.directive';
 
 @Component({
   selector: 'app-submission',
@@ -14,7 +15,7 @@ import { SlideRowAnimation } from '../../../shared/components/mat.row.expand.dir
   styleUrls: ['./submission.component.scss'],
   animations: [SlideRowAnimation]
 })
-export class SubmissionComponent implements OnInit, AfterViewInit {
+export class SubmissionComponent extends PermissionHandler implements OnInit, AfterViewInit {
 
   preload: SubmissionPreloadResponse;
   displayedColumns = ['title', 'creationDate', 'lastModifyDate', 'manuscriptAbstract', 'submitter', 'actions'];
@@ -27,6 +28,7 @@ export class SubmissionComponent implements OnInit, AfterViewInit {
   constructor(private submissionService: SubmissionService,
               private activatedRoute: ActivatedRoute,
               private toasterService: ToasterService) {
+    super();
   }
 
   ngOnInit() {
