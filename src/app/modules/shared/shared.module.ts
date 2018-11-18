@@ -26,6 +26,9 @@ const declareExport = [
   ],
   exports: [
     declareExport
+  ],
+  entryComponents: [
+    ConfirmDialogComponent
   ]
 })
 export class SharedModule {

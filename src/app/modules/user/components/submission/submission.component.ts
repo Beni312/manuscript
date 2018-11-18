@@ -1,5 +1,5 @@
 import { ActivatedRoute } from '@angular/router';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { FileSystemFileEntry, UploadEvent, UploadFile } from 'ngx-file-drop';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { MessageService } from '../../../../services/message.service';

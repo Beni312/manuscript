@@ -11,6 +11,14 @@ export class UserService {
   constructor(private httpClient: HttpClient, private router: Router) {
   }
 
+  static getPreload(): Preload {
+    return JSON.parse(localStorage.getItem('currentUser'));
+  }
+
+  static isLogined(): boolean {
+    return localStorage.getItem('currentUser') != null;
+  }
+
   login(username, password): Observable<BasicResponse> {
     const body = new HttpParams()
       .set('username', username)
@@ -39,14 +47,6 @@ export class UserService {
         localStorage.removeItem('currentUser');
         return null;
       });
-  }
-
-  static getPreload(): Preload {
-    return JSON.parse(localStorage.getItem('currentUser'));
-  }
-
-  static isLogined(): boolean {
-    return localStorage.getItem('currentUser') != null;
   }
 
   logout() {
