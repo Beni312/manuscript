@@ -29,7 +29,7 @@
     <ng-container matColumnDef="actions">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Actions </mat-header-cell>
       <mat-cell *matCellDef="let element" class="ignore">
-        <button mat-icon-button (click)="delete(element.submissionId)" matTooltip="Delete">
+        <button mat-icon-button (click)="confirmDelete(element.submissionId)" matTooltip="Delete">
           <mat-icon aria-label="Delete">delete</mat-icon>
         </button>
       </mat-cell>

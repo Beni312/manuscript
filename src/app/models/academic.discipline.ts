@@ -1,9 +1,9 @@
 export class AcademicDiscipline {
-  academicDisciplineId: string;
-  academicDisciplineName: string;
+  id: string;
+  name: string;
 
-  constructor(academicDisciplineId: string, academicDisciplineName: string) {
-    this.academicDisciplineId = academicDisciplineId;
-    this.academicDisciplineName = academicDisciplineName;
+  constructor(id: string, name: string) {
+    this.id = id;
+    this.name = name;
   }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ToasterService } from 'angular5-toaster/dist';
 import { UserService } from '../../../../services/user.service';
+import {MessageService} from '../../../../services/message.service';
 
 export class Login {
   username: string;
@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
 
   constructor(private service: UserService,
               private fb: FormBuilder,
-              private toasterService: ToasterService) {
+              private messageService: MessageService) {
   }
 
   ngOnInit() {
@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
     this.service.login(this.model.username, this.model.password).subscribe(() => {
       this.service.preload();
     }, error => {
-      this.toasterService.pop('error', error.error.exceptionMessage);
-    })
+      this.messageService.error(error.error.exceptionMessage);
+    });
   }
 }

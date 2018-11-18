@@ -2,12 +2,12 @@ import { ActivatedRoute } from '@angular/router';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FileSystemFileEntry, UploadEvent, UploadFile } from 'ngx-file-drop';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MessageService } from '../../../../services/message.service';
 import { PermissionHandler } from '../permission.component';
 import { SlideRowAnimation } from '../../../shared/components/mat.row.expand.directive';
 import { Submission } from '../../../../models/submission';
 import { SubmissionPreloadResponse } from '../../../../models/submission.preload.response';
 import { SubmissionService } from '../../../../services/submission.service';
-import { ToasterService } from 'angular5-toaster/dist';
 
 @Component({
   selector: 'app-submission',
@@ -15,7 +15,7 @@ import { ToasterService } from 'angular5-toaster/dist';
   styleUrls: ['./submission.component.scss'],
   animations: [SlideRowAnimation]
 })
-export class SubmissionComponent extends PermissionHandler implements OnInit, AfterViewInit {
+export class SubmissionComponent extends PermissionHandler implements AfterViewInit {
 
   preload: SubmissionPreloadResponse;
   displayedColumns = ['title', 'creationDate', 'lastModifyDate', 'manuscriptAbstract', 'submitter', 'actions'];
@@ -27,14 +27,11 @@ export class SubmissionComponent extends PermissionHandler implements OnInit, Af
 
   constructor(private submissionService: SubmissionService,
               private activatedRoute: ActivatedRoute,
-              private toasterService: ToasterService) {
+              private messageService: MessageService) {
     super();
-  }
-
-  ngOnInit() {
     this.preload = this.activatedRoute.snapshot.data['preload'];
     if (this.preload.submissions.length === 0) {
-      this.toasterService.pop('warning', 'You don\'t have any submission!');
+      this.messageService.warning('You don\'t have any submission!');
     } else {
       this.dataSource = new MatTableDataSource<Submission>(this.preload.submissions);
     }
@@ -47,13 +44,22 @@ export class SubmissionComponent extends PermissionHandler implements OnInit, Af
     }
   }
 
-  delete(item) {
+  confirmDelete(item) {
+    this.messageService.confirm('Are you sure want to delete?').subscribe(result => {
+      if (!result) {
+        return null;
+      }
+      this.deleteSubmission(item);
+    });
+  }
+
+  deleteSubmission(item) {
     this.submissionService.remove(item).subscribe(response => {
       if (!response.exceptionMessage) {
-        this.toasterService.pop('success', response.successMessage);
+        this.messageService.success(response.successMessage);
         this.reload();
       } else {
-        this.toasterService.pop('warning', response.exceptionMessage);
+        this.messageService.error(response.exceptionMessage);
       }
     });
   }
@@ -67,7 +73,7 @@ export class SubmissionComponent extends PermissionHandler implements OnInit, Af
   public dropped(event: UploadEvent) {
     this.files = event.files;
     if (event.files.length > 1) {
-      this.toasterService.pop('warning', 'It\'s a directory, choose only one file!');
+      this.messageService.warning('warning', 'It\'s a directory, choose only one file!');
       return;
     }
     for (const droppedFile of event.files) {
@@ -79,11 +85,11 @@ export class SubmissionComponent extends PermissionHandler implements OnInit, Af
           formData.append(file.name, file, droppedFile.relativePath);
 
           this.submissionService.uploadFile(file).subscribe(response => {
-            this.toasterService.pop('success', response.successMessage);
+            this.messageService.success(response.successMessage);
           });
         });
       } else {
-        this.toasterService.pop('warning', 'It\'s an empty directory, choose a file.');
+        this.messageService.warning('It\'s an empty directory, choose a file.');
       }
     }
   }

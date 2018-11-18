@@ -3,9 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MessageService } from '../../../../services/message.service';
 import { PersonalDataPreload, ProfileService } from '../../../../services/profile.service';
 import { PermissionHandler } from '../permission.component';
-import { ToasterService } from 'angular5-toaster/dist';
 import { UpdateAcademicDisciplinesComponent } from './update.academic.disciplines/update.academic.disciplines.component';
 
 @Component({
@@ -28,7 +28,7 @@ export class ProfileComponent extends PermissionHandler implements OnInit, After
   constructor(private profileService: ProfileService,
               private fb: FormBuilder,
               private activatedRoute: ActivatedRoute,
-              private toasterService: ToasterService,
+              private messageService: MessageService,
               private dialog: MatDialog) {
     super();
     this.preload = this.activatedRoute.snapshot.data['preload'];
@@ -74,18 +74,18 @@ export class ProfileComponent extends PermissionHandler implements OnInit, After
     if (this.personalDataForm.valid) {
       this.profileService.savePersonalData(this.personalDataForm.value).subscribe(response => {
         this.personalDataForm.reset(this.personalDataForm.value);
-        this.toasterService.pop('success', response.successMessage);
+        this.messageService.success(response.successMessage);
       }, error => {
-        this.toasterService.pop('error', error.error.exceptionMessage);
+        this.messageService.success(error.error.exceptionMessage);
       });
     }
   }
 
   changePassword() {
     this.profileService.changePassword(this.changePasswordForm.value).subscribe(response => {
-      this.toasterService.pop('success', response.successMessage);
+      this.messageService.success(response.successMessage);
     }, error => {
-      this.toasterService.pop('error', error.error.exceptionMessage);
+      this.messageService.error(error.error.exceptionMessage);
     });
   }
 
@@ -106,7 +106,7 @@ export class ProfileComponent extends PermissionHandler implements OnInit, After
         }
         this.profileService.updateAcademicDisciplines(result).subscribe(response => {
           this.reloadAcademicDisciplines();
-          this.toasterService.pop('success', response.successMessage);
+          this.messageService.success(response.successMessage);
         });
       });
     });

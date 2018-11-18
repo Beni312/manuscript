@@ -68,12 +68,12 @@
 
         <ng-container matColumnDef="academicDisciplineId">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Id </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.academicDisciplineId}} </mat-cell>
+          <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="academicDisciplineName">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.academicDisciplineName}} </mat-cell>
+          <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

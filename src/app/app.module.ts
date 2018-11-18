@@ -5,12 +5,13 @@ import { CoreModule } from './modules/core/core.module';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './modules/core/components/login/login.component';
 import { MaterialModule } from './modules/material/material.module';
+import { MessageService } from './services/message.service';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule } from '@angular/router';
 import { ProgressInterceptor, ProgressSpinnerService } from './services/progress.spinner.service';
 import { RegistrationComponent } from './modules/core/components/registration/registration.component';
 import { SharedModule } from './modules/shared/shared.module';
-import { ToasterModule } from 'angular5-toaster/dist';
+import { ToastrModule } from 'ngx-toastr';
 import { UserModule } from './modules/user/user.module';
 
 const Routes: ModuleWithProviders = RouterModule.forRoot([
@@ -29,7 +30,7 @@ const Routes: ModuleWithProviders = RouterModule.forRoot([
     pathMatch: 'full',
     redirectTo: 'login'
   }
-],{
+], {
   useHash: true,
   preloadingStrategy: PreloadAllModules
 });
@@ -45,10 +46,11 @@ const Routes: ModuleWithProviders = RouterModule.forRoot([
     MaterialModule,
     Routes,
     SharedModule,
-    ToasterModule,
+    ToastrModule.forRoot(),
     UserModule
   ],
   providers: [
+    MessageService,
     ProgressSpinnerService,
     {provide: HTTP_INTERCEPTORS, useClass: ProgressInterceptor, multi: true, deps: [ProgressSpinnerService]}
   ],
