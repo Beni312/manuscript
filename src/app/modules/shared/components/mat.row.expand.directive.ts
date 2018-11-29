@@ -10,8 +10,9 @@ export const SlideRowAnimation = trigger('detailExpand', [
 @Directive({
   selector: '[matRowExpand]'
 })
+//TODO containerbe tenni
 export class MatRowExpandDirective {
-  private static current: MatRowExpandDirective;
+  public static current: MatRowExpandDirective;
   private row: any;
   private tRef: TemplateRef<any>;
   private opened: boolean;

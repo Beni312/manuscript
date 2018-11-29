@@ -1,5 +1,6 @@
-import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CommonModule } from '@angular/common';
+import { ConferenceComponent } from './components/conference/conference.component';
 import { FileDropModule } from 'ngx-file-drop';
 import { HomeComponent } from './components/home/home.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -8,7 +9,6 @@ import { ModuleWithProviders, NgModule } from '@angular/core';
 import { PersonalDataPreloadResolver } from './components/profile/personal.data.preload.resolver';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ProfileService } from '../../services/profile.service';
-import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { RoleGuard } from '../../guards/role.guard';
 import { SharedModule } from '../shared/shared.module';
@@ -33,7 +33,8 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
         data: {
           expectedRoles: ['ADMIN', 'REVIEWER', 'EDITOR', 'AUTHOR'],
           label: 'Home',
-          icon: 'home'
+          icon: 'home',
+          place: 'sidebar'
         }
       },
       {
@@ -42,10 +43,21 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
         data: {
           expectedRoles: ['ADMIN', 'REVIEWER', 'EDITOR', 'AUTHOR'],
           label: 'Profile',
-          icon: 'account_circle'
+          icon: 'account_circle',
+          place: 'sidebar'
         },
         resolve: {
           preload: PersonalDataPreloadResolver
+        }
+      },
+      {
+        path: 'conference',
+        component: ConferenceComponent,
+        data: {
+          expectedRoles: ['REVIEWER', 'EDITOR', 'AUTHOR', 'ADMIN'],
+          label: 'Conference',
+          icon: 'group_work',
+          place: 'sidebar'
         }
       },
       {
@@ -54,7 +66,34 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
         data: {
           expectedRoles: ['REVIEWER', 'EDITOR', 'AUTHOR', 'ADMIN'],
           label: 'Submission',
-          icon: 'content_paste'
+          icon: 'content_paste',
+          place: 'sidebar'
+        },
+        resolve: {
+          preload: SubmissionPreloadResolver
+        }
+      },
+      {
+        path: 'submission/:id',
+        component: SubmissionComponent,
+        data: {
+          expectedRoles: ['REVIEWER', 'EDITOR', 'AUTHOR', 'ADMIN'],
+          label: 'Submission',
+          icon: 'content_paste',
+          place: 'submissionComponent'
+        },
+        resolve: {
+          preload: SubmissionPreloadResolver
+        }
+      },
+      {
+        path: 'submission/conference/:id',
+        component: SubmissionComponent,
+        data: {
+          expectedRoles: ['REVIEWER', 'EDITOR', 'AUTHOR', 'ADMIN'],
+          label: 'Submission',
+          icon: 'content_paste',
+          place: 'submissionComponent'
         },
         resolve: {
           preload: SubmissionPreloadResolver
@@ -66,7 +105,8 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
         data: {
           expectedRoles: ['ADMIN'],
           label: 'User management',
-          icon: 'group'
+          icon: 'group',
+          place: 'sidebar'
         }
       },
       {path: '', pathMatch: 'full', redirectTo: 'home'}
@@ -76,16 +116,18 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
 
 @NgModule({
   imports: [
-    CommonModule,
     BrowserAnimationsModule,
+    CommonModule,
     FileDropModule,
+    FormsModule,
     HttpClientModule,
     MaterialModule,
     ReactiveFormsModule,
-    SharedModule,
-    SecureRoutes
+    SecureRoutes,
+    SharedModule
   ],
   declarations: [
+    ConferenceComponent,
     HomeComponent,
     ProfileComponent,
     SubmissionComponent,

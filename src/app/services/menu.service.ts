@@ -11,9 +11,9 @@ export class MenuService {
 
   getSidebarItemsDefinitions(): SidebarItemDefinition[] {
     const sidebarItemDefinitions: SidebarItemDefinition[] = [];
-    let role = UserService.getPreload().role;
+    const role = UserService.getPreload().role;
     this.router.config[0].children.forEach(item => {
-      if (item.data && item.data.expectedRoles.includes(role.toUpperCase())) {
+      if (item.data && item.data.place === 'sidebar' && item.data.expectedRoles.includes(role.toUpperCase())) {
         sidebarItemDefinitions.push(new SidebarItemDefinition(item.path, item.data.label, item.component, item.data.icon));
       }
     });

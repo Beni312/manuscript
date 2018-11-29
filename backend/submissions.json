@@ -34,7 +34,8 @@
       {"academicDisciplineId": "02023017", "academicDisciplineName": "Medieval History"},
       {"academicDisciplineId": "02023018", "academicDisciplineName": "Military History"}
     ],
-    "submitter": 1
+    "submitter": 1,
+    "conferenceId": 1
   },
   {
     "submissionId": "1",
@@ -52,7 +53,8 @@
       {"academicDisciplineId": "02023017", "academicDisciplineName": "Medieval History"},
       {"academicDisciplineId": "02023018", "academicDisciplineName": "Military History"}
     ],
-    "submitter": 1
+    "submitter": 1,
+    "conferenceId": 2
   },
   {
     "submissionId": "2",
@@ -70,7 +72,8 @@
       {"academicDisciplineId": "02023017", "academicDisciplineName": "Medieval History"},
       {"academicDisciplineId": "02023018", "academicDisciplineName": "Military History"}
     ],
-    "submitter": 1
+    "submitter": 1,
+    "conferenceId": 1
   },
   {
     "submissionId": "3",
@@ -88,7 +91,8 @@
       {"academicDisciplineId": "02023017", "academicDisciplineName": "Medieval History"},
       {"academicDisciplineId": "02023018", "academicDisciplineName": "Military History"}
     ],
-    "submitter": 1
+    "submitter": 1,
+    "conferenceId": 2
   },
   {
     "submissionId": "4",
@@ -106,7 +110,8 @@
       {"academicDisciplineId": "02023017", "academicDisciplineName": "Medieval History"},
       {"academicDisciplineId": "02023018", "academicDisciplineName": "Military History"}
     ],
-    "submitter": 1
+    "submitter": 1,
+    "conferenceId": 2
   },
   {
     "submissionId": "5",
@@ -124,7 +129,8 @@
       {"academicDisciplineId": "02023017", "academicDisciplineName": "Medieval History"},
       {"academicDisciplineId": "02023018", "academicDisciplineName": "Military History"}
     ],
-    "submitter": 1
+    "submitter": 1,
+    "conferenceId": 1
   },
   {
     "submissionId": "6",
@@ -142,7 +148,8 @@
       {"academicDisciplineId": "02023017", "academicDisciplineName": "Medieval History"},
       {"academicDisciplineId": "02023018", "academicDisciplineName": "Military History"}
     ],
-    "submitter": 1
+    "submitter": 1,
+    "conferenceId": 3
   },
   {
     "submissionId": "7",
@@ -160,7 +167,8 @@
       {"academicDisciplineId": "02023017", "academicDisciplineName": "Medieval History"},
       {"academicDisciplineId": "02023018", "academicDisciplineName": "Military History"}
     ],
-    "submitter": 3
+    "submitter": 3,
+    "conferenceId": 2
   },
   {
     "submissionId": "8",
@@ -178,7 +186,8 @@
       {"academicDisciplineId": "02023017", "academicDisciplineName": "Medieval History"},
       {"academicDisciplineId": "02023018", "academicDisciplineName": "Military History"}
     ],
-    "submitter": 1
+    "submitter": 1,
+    "conferenceId": 1
   },
   {
     "submissionId": "9",
@@ -196,7 +205,8 @@
       {"academicDisciplineId": "02023017", "academicDisciplineName": "Medieval History"},
       {"academicDisciplineId": "02023018", "academicDisciplineName": "Military History"}
     ],
-    "submitter": 1
+    "submitter": 1,
+    "conferenceId": 3
   },
   {
     "submissionId": "10",
@@ -214,7 +224,8 @@
       {"academicDisciplineId": "02023017", "academicDisciplineName": "Medieval History"},
       {"academicDisciplineId": "02023018", "academicDisciplineName": "Military History"}
     ],
-    "submitter": 1
+    "submitter": 1,
+    "conferenceId": 1
   },
   {
     "submissionId": "11",
@@ -232,6 +243,7 @@
       {"academicDisciplineId": "02023017", "academicDisciplineName": "Medieval History"},
       {"academicDisciplineId": "02023018", "academicDisciplineName": "Military History"}
     ],
-    "submitter": 3
+    "submitter": 3,
+    "conferenceId": 3
   }
 ]

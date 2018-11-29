@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "title": "Ancient Philosophy",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam rhoncus ante et nulla sodales, eget condimentum elit blandit. Maecenas et purus vel magna cursus auctor ut vel arcu. ",
+    "submitter": 1,
+    "creationDate": "2/29/2018 11:43"
+  },
+  {
+    "id": 2,
+    "title": "Translation Studies",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam rhoncus ante et nulla sodales, eget condimentum elit blandit. Maecenas et purus vel magna cursus auctor ut vel arcu. ",
+    "submitter": 1,
+    "creationDate": "2/29/2018 11:43"
+  },
+  {
+    "id": 3,
+    "title": "Poetry",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam rhoncus ante et nulla sodales, eget condimentum elit blandit. Maecenas et purus vel magna cursus auctor ut vel arcu. ",
+    "submitter": 1,
+    "creationDate": "2/29/2018 11:43"
+  }
+]
