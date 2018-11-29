@@ -1,3 +1,13 @@
+<div class="filter" *ngIf="preload.submissions.length > 0">
+  <mat-form-field>
+    <mat-select placeholder="Filter for conference" [(ngModel)]="selectedConference" (selectionChange)="filter(selectedConference.id)">
+      <mat-option *ngFor="let pair of filterConferences" [value]="pair">
+        {{ pair.title }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
 <div class="mat-elevation-z8" *ngIf="preload.submissions.length > 0">
   <mat-table #table [dataSource]="dataSource" matSort id="submissionsTable">
 
@@ -29,7 +39,7 @@
     <ng-container matColumnDef="actions">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Actions </mat-header-cell>
       <mat-cell *matCellDef="let element" class="ignore">
-        <button mat-icon-button (click)="confirmDelete(element.submissionId)" matTooltip="Delete">
+        <button mat-icon-button (click)="confirmDelete(element.id)" matTooltip="Delete">
           <mat-icon aria-label="Delete">delete</mat-icon>
         </button>
       </mat-cell>
