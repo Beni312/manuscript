@@ -1,9 +1,9 @@
 <div class="mat-elevation-z8">
   <mat-table #table [dataSource]="dataSource" matSort id="userManagementTable">
 
-    <ng-container matColumnDef="userId">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> User id </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.userId}}</mat-cell>
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Id </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.id}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="username">

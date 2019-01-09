@@ -1,19 +1,32 @@
-module.exports = function(app, sequelize){
+module.exports = function(app, User, UserAlias, Role){
   app.post('/admin/usermanagement', (request, response) => {
-    fs.readFile('users.json', 'utf8', function(err, data) {
-      let users = JSON.parse(data);
-      let resp = [];
+    User.findAll({
+      include: [
+        {
+          model: UserAlias,
+          attributes: ['username']
+        },
+        {
+          model: Role,
+          attributes: ['name']
+        }
+      ],
+      attributes: ['id', 'firstName', 'lastName', 'email']
+    }).then(users => {
+      let usersDto = [];
       users.forEach(user => {
-        resp.push({
-          userId: user.userId,
-          username: user.username,
+        usersDto.push({
+          id: user.id,
+          title: user.title,
           firstName: user.firstName,
           lastName: user.lastName,
-          role: user.role,
-          email: user.email
-        });
+          username: user.userAlias.username,
+          job: user.job,
+          email: user.email,
+          role: user.role.name
+        })
       });
-      response.status(200).send(resp);
-    });
+      response.status(200).send(usersDto);
+    })
   });
 };

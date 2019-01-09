@@ -11,7 +11,7 @@ import { UserManagementService } from '../../../../services/user.management.serv
 export class UserManagementComponent implements OnInit {
 
   users: any;
-  displayedColumns = ['userId', 'username', 'firstName', 'lastName', 'role', 'email'];
+  displayedColumns = ['id', 'username', 'firstName', 'lastName', 'role', 'email'];
   dataSource: MatTableDataSource<any>;
 
   @ViewChild(MatSort) sort: MatSort;
