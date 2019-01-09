@@ -11,10 +11,10 @@ export class Submission {
   authors: Author[];
   keywords: Keyword[];
   academicDisciplines: AcademicDiscipline[];
-  submitter: string;
+  submitterUser: Author;
   conferenceId: number;
 
-  constructor(submissionId: string, title: string, creationDate: Date, lastModifyDate: Date, manuscriptAbstract: string, authors: Author[], keywords: Keyword[], academicDisciplines: AcademicDiscipline[], submitter: string, conferenceId: number) {
+  constructor(submissionId: string, title: string, creationDate: Date, lastModifyDate: Date, manuscriptAbstract: string, authors: Author[], keywords: Keyword[], academicDisciplines: AcademicDiscipline[], submitterUser: Author, conferenceId: number) {
     this.submissionId = submissionId;
     this.title = title;
     this.creationDate = creationDate;
@@ -23,7 +23,7 @@ export class Submission {
     this.authors = authors;
     this.keywords = keywords;
     this.academicDisciplines = academicDisciplines;
-    this.submitter = submitter;
+    this.submitterUser = submitterUser;
     this.conferenceId = conferenceId;
   }
 }

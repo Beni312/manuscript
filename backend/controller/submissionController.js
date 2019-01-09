@@ -17,6 +17,11 @@ module.exports = function(app, User, Conference, Submission, Author, AcademicDis
             through: { attributes: [] }
           },
           {
+            model: User,
+            as: 'submitterUser',
+            attributes: ['id', 'email', 'firstName', 'lastName']
+          },
+          {
             model: Keyword,
             as: 'keywords'
           }
@@ -88,31 +93,64 @@ module.exports = function(app, User, Conference, Submission, Author, AcademicDis
 
   app.post('/submission/conference', util.isLoggedIn, (request, response) => {
     let id = request.body.conferenceId;
-    let conf = '';
-    if (id !== -1) {
-      conf = 'where: {conferenceId:' + id + '}';
+    if (id === -1) {
+      Submission.findAll({include: [
+          {
+            model: AcademicDiscipline,
+            attributes: ['id', 'name'],
+            through: { attributes: [] }
+          },
+          {
+            model: User,
+            as: 'authors',
+            attributes: ['id', 'email','firstName', 'lastName'],
+            through: { attributes: [] }
+          },
+          {
+            model: User,
+            as: 'submitterUser'
+          },
+          {
+            model: Keyword,
+            as: 'keywords'
+          }
+        ]})
+        .then(s => {
+          response.status(200).send(s);
+        })
+    } else {
+      Conference.findById(id, {
+        include: [
+          {
+            model: Submission,
+            attributes: ['id', 'title', 'manuscriptAbstract', 'conferenceId', 'lastModifyDate', 'creationDate'],
+            include: [
+              {
+                model: AcademicDiscipline,
+                attributes: ['id', 'name'],
+                through: {attributes: []}
+              },
+              {
+                model: User,
+                as: 'authors',
+                attributes: ['id', 'email', 'firstName', 'lastName'],
+                through: {attributes: []}
+              },
+              {
+                model: User,
+                as: 'submitterUser',
+                attributes: ['id', 'email', 'firstName', 'lastName']
+              },
+              {
+                model: Keyword,
+                attributes: ['keyword']
+              }
+            ]
+          }
+        ]
+      }).then(c => {
+        response.status(200).send(c.submissions);
+      });
     }
-    Submission.findAll({
-      include: [
-        {
-          model: AcademicDiscipline,
-          attributes: ['id', 'name'],
-          through: {attributes: []}
-        },
-        {
-          model: User,
-          as: 'authors',
-          attributes: ['id', 'email','firstName', 'lastName'],
-          through: {attributes: []}
-        },
-        {
-          model: Keyword,
-          attributes: ['keyword']
-        }
-      ], conf
-    })
-      .then(submissions => {
-        response.status(200).send(submissions);
-      })
   });
 };

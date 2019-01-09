@@ -1,9 +1,9 @@
 export class ConferenceIdNamePair {
   id: number;
-  title: string;
+  name: string;
 
-  constructor(id: number, title: string) {
+  constructor(id: number, name: string) {
     this.id = id;
-    this.title = title;
+    this.name = name;
   }
 }

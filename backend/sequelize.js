@@ -65,6 +65,10 @@ Submission.hasMany(Keyword, {
 Submission.belongsTo(Conference, {
   foreignKey: 'conferenceId'
 });
+Submission.belongsTo(User, {
+  foreignKey: 'submitter',
+  as: 'submitterUser'
+});
 Conference.hasMany(Submission, {
   foreignKey: 'conferenceId'
 });
@@ -96,7 +100,7 @@ sequelize.sync({ force: true })
     const passwordUser = bcrypt.hashSync("user", salt);
     UserStatus.create({id: 0, status: "ok"});
 
-    User.create({id: 1, email: 'admin@example.com', statusId: 0, title: "admin", firstName: "admin", lastName: "admin", job: "admin", birthDate: null, roleId: 1})
+    User.create({id: 1, email: 'admin@example.com', statusId: 0, title: "admin", firstName: "admin", lastName: "Feri", job: "admin", birthDate: null, roleId: 1})
       .then(() => {
         Password.create({id: 1, password: password, expiryDate: null, salt: salt, userId: 1})
           .then(() => {
@@ -105,7 +109,7 @@ sequelize.sync({ force: true })
         UserAlias.create({username: "admin", userId: 1});
       });
 
-    User.create({id: 2, email: 'user@example.com', statusId: 0, title: "Mr", firstName: "user", lastName: "user", job: "user", birthDate: null, roleId: 2})
+    User.create({id: 2, email: 'user@example.com', statusId: 0, title: "Mr", firstName: "John", lastName: "Smith", job: "user", birthDate: null, roleId: 2})
       .then((user) => {
         Password.create({id: 2, password: passwordUser, expiryDate: null, salt: salt, userId: 2})
           .then(() => {

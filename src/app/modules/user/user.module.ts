@@ -2,6 +2,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { ConferenceComponent } from './components/conference/conference.component';
 import { FileDropModule } from 'ngx-file-drop';
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HomeComponent } from './components/home/home.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from '../material/material.module';
