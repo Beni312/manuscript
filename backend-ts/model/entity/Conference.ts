@@ -1,5 +1,6 @@
 import { BaseModel } from "./BaseModel";
-import { BelongsTo, Column, DataType, ForeignKey, Table } from "sequelize-typescript";
+import { BelongsTo, Column, DataType, ForeignKey, HasMany, Table } from "sequelize-typescript";
+import { Submission } from "./Submission";
 import { User } from "./User";
 
 @Table
@@ -16,5 +17,8 @@ export class Conference extends BaseModel<Conference> {
     submitterId: number;
 
     @BelongsTo(() => User)
-    submitter?: User;
+    submitter: User;
+
+    @HasMany(() => Submission)
+    keyword: Submission[];
 }

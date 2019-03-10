@@ -1,8 +1,9 @@
-import { BelongsToMany, Column, DataType, ForeignKey, Table } from "sequelize-typescript";
+import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasMany, Table } from "sequelize-typescript";
 import { AcademicDiscipline } from "./AcademicDiscipline";
 import { AuthorsSubmission } from "./AuthorsSubmission";
 import { BaseModel } from "./BaseModel";
 import { Conference } from "./Conference";
+import { Keyword } from "./Keyword";
 import { SubmissionAcademicDiscipline } from "./SubmissionAcademicDiscipline";
 import { User } from "./User";
 
@@ -28,4 +29,13 @@ export class Submission extends BaseModel<Submission> {
 
   @BelongsToMany(() => User, () => AuthorsSubmission)
   authors: User[];
+
+  @BelongsTo(() => Conference)
+  conference: Conference;
+
+  @BelongsTo(() => User)
+  submitter: User;
+
+  @HasMany(() => Keyword)
+  keyword: Keyword[];
 }

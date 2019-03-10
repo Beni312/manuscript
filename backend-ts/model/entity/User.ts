@@ -1,8 +1,9 @@
-import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, Table } from "sequelize-typescript";
+import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasOne, Table } from "sequelize-typescript";
 import { AcademicDiscipline } from "./AcademicDiscipline";
 import { AuthorsAcademicDiscipline } from "./AuthorsAcademicDiscipline";
 import { BaseModel } from "./BaseModel";
 import { Role } from "./Role";
+import { UserAlias } from "./UserAlias";
 import { UserStatus } from "./UserStatus";
 
 @Table
@@ -42,4 +43,7 @@ export class User extends BaseModel<User> {
 
   @BelongsToMany(() => AcademicDiscipline, () => AuthorsAcademicDiscipline)
   academicDisciplines: AcademicDiscipline[];
+
+  @HasOne(() => UserAlias)
+  userAlias: UserAlias;
 }
