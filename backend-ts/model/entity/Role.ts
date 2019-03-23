@@ -1,7 +1,8 @@
-import { AutoIncrement, Column, DataType, Model, PrimaryKey, Table } from "sequelize-typescript";
+import { AutoIncrement, Column, DataType, PrimaryKey, Table } from "sequelize-typescript";
+import { ModelRepository } from "../ModelRepository";
 
 @Table
-export class Role extends Model<Role> {
+export class Role extends ModelRepository<Role> {
 
   @PrimaryKey
   @AutoIncrement

@@ -1,9 +1,10 @@
 import { AcademicDiscipline } from "./AcademicDiscipline";
-import { Column, DataType, ForeignKey, Model, PrimaryKey, Table } from "sequelize-typescript";
+import { Column, DataType, ForeignKey, PrimaryKey, Table } from "sequelize-typescript";
+import { ModelRepository } from "..//ModelRepository";
 import { User } from "./User";
 
 @Table
-export class AuthorsAcademicDiscipline extends Model<AuthorsAcademicDiscipline> {
+export class AuthorsAcademicDiscipline extends ModelRepository<AuthorsAcademicDiscipline> {
 
   @PrimaryKey
   @ForeignKey(() => User)

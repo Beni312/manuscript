@@ -38,6 +38,6 @@ export class ProfileService {
   }
 
   getAcademicDisciplines() {
-    return this.httpClient.post<AcademicDiscipline[]>('/personaldatasettings/academicdisciplines', JSON.stringify({}));
+    return this.httpClient.post<AcademicDiscipline[]>('/application/academicdisciplines', JSON.stringify({}));
   }
 }

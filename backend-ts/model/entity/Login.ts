@@ -1,9 +1,10 @@
-import { Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
+import { Column, DataType, ForeignKey, Table } from "sequelize-typescript";
+import { ModelRepository } from "../ModelRepository";
 import { Password } from "./Password";
 import { UserAlias } from "./UserAlias";
 
 @Table
-export class Login extends Model<Login> {
+export class Login extends ModelRepository<Login> {
 
   @ForeignKey(() => UserAlias)
   @Column(DataType.STRING)

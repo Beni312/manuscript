@@ -12,7 +12,7 @@ export class RegistrationService {
   }
 
   preload(): Observable<AcademicDiscipline[]> {
-    return this.httpClient.post<AcademicDiscipline[]>('/registration/preload', JSON.stringify({}))
+    return this.httpClient.post<AcademicDiscipline[]>('/application/academicdisciplines', JSON.stringify({}))
   }
 
   register(userRegistration: UserRegistration): Observable<BasicResponse> {

@@ -1,9 +1,10 @@
-import { Sequelize } from 'sequelize-typescript';
+import { Model, Sequelize } from 'sequelize-typescript';
 import { AcademicDiscipline } from "./entity/AcademicDiscipline";
 import { AuthorsAcademicDiscipline } from "./entity/AuthorsAcademicDiscipline";
 import { AuthorsSubmission } from "./entity/AuthorsSubmission";
 import { Conference } from "./entity/Conference";
 import { Keyword } from "./entity/Keyword";
+import { InitialDatabaseUploadCommandService } from "../service/InitialDatabaseUploadCommandService";
 import { Login } from "./entity/Login";
 import { Password } from "./entity/Password";
 import { Role } from "./entity/Role";
@@ -42,16 +43,27 @@ export class Models {
   }
 
   public async initModels() {
-    this.sequelize.addModels(this.getModels());
+    this.sequelize.addModels(Models.getModels());
     await this.sequelize.sync({force: true});
+    await InitialDatabaseUploadCommandService.initData();
     await TestData.initData();
   }
 
   // TODO Scan models folder to build list
-  private getModels() {
+  private static getModels() {
     return [
       AcademicDiscipline, AuthorsAcademicDiscipline, AuthorsSubmission, Conference, Keyword, Login, Password, Role, Submission, SubmissionAcademicDiscipline, User, UserAlias, UserStatus
     ];
+  }
+
+  static getModel<T extends Model<T>>(expectedModelName: string): any {
+    let modelType: any = null;
+    this.getModels().forEach(model => {
+      if (model.getTableName() == expectedModelName) {
+        modelType = model;
+      }
+    });
+    return modelType;
   }
 }
 

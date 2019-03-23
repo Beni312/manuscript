@@ -1,15 +1,15 @@
 import * as express from "express";
 import * as passport from "passport";
-import { BaseRouter } from "./BaseRouter";
+import { BaseController } from "./BaseController";
 
-export class AuthRouter extends BaseRouter {
+export class AuthenticationController extends BaseController {
 
   constructor() {
     super();
     this.buildRoutes();
   }
 
-  private async logout(req: express.Request, res: express.Response, next: express.NextFunction) {
+  private async logout(req: express.Request, res: express.Response) {
     req.logout();
     res.status(200).send({"success": true});
   }
@@ -36,7 +36,7 @@ export class AuthRouter extends BaseRouter {
     })(req, res, next);
   }
 
-  private buildRoutes() {
+  buildRoutes() {
     this.router.post("/login", this.login.bind(this));
     this.router.post("/logout", this.logout.bind(this));
   }

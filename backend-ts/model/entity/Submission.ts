@@ -27,14 +27,14 @@ export class Submission extends BaseModel<Submission> {
   @BelongsToMany(() => AcademicDiscipline, () => SubmissionAcademicDiscipline)
   academicDisciplines: AcademicDiscipline[];
 
-  @BelongsToMany(() => User, () => AuthorsSubmission)
+  @BelongsToMany(() => User, {through: () => AuthorsSubmission, as: "authors", foreignKey: "authorId", otherKey: "submissionId"})
   authors: User[];
+
+  @BelongsTo(() => User, {as: "submitter"})
+  submitter: User;
 
   @BelongsTo(() => Conference)
   conference: Conference;
-
-  @BelongsTo(() => User)
-  submitter: User;
 
   @HasMany(() => Keyword)
   keyword: Keyword[];

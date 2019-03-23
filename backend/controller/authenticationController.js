@@ -1,7 +1,7 @@
 const passport = require('passport');
 
 module.exports = function (app) {
-  app.post('/j_spring_security_check', function (req, res, next) {
+  app.post('/login', function (req, res, next) {
     passport.authenticate('local', function (err, user, info) {
       if (err) {
         return next(err);

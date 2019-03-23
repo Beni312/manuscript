@@ -1,8 +1,9 @@
-import { AutoIncrement, Column, DataType, ForeignKey, Model, PrimaryKey, Table } from "sequelize-typescript";
+import { AutoIncrement, Column, DataType, ForeignKey, PrimaryKey, Table } from "sequelize-typescript";
+import { ModelRepository } from "../ModelRepository";
 import { Submission } from "./Submission";
 
 @Table
-export class Keyword extends Model<Keyword> {
+export class Keyword extends ModelRepository<Keyword> {
 
   @PrimaryKey
   @AutoIncrement

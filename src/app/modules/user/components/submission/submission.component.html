@@ -2,7 +2,7 @@
   <mat-form-field>
     <mat-select placeholder="Filter for conference" [(ngModel)]="selectedConference" (selectionChange)="filter(selectedConference.id)">
       <mat-option *ngFor="let pair of filterConferences" [value]="pair">
-        {{ pair.name }}
+        {{ pair.title }}
       </mat-option>
     </mat-select>
   </mat-form-field>
@@ -33,7 +33,7 @@
 
     <ng-container matColumnDef="submitter">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Submitter</mat-header-cell>
-      <mat-cell *matCellDef="let element">{{element.submitterUser.firstName + ' '  + element.submitterUser.lastName}}</mat-cell>
+      <mat-cell *matCellDef="let element">{{element.submitter.firstName + ' '  + element.submitter.lastName}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="actions">

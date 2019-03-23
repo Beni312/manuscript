@@ -3,7 +3,7 @@ import { Keyword } from './keyword';
 import { Author } from './author';
 
 export class Submission {
-  submissionId: string;
+  id: number;
   title: string;
   creationDate: Date;
   lastModifyDate: Date;
@@ -11,11 +11,11 @@ export class Submission {
   authors: Author[];
   keywords: Keyword[];
   academicDisciplines: AcademicDiscipline[];
-  submitterUser: Author;
+  submitter: Author;
   conferenceId: number;
 
-  constructor(submissionId: string, title: string, creationDate: Date, lastModifyDate: Date, manuscriptAbstract: string, authors: Author[], keywords: Keyword[], academicDisciplines: AcademicDiscipline[], submitterUser: Author, conferenceId: number) {
-    this.submissionId = submissionId;
+  constructor(id: number, title: string, creationDate: Date, lastModifyDate: Date, manuscriptAbstract: string, authors: Author[], keywords: Keyword[], academicDisciplines: AcademicDiscipline[], submitter: Author, conferenceId: number) {
+    this.id = id;
     this.title = title;
     this.creationDate = creationDate;
     this.lastModifyDate = lastModifyDate;
@@ -23,7 +23,7 @@ export class Submission {
     this.authors = authors;
     this.keywords = keywords;
     this.academicDisciplines = academicDisciplines;
-    this.submitterUser = submitterUser;
+    this.submitter = submitter;
     this.conferenceId = conferenceId;
   }
 }

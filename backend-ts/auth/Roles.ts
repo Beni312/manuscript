@@ -1,5 +1,5 @@
 import { RoleEnum } from "../model/enum/RoleEnum";
-import { AuthError } from "../error/AuthError";
+import { AuthenticationError } from "../model/error/AuthenticationError";
 
 const ConnectRoles = require('connect-roles');
 
@@ -18,7 +18,7 @@ export class Roles {
   public static buildRoles() {
     Roles.connectRoles = new ConnectRoles({
       failureHandler: function (req, res, action) {
-        const error = new AuthError('Access Denied - You don\'t have permission to: ' + action);
+        const error = new AuthenticationError('Access Denied - You don\'t have permission to: ' + action);
         res.status(403).json(error);
       },
       async: true

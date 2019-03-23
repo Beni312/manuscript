@@ -24,7 +24,7 @@ export class UserService {
       .set('username', username)
       .set('password', password);
 
-    return this.httpClient.post<BasicResponse>('/j_spring_security_check',
+    return this.httpClient.post<BasicResponse>('/login',
       body.toString(),
       {
         headers: new HttpHeaders()

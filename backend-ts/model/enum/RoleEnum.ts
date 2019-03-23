@@ -4,3 +4,5 @@ export enum RoleEnum {
   EDITOR = "EDITOR",
   REVIEWER = "REVIEWER"
 }
+
+export const roles = Object.keys(RoleEnum);

@@ -1,8 +1,9 @@
-import { Column, DataType, ForeignKey, Model, PrimaryKey, Table } from "sequelize-typescript";
+import { Column, DataType, ForeignKey, PrimaryKey, Table } from "sequelize-typescript";
 import { User } from "./User";
+import { ModelRepository } from "../ModelRepository";
 
 @Table
-export class UserAlias extends Model<UserAlias> {
+export class UserAlias extends ModelRepository<UserAlias> {
 
   @PrimaryKey
   @Column(DataType.STRING)
