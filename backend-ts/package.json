@@ -47,7 +47,6 @@
     "rimraf": "2.6.2",
     "sequelize": "^4.38.0",
     "sequelize-typescript": "^0.6.8-beta.0",
-    "sharp": "^0.20.8",
     "ts-node": "^3.3.0",
     "tsc-watch": "^2.1.2",
     "tslint": "^5.0.0",

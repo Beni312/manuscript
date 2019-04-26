@@ -7,4 +7,6 @@ export abstract class BaseController {
   protected constructor() {
     this.router = express.Router();
   }
+
+  abstract buildRoutes();
 }

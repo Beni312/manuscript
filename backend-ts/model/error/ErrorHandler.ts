@@ -8,6 +8,12 @@ export function errorHandler(error: Error, req, res, next) {
     return res.status(401).json(error);
   }
 
+  if (error.name === "RegistrationError") {
+    console.log(error.name);
+    return res.status(403).json(error);
+  }
+
+
   if (error.name === 'ChangePasswordError') {
     logger.error(error.message);
     return res.status(403).json(error);

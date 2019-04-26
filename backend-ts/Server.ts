@@ -6,12 +6,12 @@ import * as passport from "passport";
 import * as config from "./config/config";
 import * as session from "express-session";
 
-import { Auth } from "./auth/auth";
+import { Auth } from './auth/Auth';
 import { errorHandler } from "./model/error/ErrorHandler";
 import { InternalServerError } from "./model/error/InternalServerError";
 import { logger } from "./service/logger";
 import { Models } from "./model";
-import { Roles } from "./auth/roles";
+import { Roles } from "./auth/Roles";
 import { Router } from "./route";
 import { sequelize } from "./sequelize.config";
 
