@@ -51,6 +51,7 @@
     "tsc-watch": "^2.1.2",
     "tslint": "^5.0.0",
     "typescript": "^2.7.2",
-    "winston": "2.4.4"
+    "winston": "2.4.4",
+    "yarn": "^1.16.0"
   }
 }

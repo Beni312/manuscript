@@ -23,7 +23,7 @@
 
     <ng-container matColumnDef="role">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Role </mat-header-cell>
-      <mat-cell *matCellDef="let element">{{element.role}}</mat-cell>
+      <mat-cell *matCellDef="let element">{{element.role | titlecase}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="email">

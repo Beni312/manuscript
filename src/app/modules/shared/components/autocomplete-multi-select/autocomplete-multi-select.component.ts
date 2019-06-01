@@ -33,6 +33,8 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
   selectedItemsHeight = '120px';
   @Input()
   toOrder: boolean = true;
+  @Input()
+  displayProperty: Function;
 
   @ViewChild('field')
   field: MatFormField;
@@ -61,7 +63,7 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
   isSelected(element) {
     let isSelected = false;
     this.selected.forEach(item => {
-      if (item[this.property] == element[this.property] && !isSelected) {
+      if (item[this.property] === element[this.property] && !isSelected) {
         isSelected = true;
       }
     });
@@ -96,6 +98,13 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
 
   registerOnTouched(fn: any): void {
     this.propagateTouch = fn;
+  }
+
+  getDisplayProperty(item) {
+    if (this.displayProperty) {
+      return this.displayProperty(item);
+    }
+    return item[this.property];
   }
 
   ngOnChanges(): void {

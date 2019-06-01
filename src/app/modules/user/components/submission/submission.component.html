@@ -23,7 +23,7 @@
 
     <ng-container matColumnDef="lastModifyDate">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Last modify date</mat-header-cell>
-      <mat-cell *matCellDef="let element">{{element.lastModifyDate | date:'dd/MM/yyyy hh:mm' }}</mat-cell>
+      <mat-cell *matCellDef="let element">{{element.updatedOn | date:'dd/MM/yyyy hh:mm' }}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="manuscriptAbstract">
@@ -36,11 +36,22 @@
       <mat-cell *matCellDef="let element">{{element.submitter.firstName + ' '  + element.submitter.lastName}}</mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="status">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.status | titlecase }}</mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="actions">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Actions </mat-header-cell>
       <mat-cell *matCellDef="let element" class="ignore">
         <button mat-icon-button (click)="confirmDelete(element.id)" matTooltip="Delete">
           <mat-icon aria-label="Delete">delete</mat-icon>
+        </button>
+        <button mat-icon-button (click)="edit(element.id)" matTooltip="Edit">
+          <mat-icon aria-label="Edit">edit</mat-icon>
+        </button>
+        <button mat-icon-button (click)="evaluate(element.id)" matTooltip="Evaluate" *ngIf="hasPermission(['REVIEWER', 'EDITOR', 'ADMIN'])">
+          <mat-icon aria-label="Evaluate">check_circle</mat-icon>
         </button>
       </mat-cell>
     </ng-container>

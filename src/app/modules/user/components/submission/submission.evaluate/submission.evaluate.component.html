@@ -1,0 +1,36 @@
+<div mat-dialog-content>
+  <form [formGroup]="submissionEvaluateForm">
+    <div class="row">
+      <mat-form-field class="col-12 mb-3">
+        <input matInput placeholder="Submission" formControlName="submissionId">
+      </mat-form-field>
+    </div>
+
+<!--    <div class="row">-->
+<!--      <mat-form-field class="col-12 mb-3">-->
+<!--        <mat-select placeholder="Select type of the message" formControlName="type">-->
+<!--          <mat-option *ngFor="let item of messageTypes" [value]="item">-->
+<!--            {{ item }}-->
+<!--          </mat-option>-->
+<!--        </mat-select>-->
+<!--      </mat-form-field>-->
+<!--    </div>-->
+
+    <div class="row">
+      <mat-form-field class="col-12 mb-3">
+        <textarea matInput placeholder="Leave a message about the submission" formControlName="message"></textarea>
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <mat-checkbox (change)="accept($event)" formControlName="result">Accept submission</mat-checkbox>
+    </div>
+    <div class="d-flex justify-content-center buttons">
+      <button mat-raised-button color="primary" type="submit" (click)="submit()">
+        Submit
+      </button>
+
+      <button mat-raised-button (click)="cancel()">Cancel</button>
+    </div>
+  </form>
+</div>

@@ -1,11 +1,12 @@
-import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasMany, Table } from "sequelize-typescript";
-import { AcademicDiscipline } from "./AcademicDiscipline";
-import { AuthorsSubmission } from "./AuthorsSubmission";
-import { BaseModel } from "./BaseModel";
-import { Conference } from "./Conference";
-import { Keyword } from "./Keyword";
-import { SubmissionAcademicDiscipline } from "./SubmissionAcademicDiscipline";
-import { User } from "./User";
+import { AcademicDiscipline } from './AcademicDiscipline';
+import { AuthorsSubmission } from './AuthorsSubmission';
+import { BaseModel } from './BaseModel';
+import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasMany, Table } from 'sequelize-typescript';
+import { Conference } from './Conference';
+import { Keyword } from './Keyword';
+import { SubmissionStatus, submissionStatuses } from '../enum/SubmissionStatus';
+import { SubmissionAcademicDiscipline } from './SubmissionAcademicDiscipline';
+import { User } from './User';
 
 @Table
 export class Submission extends BaseModel<Submission> {
@@ -24,18 +25,21 @@ export class Submission extends BaseModel<Submission> {
   @Column(DataType.INTEGER)
   conferenceId: number;
 
+  @Column(DataType.ENUM(submissionStatuses))
+  status: SubmissionStatus;
+
   @BelongsToMany(() => AcademicDiscipline, () => SubmissionAcademicDiscipline)
   academicDisciplines: AcademicDiscipline[];
 
-  @BelongsToMany(() => User, {through: () => AuthorsSubmission, as: "authors", foreignKey: "authorId", otherKey: "submissionId"})
+  @BelongsToMany(() => User, {through: () => AuthorsSubmission, as: 'authors', foreignKey: 'authorId', otherKey: 'submissionId'})
   authors: User[];
 
-  @BelongsTo(() => User, {as: "submitter"})
+  @BelongsTo(() => User, {as: 'submitter'})
   submitter: User;
 
   @BelongsTo(() => Conference)
   conference: Conference;
 
   @HasMany(() => Keyword)
-  keyword: Keyword[];
+  keywords: Keyword[];
 }

@@ -1,0 +1,53 @@
+<div mat-dialog-content>
+  <form [formGroup]="submissionCreateForm">
+      <div class="row">
+        <mat-form-field class="col-12 mb-3">
+          <input matInput type="text" placeholder="Title" formControlName="title">
+        </mat-form-field>
+        <mat-form-field class="col-12 mb-3">
+          <input matInput type="text" placeholder="Manuscript abstract" formControlName="manuscriptAbstract">
+        </mat-form-field>
+
+        <mat-form-field class="col-12 mb-3">
+          <mat-select placeholder="Select conference" formControlName="conference">
+            <mat-option *ngFor="let pair of conferences" [value]="pair">
+              {{ pair.title }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="row">
+
+        <tag-input class="col-12 mb-3" formControlName="keywords" [placeholder]="'+keyword'" [identifyBy]="'keyword'" [displayBy]="'keyword'"></tag-input>
+
+        <app-autocomplete-multi-select class="col-12 mb-3"
+          [items]="academicDisciplines"
+          [property]="'name'"
+          formControlName="academicDisciplines"
+          [placeholder]="'Choose academic disciplines'"
+          [selectedItemsHeight]="'200px'"
+          [inputWidth]="'100%'">
+        </app-autocomplete-multi-select>
+
+        <app-autocomplete-multi-select class="col-12 mb-3"
+                                       [items]="authors"
+                                       [property]="'firstName'"
+                                       formControlName="authors"
+                                       [placeholder]="'Add authors'"
+                                       [selectedItemsHeight]="'200px'"
+                                       [inputWidth]="'100%'"
+                                       [displayProperty]="getFullName">
+        </app-autocomplete-multi-select>
+      </div>
+  </form>
+
+  <div class="d-flex justify-content-center buttons">
+    <button mat-raised-button color="primary" (click)="submit()" type="submit">
+      Submit
+    </button>
+
+    <button mat-raised-button (click)="cancel()">Cancel</button>
+  </div>
+
+</div>

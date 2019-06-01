@@ -29,7 +29,6 @@ export class RegistrationComponent implements OnInit {
   selected: AcademicDiscipline[] = [];
   registrationForm: FormGroup;
   result: BasicResponse;
-  isSubmitted: boolean;
 
   constructor(private service: RegistrationService,
               private fb: FormBuilder) {
@@ -85,8 +84,6 @@ export class RegistrationComponent implements OnInit {
           this.result = error;
         }
       );
-    } else {
-      this.isSubmitted = true;
     }
   }
 }

@@ -9,16 +9,24 @@ import {
   User,
   UserAlias
 } from "../index";
-import * as bcrypt from "bcrypt-nodejs"
+import * as bcrypt from "bcrypt-nodejs";
+import { MessageType } from '../enum/MessageType';
+import { SubmissionStatus } from '../enum/SubmissionStatus';
+import { SubmissionMessage } from '../entity/SubmissionMessage';
 
 export class TestData {
 
   static async initData() {
     await this.createUser("admin", "admin@gmail.com", 1, "Mr.", "Admin", "admin", "admin", null, 1, "admin");
-    await this.createUser("user", "user@gmail.com", 1, "Mr.", "User", "user", "user", null, 2, "user");
+    await this.createUser("user", "user@gmail.com", 1, "Mr.", "User", "Lajos", "user", null, 2, "user");
+    await this.createUser("user1", "user1@gmail.com", 1, "Mr.", "User", "Béla", "user", null, 2, "user");
+    await this.createUser("user2", "user2@gmail.com", 1, "Mr.", "User", "Tamás", "user", null, 2, "user");
+    await this.createUser("user3", "user3@gmail.com", 1, "Mr.", "User", "Ezékiel", "user", null, 2, "user");
+    await this.createUser("user4", "user4@gmail.com", 1, "Mr.", "User", "Britniszpírsz", "user", null, 2, "user");
     await this.addAcademicDisciplineToUser(2, 3);
     await this.createConference(2, "testConference", "testDescription");
-    await this.createSubmission("testSubmission", "nabzscahduaefhuhefosuhefs", 2, 1);
+    await this.createSubmission("testSubmission", "nabzscahduaefhuhefosuhefs", 2, 1, SubmissionStatus.CREATED);
+    await this.createSubmissionMessage("submissionMessage", MessageType.INFO);
   }
 
   static async createUser(username, email, statusId, title, firstName, lastName, job, birthDate, roleId, password) {
@@ -33,7 +41,7 @@ export class TestData {
       roleId: roleId
     });
     const salt = bcrypt.genSaltSync();
-    let hashedPassword = this.createPassword(password, salt);
+    const hashedPassword = this.createPassword(password, salt);
     const userPassword = await Password.create({
       password: hashedPassword,
       expiryDate: null,
@@ -48,12 +56,13 @@ export class TestData {
     await Conference.create({title: title, description: description, submitterId: userId});
   }
 
-  static async createSubmission(title, manuscriptAbstract, userId, conferenceId) {
+  static async createSubmission(title, manuscriptAbstract, userId, conferenceId, status) {
     const submission = await Submission.create({
       title: title,
       manuscriptAbstract: manuscriptAbstract,
       submitterId: userId,
-      conferenceId: conferenceId
+      conferenceId: conferenceId,
+      status: status
     });
 
     await SubmissionAcademicDiscipline.create({submissionId: submission.id, academicDisciplineId: 2});
@@ -63,6 +72,10 @@ export class TestData {
     await SubmissionAcademicDiscipline.create({submissionId: submission.id, academicDisciplineId: 6});
     await Keyword.create({submissionId: submission.id, keyword: 'lorem'});
     await Keyword.create({submissionId: submission.id, keyword: 'ipsum'});
+  }
+
+  static async createSubmissionMessage(message, type) {
+    await SubmissionMessage.create({message: message, type: type});
   }
 
   static createPassword(password, salt) {

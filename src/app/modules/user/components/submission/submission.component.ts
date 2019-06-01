@@ -1,14 +1,17 @@
 import { ActivatedRoute } from '@angular/router';
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { ConferenceIdNamePair } from "../../../../models/conference.id.name.pair";
+import { Author } from '../../../../models/author';
+import { ConferenceIdNamePair } from '../../../../models/conference.id.name.pair';
 import { FileSystemFileEntry, UploadEvent, UploadFile } from 'ngx-file-drop';
-import { MatPaginator, MatSort, MatTable, MatTableDataSource } from '@angular/material';
+import { MatDialog, MatPaginator, MatSort, MatTable, MatTableDataSource } from '@angular/material';
 import { MessageService } from '../../../../services/message.service';
-import { PermissionHandler } from '../permission.component';
-import { SlideRowAnimation} from '../../../shared/components/mat.row.expand.directive';
+import { PermissionHandler } from '../permission.handler';
+import { SlideRowAnimation } from '../../../shared/components/mat.row.expand.directive';
 import { Submission } from '../../../../models/submission';
 import { SubmissionPreloadResponse } from '../../../../models/submission.preload.response';
 import { SubmissionService } from '../../../../services/submission.service';
+import { SubmissionUpsertComponent } from './submission.upsert/submission.upsert.component';
+import { SubmissionEvaluateComponent } from './submission.evaluate/submission.evaluate.component';
 
 @Component({
   selector: 'app-submission',
@@ -19,10 +22,14 @@ import { SubmissionService } from '../../../../services/submission.service';
 export class SubmissionComponent extends PermissionHandler implements AfterViewInit {
 
   preload: SubmissionPreloadResponse;
-  displayedColumns = ['title', 'creationDate', 'lastModifyDate', 'manuscriptAbstract', 'submitter', 'actions'];
+  displayedColumns = ['title', 'creationDate', 'lastModifyDate', 'manuscriptAbstract', 'submitter', 'status', 'actions'];
   dataSource: MatTableDataSource<Submission>;
   selectedConference: any;
   filterConferences: ConferenceIdNamePair[] = [];
+  messageTypes: string[];
+
+  authors: Author[];
+
   public files: UploadFile[] = [];
 
   @ViewChild(MatSort) sort: MatSort;
@@ -31,7 +38,8 @@ export class SubmissionComponent extends PermissionHandler implements AfterViewI
 
   constructor(private submissionService: SubmissionService,
               private activatedRoute: ActivatedRoute,
-              private messageService: MessageService) {
+              private messageService: MessageService,
+              private dialog: MatDialog) {
     super();
     this.preload = this.activatedRoute.snapshot.data['preload'];
     const allConference = new ConferenceIdNamePair(-1, 'All conference');
@@ -42,6 +50,7 @@ export class SubmissionComponent extends PermissionHandler implements AfterViewI
       this.messageService.warning('You don\'t have any submission!');
     } else {
       this.dataSource = new MatTableDataSource<Submission>(this.preload.submissions);
+      // TODO
       if (this.activatedRoute.routeConfig.path.includes(':id')) {
         this.activatedRoute.url.subscribe(urlSegment => {
           if (urlSegment.length === 2) {
@@ -66,6 +75,72 @@ export class SubmissionComponent extends PermissionHandler implements AfterViewI
   filter(conferenceId: number) {
     this.submissionService.getFilteredByConference(conferenceId).subscribe(submissions => {
       this.dataSource.data = submissions;
+    });
+  }
+
+  edit(submissionId) {
+    const conferences = this.filterConferences.filter(item => item.id !== -1);
+    if (!this.authors) {
+      this.submissionService.getAuthors().toPromise().then((authors: Author[]) => {
+        this.authors = authors;
+        this.openEditPopup(submissionId, conferences);
+      });
+      return;
+    }
+    this.openEditPopup(submissionId, conferences);
+  }
+
+  openEditPopup(submissionId, conferences) {
+    const dialogRef = this.dialog.open(SubmissionUpsertComponent, {
+      width: '600px',
+      autoFocus: true,
+      data: {
+        academicDisciplines: this.preload.academicDisciplines,
+        authors: this.authors,
+        submission: this.preload.submissions.filter(item => item.id === submissionId)[0],
+        conferences: conferences
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        return;
+      }
+      this.submissionService.edit(result).subscribe(response => {
+        this.reload();
+        this.messageService.success(response.successMessage);
+      });
+    });
+  }
+
+  evaluate(submissionId) {
+    if (!this.authors) {
+      this.submissionService.getMessageTypes().toPromise().then((messageTypes: string[]) => {
+        this.messageTypes = messageTypes;
+        this.openEvaluatePopup(submissionId);
+      });
+      return;
+    }
+    this.openEvaluatePopup(submissionId);
+  }
+
+  openEvaluatePopup(submissionId) {
+    const dialogRef = this.dialog.open(SubmissionEvaluateComponent, {
+      width: '600px',
+      autoFocus: false,
+      data: {
+        submissionId: submissionId,
+        messageTypes: this.messageTypes
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        return;
+      }
+      this.submissionService.evaluate(result).subscribe(response => {
+        this.messageService.success(response.successMessage);
+      });
     });
   }
 

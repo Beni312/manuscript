@@ -43,13 +43,13 @@ export class ProfileService {
       }
     });
 
-    let isMatch = bcrypt.compareSync(params.oldPassword, password.password);
+    const isMatch = bcrypt.compareSync(params.oldPassword, password.password);
     if (!isMatch) {
       throw new ChangePasswordError("Your password is wrong.");
     }
 
     const salt = bcrypt.genSaltSync();
-    await Password._updateByPk(password.id, {password: bcrypt.hashSync(params.password.password, salt), salt: salt});
+    await Password._updateByPk<Password>(password.id, {password: bcrypt.hashSync(params.password.password, salt), salt: salt});
   }
 
   public async updateAcademicDisciplines(userId: number, userAcademicDisciplines: Array<AcademicDiscipline>): Promise<void> {

@@ -5,7 +5,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { MessageService } from '../../../../services/message.service';
 import { PersonalDataPreload, ProfileService } from '../../../../services/profile.service';
-import { PermissionHandler } from '../permission.component';
+import { PermissionHandler } from '../permission.handler';
 import { UpdateAcademicDisciplinesComponent } from './update.academic.disciplines/update.academic.disciplines.component';
 
 @Component({

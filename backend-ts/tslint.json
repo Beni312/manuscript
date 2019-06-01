@@ -19,6 +19,7 @@
       "always",
       "ignore-bound-class-methods"
     ],
+    "whitespace": [true, "check-module"],
     "typedef-whitespace": [
       true,
       {

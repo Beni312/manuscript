@@ -10,7 +10,7 @@
     </div>
     <ul [hidden]="!showDropdown">
       <li #dropdown class="mat-elevation-z8">
-        <div *ngFor="let item of filteredList" (click)="select(item)">{{ item[property] }}</div>
+        <div *ngFor="let item of filteredList" (click)="select(item)">{{ getDisplayProperty(item) }}</div>
       </li>
     </ul>
   </div>
@@ -18,7 +18,7 @@
     <div *ngFor="let item of selected" class="item">
       <div>
         <a (click)="remove(item)"><i class="material-icons">delete</i></a>
-        <span>{{ item[property] }}</span>
+        <span>{{ getDisplayProperty(item) }}</span>
       </div>
     </div>
   </div>

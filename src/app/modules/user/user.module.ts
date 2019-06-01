@@ -2,7 +2,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { ConferenceComponent } from './components/conference/conference.component';
 import { FileDropModule } from 'ngx-file-drop';
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './components/home/home.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from '../material/material.module';
@@ -14,13 +14,16 @@ import { RouterModule } from '@angular/router';
 import { RoleGuard } from '../../guards/role.guard';
 import { SharedModule } from '../shared/shared.module';
 import { SubmissionComponent } from './components/submission/submission.component';
+import { SubmissionUpsertComponent } from './components/submission/submission.upsert/submission.upsert.component';
 import { SubmissionDetailsComponent } from './components/submission/submission-details/submission.details.component';
 import { SubmissionPreloadResolver } from './components/submission/submission.preload.service';
 import { SubmissionService } from '../../services/submission.service';
+import { TagInputModule } from 'ngx-chips';
 import { UpdateAcademicDisciplinesComponent } from './components/profile/update.academic.disciplines/update.academic.disciplines.component';
 import { UserComponent } from './user.component';
 import { UserManagementComponent } from './components/user.management/user.management.component';
 import { UserService } from '../../services/user.service';
+import { SubmissionEvaluateComponent } from './components/submission/submission.evaluate/submission.evaluate.component';
 
 const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
   {
@@ -125,7 +128,8 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
     MaterialModule,
     ReactiveFormsModule,
     SecureRoutes,
-    SharedModule
+    SharedModule,
+    TagInputModule
   ],
   declarations: [
     ConferenceComponent,
@@ -133,6 +137,8 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
     ProfileComponent,
     SubmissionComponent,
     SubmissionDetailsComponent,
+    SubmissionEvaluateComponent,
+    SubmissionUpsertComponent,
     UpdateAcademicDisciplinesComponent,
     UserComponent,
     UserManagementComponent
@@ -146,6 +152,8 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
     UserService
   ],
   entryComponents: [
+    SubmissionEvaluateComponent,
+    SubmissionUpsertComponent,
     UpdateAcademicDisciplinesComponent
   ]
 })
