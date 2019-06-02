@@ -1,6 +1,7 @@
+import * as cloneDeep from 'lodash/cloneDeep';
 import { AcademicDiscipline } from '../../../../../models/academic.discipline';
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 @Component({
@@ -17,13 +18,13 @@ export class UpdateAcademicDisciplinesComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) private data: any,
               private dialogRef: MatDialogRef<UpdateAcademicDisciplinesComponent>,
               private fb: FormBuilder) {
-    this.selected = new Array(Object.assign([], data.selected));
+    this.selected = cloneDeep(data.selected);
     this.all = data.all;
   }
 
   ngOnInit(): void {
     this.academicDisciplinesForm = this.fb.group({
-      academicDisciplines: this.selected
+      academicDisciplines: new FormControl(this.selected)
     });
   }
 

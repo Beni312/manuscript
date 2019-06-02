@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, forwardRef, Input, OnChanges, Renderer2, ViewChild } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, ElementRef, forwardRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatFormField } from '@angular/material';
 
@@ -14,7 +14,7 @@ import { MatFormField } from '@angular/material';
     }
   ]
 })
-export class AutocompleteMultiSelectComponent implements ControlValueAccessor, OnChanges, AfterViewInit {
+export class AutocompleteMultiSelectComponent implements ControlValueAccessor, OnInit, AfterContentInit, AfterViewInit {
 
   query = '';
   filteredList = [];
@@ -47,6 +47,18 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
   constructor(private renderer: Renderer2) {
   }
 
+  ngOnInit(): void {
+    this.propagateChange(this.selected);
+  }
+
+  ngAfterContentInit(): void {
+    if (this.items && this.toOrder) {
+      this.selected = this.sortByDisplayedProperty(this.selected);
+      this.items = this.sortByDisplayedProperty(this.items);
+    }
+    this.filter();
+  }
+
   clearSearch() {
     this.query = '';
     this.filter();
@@ -55,7 +67,7 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
   filter() {
     this.filteredList = this.items.filter(el => {
       if (el !== undefined) {
-        return (el[this.property].toLowerCase().indexOf(this.query.toLowerCase())) > -1 && !this.isSelected(el);
+        return (this.getDisplayProperty(el).toLowerCase().indexOf(this.query.toLowerCase())) > -1 && !this.isSelected(el);
       }
     });
   }
@@ -63,7 +75,7 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
   isSelected(element) {
     let isSelected = false;
     this.selected.forEach(item => {
-      if (item[this.property] === element[this.property] && !isSelected) {
+      if (this.getDisplayProperty(item) === this.getDisplayProperty(element) && !isSelected) {
         isSelected = true;
       }
     });
@@ -72,6 +84,7 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
 
   select(item) {
     this.selected.push(item);
+    this.sortByDisplayedProperty(this.selected);
     this.query = '';
     this.filteredList.splice(this.filteredList.indexOf(item), 1);
   }
@@ -107,19 +120,15 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
     return item[this.property];
   }
 
-  ngOnChanges(): void {
-    if (this.items && this.toOrder) {
-      this.items = this.items.sort((a, b) => {
-        if (a[this.property] < b[this.property]) {
-          return -1;
-        } else if (a[this.property] > b[this.property]) {
-          return 1;
-        }
-        return 0;
-      });
-      this.filter();
-    }
-    this.propagateChange(this.selected);
+  sortByDisplayedProperty(array: any[]) {
+    return array.sort((a, b) => {
+      if (this.getDisplayProperty(a) < this.getDisplayProperty(b)) {
+        return -1;
+      } else if (this.getDisplayProperty(a) > this.getDisplayProperty(b)) {
+        return 1;
+      }
+      return 0;
+    });
   }
 
   ngAfterViewInit(): void {

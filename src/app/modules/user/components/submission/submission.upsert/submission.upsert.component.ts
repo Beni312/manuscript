@@ -6,6 +6,8 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Submission } from '../../../../../models/submission';
 
+import * as cloneDeep from 'lodash/cloneDeep';
+
 // class SubmissionUpsert {
 //   academicDisciplines: AcademicDiscipline[];
 //   authors: Author[];
@@ -27,8 +29,8 @@ export class SubmissionUpsertComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) private data: any,
               private dialogRef: MatDialogRef<SubmissionUpsertComponent>,
               private fb: FormBuilder) {
+    this.submission = cloneDeep(data.submission);
     this.conferences = data.conferences;
-    this.submission = data.submission;
     this.academicDisciplines = data.academicDisciplines;
     this.authors = data.authors;
   }
