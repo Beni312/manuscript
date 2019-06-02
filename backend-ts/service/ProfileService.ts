@@ -12,7 +12,10 @@ export class ProfileService {
         {
           model: AcademicDiscipline,
           attributes: ['id', 'name'],
-          through: {attributes: []}
+          through: {attributes: []},
+          order: [
+            ['name', 'ASC'],
+          ],
         },
         {
           model: UserAlias,
@@ -66,8 +69,6 @@ export class ProfileService {
 
     for (let i = 0; i < oldAcademicDisciplines.length; i++) {
       if (!userAcademicDisciplinesMap.get(oldAcademicDisciplines[i].academicDisciplineId)) {
-        console.log("destroy");
-        console.log({userId: userId, academicDisciplineId: oldAcademicDisciplines[i].academicDisciplineId});
         await AuthorsAcademicDiscipline._deleteByOptions<AuthorsAcademicDiscipline>({
           where: {
             userId: userId,
@@ -78,8 +79,6 @@ export class ProfileService {
     }
     for (let i = 0; i < userAcademicDisciplines.length; i++) {
       if (!oldAcademicDisciplinesMap.get(userAcademicDisciplines[i].id)) {
-        console.log("create");
-        console.log({userId: userId, academicDisciplineId: userAcademicDisciplines[i].id});
         await AuthorsAcademicDiscipline.create({userId: userId, academicDisciplineId: userAcademicDisciplines[i].id});
       }
     }
