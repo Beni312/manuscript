@@ -8,10 +8,10 @@ import { Submission } from '../../../../../models/submission';
 
 import * as cloneDeep from 'lodash/cloneDeep';
 
-// class SubmissionUpsert {
-//   academicDisciplines: AcademicDiscipline[];
-//   authors: Author[];
-// }
+export class UpsertSubmissionPreload {
+  academicDisciplines: AcademicDiscipline[];
+  authors: Author[];
+}
 
 @Component({
   selector: 'app-submission-upsert',
@@ -21,18 +21,16 @@ import * as cloneDeep from 'lodash/cloneDeep';
 export class SubmissionUpsertComponent implements OnInit {
 
   submissionCreateForm: FormGroup;
-  academicDisciplines: AcademicDiscipline[];
   conferences: ConferenceIdNamePair[];
   submission: Submission;
-  authors: Author[];
+  preload: UpsertSubmissionPreload;
 
   constructor(@Inject(MAT_DIALOG_DATA) private data: any,
               private dialogRef: MatDialogRef<SubmissionUpsertComponent>,
               private fb: FormBuilder) {
     this.submission = cloneDeep(data.submission);
     this.conferences = data.conferences;
-    this.academicDisciplines = data.academicDisciplines;
-    this.authors = data.authors;
+    this.preload = data.preload;
   }
 
   ngOnInit(): void {

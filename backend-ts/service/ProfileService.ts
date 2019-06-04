@@ -14,8 +14,8 @@ export class ProfileService {
           attributes: ['id', 'name'],
           through: {attributes: []},
           order: [
-            ['name', 'ASC'],
-          ],
+            ['name', 'ASC']
+          ]
         },
         {
           model: UserAlias,

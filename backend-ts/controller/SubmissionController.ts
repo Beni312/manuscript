@@ -1,8 +1,7 @@
-import * as express from "express";
-import { BaseController } from "./BaseController";
-import { BasicResponse } from "../model/dto/BasicResponse";
-import { messageTypes } from '../model/enum/MessageType';
-import { SubmissionService } from "../service/SubmissionService";
+import * as express from 'express';
+import { BaseController } from './BaseController';
+import { BasicResponse } from '../model/dto/BasicResponse';
+import { SubmissionService } from '../service/SubmissionService';
 
 export class SubmissionController extends BaseController {
 
@@ -43,9 +42,9 @@ export class SubmissionController extends BaseController {
     );
   }
 
-  async getMessageTypes(req: express.Request, res: express.Response, next: express.NextFunction) {
-    res.json(messageTypes);
-  }
+  // async getMessageTypes(req: express.Request, res: express.Response, next: express.NextFunction) {
+  //   res.json(messageTypes);
+  // }
 
   async edit(req: express.Request, res: express.Response, next: express.NextFunction) {
     await this.submissionService.editSubmission(req.body);
@@ -61,6 +60,10 @@ export class SubmissionController extends BaseController {
     );
   }
 
+  async upsertSubmissionPreload(req: express.Request, res: express.Response, next: express.NextFunction) {
+    res.json(await this.submissionService.getUpsertSubmissionPreload());
+  }
+
   buildRoutes() {
     this.router.post("/preload", this.preload.bind(this));
     this.router.post("/remove", this.remove.bind(this));
@@ -68,6 +71,7 @@ export class SubmissionController extends BaseController {
     this.router.post("/submit", this.submit.bind(this));
     this.router.post("/edit", this.edit.bind(this));
     this.router.post("/evaluate", this.evaluate.bind(this));
-    this.router.post("/getMessageTypes", this.getMessageTypes.bind(this));
+    this.router.post("/upsertSubmissionPreload", this.upsertSubmissionPreload.bind(this));
+    // this.router.post("/getMessageTypes", this.getMessageTypes.bind(this));
   }
 }

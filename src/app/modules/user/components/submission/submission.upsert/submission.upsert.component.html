@@ -22,7 +22,7 @@
         <tag-input class="col-12 mb-3" formControlName="keywords" [placeholder]="'+keyword'" [identifyBy]="'keyword'" [displayBy]="'keyword'"></tag-input>
 
         <app-autocomplete-multi-select class="col-12 mb-3"
-          [items]="academicDisciplines"
+          [items]="preload.academicDisciplines"
           [property]="'name'"
           formControlName="academicDisciplines"
           [placeholder]="'Choose academic disciplines'"
@@ -31,7 +31,7 @@
         </app-autocomplete-multi-select>
 
         <app-autocomplete-multi-select class="col-12 mb-3"
-                                       [items]="authors"
+                                       [items]="preload.authors"
                                        [property]="'firstName'"
                                        formControlName="authors"
                                        [placeholder]="'Add authors'"

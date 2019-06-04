@@ -10,7 +10,7 @@ import { SlideRowAnimation } from '../../../shared/components/mat.row.expand.dir
 import { Submission } from '../../../../models/submission';
 import { SubmissionPreloadResponse } from '../../../../models/submission.preload.response';
 import { SubmissionService } from '../../../../services/submission.service';
-import { SubmissionUpsertComponent } from './submission.upsert/submission.upsert.component';
+import { SubmissionUpsertComponent, UpsertSubmissionPreload } from './submission.upsert/submission.upsert.component';
 import { SubmissionEvaluateComponent } from './submission.evaluate/submission.evaluate.component';
 
 @Component({
@@ -22,6 +22,8 @@ import { SubmissionEvaluateComponent } from './submission.evaluate/submission.ev
 export class SubmissionComponent extends PermissionHandler implements AfterViewInit {
 
   preload: SubmissionPreloadResponse;
+  upsertSubmissionPreload: UpsertSubmissionPreload;
+  // academicDisciplines: AcademicDiscipline[];
   displayedColumns = ['title', 'creationDate', 'lastModifyDate', 'manuscriptAbstract', 'submitter', 'status', 'actions'];
   dataSource: MatTableDataSource<Submission>;
   selectedConference: any;
@@ -81,8 +83,8 @@ export class SubmissionComponent extends PermissionHandler implements AfterViewI
   edit(submissionId) {
     const conferences = this.filterConferences.filter(item => item.id !== -1);
     if (!this.authors) {
-      this.submissionService.getAuthors().toPromise().then((authors: Author[]) => {
-        this.authors = authors;
+      this.submissionService.upsertSubmissionPreload().toPromise().then((preload: UpsertSubmissionPreload) => {
+        this.upsertSubmissionPreload = preload;
         this.openEditPopup(submissionId, conferences);
       });
       return;
@@ -95,8 +97,7 @@ export class SubmissionComponent extends PermissionHandler implements AfterViewI
       width: '600px',
       autoFocus: true,
       data: {
-        academicDisciplines: this.preload.academicDisciplines,
-        authors: this.authors,
+        preload: this.upsertSubmissionPreload,
         submission: this.preload.submissions.filter(item => item.id === submissionId)[0],
         conferences: conferences
       }
@@ -114,23 +115,11 @@ export class SubmissionComponent extends PermissionHandler implements AfterViewI
   }
 
   evaluate(submissionId) {
-    if (!this.authors) {
-      this.submissionService.getMessageTypes().toPromise().then((messageTypes: string[]) => {
-        this.messageTypes = messageTypes;
-        this.openEvaluatePopup(submissionId);
-      });
-      return;
-    }
-    this.openEvaluatePopup(submissionId);
-  }
-
-  openEvaluatePopup(submissionId) {
     const dialogRef = this.dialog.open(SubmissionEvaluateComponent, {
       width: '600px',
       autoFocus: false,
       data: {
-        submissionId: submissionId,
-        messageTypes: this.messageTypes
+        submissionId: submissionId
       }
     });
 

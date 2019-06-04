@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { SubmissionPreloadResponse } from '../models/submission.preload.response';
 import { Submission } from '../models/submission';
+import { UpsertSubmissionPreload } from '../modules/user/components/submission/submission.upsert/submission.upsert.component';
 
 @Injectable()
 export class SubmissionService {
@@ -27,9 +28,9 @@ export class SubmissionService {
     return this.httpClient.post('/submission/getAuthors', {});
   }
 
-  getMessageTypes() {
-    return this.httpClient.post('/submission/getMessageTypes', {});
-  }
+  // getMessageTypes() {
+  //   return this.httpClient.post('/submission/getMessageTypes', {});
+  // }
 
   edit(submission): Observable<BasicResponse> {
     return this.httpClient.post<BasicResponse>('/submission/edit', submission);
@@ -39,8 +40,11 @@ export class SubmissionService {
     return this.httpClient.post<BasicResponse>('/submission/evaluate', evaluation);
   }
 
+  upsertSubmissionPreload(): Observable<UpsertSubmissionPreload> {
+    return this.httpClient.post<UpsertSubmissionPreload>('/submission/upsertSubmissionPreload', {});
+  }
+
   uploadFile(file: File) {
-    console.log(file);
     const formData: FormData = new FormData();
     formData.append(file.name, file, file.name);
 

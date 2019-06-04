@@ -3,6 +3,7 @@ import { AuthorsSubmission } from './AuthorsSubmission';
 import { BaseModel } from './BaseModel';
 import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasMany, Table } from 'sequelize-typescript';
 import { Conference } from './Conference';
+import { HasManySetAssociationsMixin } from 'sequelize';
 import { Keyword } from './Keyword';
 import { SubmissionStatus, submissionStatuses } from '../enum/SubmissionStatus';
 import { SubmissionAcademicDiscipline } from './SubmissionAcademicDiscipline';
@@ -42,4 +43,8 @@ export class Submission extends BaseModel<Submission> {
 
   @HasMany(() => Keyword)
   keywords: Keyword[];
+
+  public setAcademicDisciplines!: HasManySetAssociationsMixin<AcademicDiscipline, number>;
+
+  public setAuthors!: HasManySetAssociationsMixin<User, number>;
 }
