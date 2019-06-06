@@ -10,7 +10,6 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 export class SubmissionEvaluateComponent implements OnInit {
 
   submissionId: number;
-  messageTypes: string[];
   submissionEvaluateForm: FormGroup;
   results = [{
     success: true,
@@ -24,7 +23,6 @@ export class SubmissionEvaluateComponent implements OnInit {
               private dialogRef: MatDialogRef<SubmissionEvaluateComponent>,
               private fb: FormBuilder) {
     this.submissionId = data.submissionId;
-    this.messageTypes = data.messageTypes;
   }
 
   ngOnInit(): void {

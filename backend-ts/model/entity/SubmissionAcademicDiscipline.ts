@@ -1,7 +1,7 @@
-import { Column, DataType, ForeignKey, Table } from "sequelize-typescript";
-import { AcademicDiscipline } from "./AcademicDiscipline";
-import { ModelRepository } from "../ModelRepository";
-import { Submission } from "./Submission";
+import { AcademicDiscipline } from './AcademicDiscipline';
+import { Column, DataType, ForeignKey, Table } from 'sequelize-typescript';
+import { ModelRepository } from '../ModelRepository';
+import { Submission } from './Submission';
 
 @Table
 export class SubmissionAcademicDiscipline extends ModelRepository<SubmissionAcademicDiscipline> {

@@ -1,8 +1,8 @@
 import { AcademicDiscipline, Conference, Keyword, Role, Submission, User } from '../model/index';
 import { ApplicationService } from './ApplicationService';
 import { AuthorDto } from '../model/dto/AuthorDto';
-import { IFindOptions, Model } from 'sequelize-typescript';
 import { MessageType } from '../model/enum/MessageType';
+import { Model } from 'sequelize-typescript';
 import { RoleEnum } from '../model/enum/RoleEnum';
 import { SubmissionMessage } from '../model/entity/SubmissionMessage';
 import { SubmissionPreload } from '../model/dto/SubmissionPreload';
@@ -15,17 +15,6 @@ export class SubmissionService {
 
   constructor() {
     this.applicationService = new ApplicationService();
-  }
-
-  public async findUserSubmissions(userId) {
-    const options: IFindOptions<Submission> = {
-      include: [
-        {
-          model: User
-        }
-      ]
-    };
-    // this.submissionRepository.findSubmissions()
   }
 
   async create(userId, submission) {

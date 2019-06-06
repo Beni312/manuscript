@@ -23,12 +23,10 @@ export class SubmissionComponent extends PermissionHandler implements AfterViewI
 
   preload: SubmissionPreloadResponse;
   upsertSubmissionPreload: UpsertSubmissionPreload;
-  // academicDisciplines: AcademicDiscipline[];
   displayedColumns = ['title', 'creationDate', 'lastModifyDate', 'manuscriptAbstract', 'submitter', 'status', 'actions'];
   dataSource: MatTableDataSource<Submission>;
   selectedConference: any;
   filterConferences: ConferenceIdNamePair[] = [];
-  messageTypes: string[];
 
   authors: Author[];
 
@@ -93,12 +91,13 @@ export class SubmissionComponent extends PermissionHandler implements AfterViewI
   }
 
   openEditPopup(submissionId, conferences) {
+    console.log(this.preload.submissions.find(item => item.id === submissionId));
     const dialogRef = this.dialog.open(SubmissionUpsertComponent, {
       width: '600px',
       autoFocus: true,
       data: {
         preload: this.upsertSubmissionPreload,
-        submission: this.preload.submissions.filter(item => item.id === submissionId)[0],
+        submission: this.preload.submissions.find(item => item.id === submissionId),
         conferences: conferences
       }
     });
@@ -156,6 +155,7 @@ export class SubmissionComponent extends PermissionHandler implements AfterViewI
   reload() {
     this.submissionService.preload().subscribe(resp => {
       this.dataSource = new MatTableDataSource<Submission>(resp.submissions);
+      this.preload = resp;
     });
   }
 
