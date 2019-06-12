@@ -1,6 +1,7 @@
 import { ActivatedRoute } from '@angular/router';
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { Author } from '../../../../models/author';
+import { BasicResponse } from '../../../../models/basic.response';
 import { ConferenceIdNamePair } from '../../../../models/conference.id.name.pair';
 import { FileSystemFileEntry, UploadEvent, UploadFile } from 'ngx-file-drop';
 import { MatDialog, MatPaginator, MatSort, MatTable, MatTableDataSource } from '@angular/material';
@@ -78,22 +79,57 @@ export class SubmissionComponent extends PermissionHandler implements AfterViewI
     });
   }
 
+  create() {
+    if (!this.upsertSubmissionPreload) {
+      this.getPreload().then(() => {
+        this.openCreatePopup();
+      });
+    } else {
+      this.openCreatePopup();
+    }
+  }
+
+  openCreatePopup() {
+    const conferences = this.filterConferences.filter(item => item.id !== -1);
+
+    const dialogRef = this.dialog.open(SubmissionUpsertComponent, {
+      autoFocus: true,
+      data: {
+        preload: this.upsertSubmissionPreload,
+        submission: new Submission(),
+        conferences: conferences
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        return;
+      }
+      this.submissionService.create(result).subscribe((resp: BasicResponse) => {
+        this.messageService.success(resp.successMessage);
+      });
+    });
+  }
+
   edit(submissionId) {
     const conferences = this.filterConferences.filter(item => item.id !== -1);
-    if (!this.authors) {
-      this.submissionService.upsertSubmissionPreload().toPromise().then((preload: UpsertSubmissionPreload) => {
-        this.upsertSubmissionPreload = preload;
+    if (!this.upsertSubmissionPreload) {
+      this.getPreload().then(() => {
         this.openEditPopup(submissionId, conferences);
       });
-      return;
+    } else {
+      this.openEditPopup(submissionId, conferences);
     }
-    this.openEditPopup(submissionId, conferences);
+  }
+
+  getPreload(): Promise<void> {
+    return this.submissionService.upsertSubmissionPreload().toPromise().then((preload: UpsertSubmissionPreload) => {
+      this.upsertSubmissionPreload = preload;
+    });
   }
 
   openEditPopup(submissionId, conferences) {
-    console.log(this.preload.submissions.find(item => item.id === submissionId));
     const dialogRef = this.dialog.open(SubmissionUpsertComponent, {
-      width: '600px',
       autoFocus: true,
       data: {
         preload: this.upsertSubmissionPreload,
@@ -128,6 +164,7 @@ export class SubmissionComponent extends PermissionHandler implements AfterViewI
       }
       this.submissionService.evaluate(result).subscribe(response => {
         this.messageService.success(response.successMessage);
+        this.reload();
       });
     });
   }
@@ -149,6 +186,22 @@ export class SubmissionComponent extends PermissionHandler implements AfterViewI
       } else {
         this.messageService.error(response.exceptionMessage);
       }
+    });
+  }
+
+  confirmSubmit(submissionId): void {
+    this.messageService.confirm('Are you sure want to submit?').subscribe(result => {
+      if (!result) {
+        return null;
+      }
+      this.submit(submissionId);
+    });
+  }
+
+  submit(submissionId) {
+    this.submissionService.submit(submissionId).subscribe(response => {
+      this.messageService.success(response.successMessage);
+      this.reload();
     });
   }
 

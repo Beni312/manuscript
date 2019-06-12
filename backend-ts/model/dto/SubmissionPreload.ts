@@ -1,10 +1,10 @@
-import { Submission } from '../index';
+import { SubmissionDto } from './SubmissionDto';
 
 export class SubmissionPreload {
-  submissions: Submission[];
+  submissions: SubmissionDto[];
   conferenceIdNamePairs: any;
 
-  constructor(submissions: Submission[], conferenceIdNamePairs: any) {
+  constructor(submissions: SubmissionDto[], conferenceIdNamePairs: any) {
     this.submissions = submissions;
     this.conferenceIdNamePairs = conferenceIdNamePairs;
   }

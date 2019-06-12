@@ -32,6 +32,9 @@ export class SubmissionService {
   //   return this.httpClient.post('/submission/getMessageTypes', {});
   // }
 
+  create(submission): Observable<BasicResponse> {
+    return this.httpClient.post<BasicResponse>('/submission/create', submission);
+  }
   edit(submission): Observable<BasicResponse> {
     return this.httpClient.post<BasicResponse>('/submission/edit', submission);
   }
@@ -42,6 +45,10 @@ export class SubmissionService {
 
   upsertSubmissionPreload(): Observable<UpsertSubmissionPreload> {
     return this.httpClient.post<UpsertSubmissionPreload>('/submission/upsertSubmissionPreload', {});
+  }
+
+  submit(submissionId): Observable<BasicResponse> {
+    return this.httpClient.post<BasicResponse>('/submission/submit', {submissionId: submissionId});
   }
 
   uploadFile(file: File) {

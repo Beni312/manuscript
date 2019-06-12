@@ -1,6 +1,7 @@
 import { User } from "model";
 
 export class UserDto {
+  id: number;
   title: string;
   firstName: string;
   lastName: string;
@@ -9,6 +10,7 @@ export class UserDto {
   email: string;
 
   constructor(user: User) {
+    this.id = user.id;
     this.title = user.title;
     this.firstName = user.firstName;
     this.lastName = user.lastName;

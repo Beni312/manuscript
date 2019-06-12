@@ -1,9 +1,9 @@
-import { AcademicDiscipline, Conference, Keyword, Role, Submission, User } from '../model/index';
+import { AcademicDiscipline, AuthorsSubmission, Conference, Keyword, Role, Submission, User, UserAlias } from '../model/index';
 import { ApplicationService } from './ApplicationService';
 import { AuthorDto } from '../model/dto/AuthorDto';
 import { MessageType } from '../model/enum/MessageType';
-import { Model } from 'sequelize-typescript';
 import { RoleEnum } from '../model/enum/RoleEnum';
+import { SubmissionDto } from '../model/dto/SubmissionDto';
 import { SubmissionMessage } from '../model/entity/SubmissionMessage';
 import { SubmissionPreload } from '../model/dto/SubmissionPreload';
 import { SubmissionStatus } from '../model/enum/SubmissionStatus';
@@ -12,21 +12,18 @@ import { UpsertSubmissionPreload } from '../model/dto/UpsertSubmissionPreload';
 export class SubmissionService {
 
   applicationService: ApplicationService;
+  editableSubmissionStatuses = [
+    SubmissionStatus.CREATED,
+    SubmissionStatus.REJECTED_BY_EDITOR,
+    SubmissionStatus.REJECTED_BY_REVIEWER,
+    SubmissionStatus.REJECTED_BY_ADMIN
+  ];
 
   constructor() {
     this.applicationService = new ApplicationService();
   }
 
-  async create(userId, submission) {
-    await Submission.create({
-      title: submission.title,
-      manuscriptAbstract: submission.manuscriptAbstract,
-      submitterId: userId,
-      conferenceId: submission.conferenceId
-    });
-  }
-
-  async preload(userId, role): Promise<SubmissionPreload> {
+  async preload(user, role): Promise<SubmissionPreload> {
     const submissionOptions: any = {
       include: [
         {
@@ -38,7 +35,12 @@ export class SubmissionService {
           model: User,
           as: 'authors',
           attributes: ['id', 'email', 'firstName', 'lastName'],
-          through: {attributes: []}
+          through: {attributes: []},
+          include: [
+            {
+              model: UserAlias
+            }
+          ]
         },
         {
           model: User,
@@ -48,14 +50,24 @@ export class SubmissionService {
         {
           model: Keyword
         }
+      ],
+      order: [
+        ['title', 'ASC'],
+        ['academicDisciplines', 'name', 'ASC'],
+        ['authors', 'firstName', 'ASC'],
+        ['authors', 'lastName', 'ASC']
       ]
     };
     const conferenceOptions: any = {attributes: ['id', 'title']};
 
-    if (role.toUpperCase() !== RoleEnum.ADMIN) {
-      const submitter: any = submissionOptions.include[1];
-      submitter.through = {attributes: [], where: {authorId: userId}};
-      submissionOptions.include[1] = submitter;
+    if (role.toUpperCase() == RoleEnum.AUTHOR) {
+      const filter = {
+        model: AuthorsSubmission,
+        where: {
+          authorId: user.userId
+        }
+      };
+      submissionOptions.include.push(filter);
     }
 
     const submissions: Submission[] = await Submission.findAll(submissionOptions);
@@ -66,7 +78,63 @@ export class SubmissionService {
     }
 
     const conferenceIdNamePairs = await Conference.findAll(conferenceOptions);
-    return new SubmissionPreload(submissions, conferenceIdNamePairs);
+    return new SubmissionPreload(
+      submissions.map(item =>
+        new SubmissionDto(
+          item,
+          this.hasPermissionToDelete(user, item),
+          this.hasPermissionToEdit(user, item),
+          this.hasPermissionToSubmit(user, item),
+          this.hasPermissionToEvaluate(user, item))),
+      conferenceIdNamePairs);
+  }
+
+  /*
+    Admins or the submitter of the submission can delete the submission
+   */
+  private hasPermissionToDelete(user: any, submission: Submission): boolean {
+    if (submission.submitter.id == user.userId) {
+      return true;
+    }
+
+    if (Role.isAdmin(user.role)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  /*
+    if the user is an admin or is an author of the submission, he can edit.
+   */
+  private hasPermissionToEdit(user: any, submission: Submission): boolean {
+    if ((submission.submitter.id === user.userId || submission.authors.find(item => item.id === user.userId)) &&
+      this.editableSubmissionStatuses.indexOf(submission.status) != -1 || Role.isAdmin(user.role)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  private hasPermissionToSubmit(user: any, submission: Submission) {
+    if (submission.submitter.id === user.userId && submission.status == SubmissionStatus.CREATED) {
+      return true;
+    }
+    return false;
+  }
+
+  private hasPermissionToEvaluate(user: any, submission: Submission): boolean {
+    if (user.role === RoleEnum.EDITOR && submission.status === SubmissionStatus.SUBMITTED) {
+      return true;
+    }
+    if (user.role === RoleEnum.REVIEWER && submission.status === SubmissionStatus.ACCEPTED_BY_EDITOR) {
+      return true;
+    }
+    if (user.role === RoleEnum.ADMIN && submission.status === SubmissionStatus.ACCEPTED_BY_REVIEWER) {
+      return true;
+    }
+
+    return false;
   }
 
   async getAuthors(): Promise<AuthorDto[]> {
@@ -87,6 +155,28 @@ export class SubmissionService {
 
   async remove(submissionId): Promise<void> {
     await Submission._deleteByPk<Submission>(submissionId);
+  }
+
+  async createSubmission(userId, submission): Promise<void> {
+    await Submission.create({
+      title: submission.title,
+      manuscriptAbstract: submission.manuscriptAbstract,
+      submitterId: userId,
+      conferenceId: submission.conference.id
+    }).then(async (createdSubmission) => {
+      await createdSubmission.setAuthors(submission.authors.map(item => item.id).push(userId));
+      await createdSubmission.setAcademicDisciplines(submission.academicDisciplines.map(item => item.id));
+      createdSubmission.save();
+    }).catch(err => {
+      console.log(err);
+    });
+    await this.createKeywords(submission.id, submission.keywords);
+  }
+
+  private async createKeywords(submissionId: number, keywords: Keyword[]) {
+    for (let i = 0; i < keywords.length; i++) {
+      await Keyword.create({submissionId: submissionId, keyword: keywords[i].keyword});
+    }
   }
 
   async editSubmission(submission): Promise<void> {
@@ -125,13 +215,14 @@ export class SubmissionService {
       await Keyword.create({submissionId: submission.id, keyword: toAddKeywords[i]});
     }
 
-    await Submission.findByPk(submission.id).then((s: Submission) => {
-      s.title = submission.title;
-      s.manuscriptAbstract = submission.manuscriptAbstract;
-      s.setAuthors(submission.authors.map(item => item.id));
-      s.setAcademicDisciplines(submission.academicDisciplines.map(item => item.id));
-      s.save();
-    });
+    await Submission.findByPk(submission.id)
+      .then(async (s: Submission) => {
+        s.title = submission.title;
+        s.manuscriptAbstract = submission.manuscriptAbstract;
+        await s.setAuthors(submission.authors.map(item => item.id));
+        await s.setAcademicDisciplines(submission.academicDisciplines.map(item => item.id));
+        s.save();
+      }).catch(err => console.log(err));
   }
 
   async evaluateSubmission(evaluation, userId, userRole): Promise<void> {
@@ -169,7 +260,7 @@ export class SubmissionService {
     return new UpsertSubmissionPreload(await this.applicationService.getAcademicDisciplines(), await this.getAuthors());
   }
 
-  async submitSubmission(submissionId): Promise<Model<Submission>> {
+  async submitSubmission(submissionId) {
     return await Submission._updateByPk<Submission>(submissionId, {status: SubmissionStatus.SUBMITTED});
   }
 }

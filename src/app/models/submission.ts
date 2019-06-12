@@ -1,6 +1,6 @@
-import {AcademicDiscipline} from './academic.discipline';
-import {Keyword} from './keyword';
-import {Author} from './author';
+import { AcademicDiscipline } from './academic.discipline';
+import { Author } from './author';
+import { Keyword } from './keyword';
 
 export class Submission {
   id: number;
@@ -14,26 +14,17 @@ export class Submission {
   authors: Author[];
   keywords: Keyword[];
   academicDisciplines: AcademicDiscipline[];
+  canDelete: boolean;
+  canEdit: boolean;
+  canEvaluate: boolean;
 
-  constructor(id: number,
-              title: string,
-              creationDate: Date,
-              updatedOn: Date,
-              manuscriptAbstract: string,
-              authors: Author[],
-              keywords: Keyword[],
-              academicDisciplines: AcademicDiscipline[],
-              submitter: Author,
-              conferenceId: number) {
-    this.id = id;
-    this.title = title;
-    this.creationDate = creationDate;
-    this.updatedOn = updatedOn;
-    this.manuscriptAbstract = manuscriptAbstract;
-    this.authors = authors;
-    this.keywords = keywords;
-    this.academicDisciplines = academicDisciplines;
-    this.submitter = submitter;
-    this.conferenceId = conferenceId;
+
+  constructor() {
+    this.title = '';
+    this.manuscriptAbstract = '';
+    this.submitter = new Author('', '', '', '');
+    this.authors = [];
+    this.keywords = [];
+    this.academicDisciplines = [];
   }
 }

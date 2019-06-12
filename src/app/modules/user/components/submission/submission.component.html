@@ -6,6 +6,11 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
+
+  <button id="createSubmissionBtn" mat-icon-button (click)="create()" matTooltip="Create new submission">
+    <mat-icon aria-label="Evaluate">add_box</mat-icon>
+  </button>
+
 </div>
 
 <div class="mat-elevation-z8" *ngIf="preload.submissions.length > 0">
@@ -44,13 +49,16 @@
     <ng-container matColumnDef="actions">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Actions </mat-header-cell>
       <mat-cell *matCellDef="let element" class="ignore">
-        <button mat-icon-button (click)="confirmDelete(element.id)" matTooltip="Delete">
+        <button mat-icon-button (click)="confirmDelete(element.id)" *ngIf="element.canDelete" matTooltip="Delete">
           <mat-icon aria-label="Delete">delete</mat-icon>
         </button>
-        <button mat-icon-button (click)="edit(element.id)" matTooltip="Edit">
+        <button mat-icon-button (click)="edit(element.id)" *ngIf="element.canEdit" matTooltip="Edit">
           <mat-icon aria-label="Edit">edit</mat-icon>
         </button>
-        <button mat-icon-button (click)="evaluate(element.id)" matTooltip="Evaluate" *ngIf="hasPermission(['REVIEWER', 'EDITOR', 'ADMIN'])">
+        <button mat-icon-button (click)="confirmSubmit(element.id)" *ngIf="element.canSubmit" matTooltip="Submit">
+          <mat-icon aria-label="Submit">present_to_all</mat-icon>
+        </button>
+        <button mat-icon-button (click)="evaluate(element.id)" matTooltip="Evaluate" *ngIf="element.canEvaluate">
           <mat-icon aria-label="Evaluate">check_circle</mat-icon>
         </button>
       </mat-cell>

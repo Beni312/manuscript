@@ -14,7 +14,7 @@ export class SubmissionController extends BaseController {
   }
 
   async create(req: express.Request, res: express.Response, next: express.NextFunction) {
-    await this.submissionService.create(req.user.userId, req.body.submission);
+    await this.submissionService.createSubmission(req.user.userId, req.body);
     res.json(new BasicResponse()
       .withSuccessMessage('Submission created')
     );
@@ -25,7 +25,7 @@ export class SubmissionController extends BaseController {
   }
 
   async preload(req: express.Request, res: express.Response, next: express.NextFunction) {
-    res.json(await this.submissionService.preload(req.user.userId, req.user.role));
+    res.json(await this.submissionService.preload(req.user, req.user.role));
   }
 
   async remove(req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -36,15 +36,11 @@ export class SubmissionController extends BaseController {
   
   async submit(req: express.Request, res: express.Response, next: express.NextFunction) {
     const submissionId: string = req.body.submissionId;
-    this.submissionService.submitSubmission(submissionId);
+    await this.submissionService.submitSubmission(submissionId);
     res.json(new BasicResponse()
       .withSuccessMessage('Submission successfully submitted.')
     );
   }
-
-  // async getMessageTypes(req: express.Request, res: express.Response, next: express.NextFunction) {
-  //   res.json(messageTypes);
-  // }
 
   async edit(req: express.Request, res: express.Response, next: express.NextFunction) {
     await this.submissionService.editSubmission(req.body);
@@ -71,7 +67,7 @@ export class SubmissionController extends BaseController {
     this.router.post("/submit", this.submit.bind(this));
     this.router.post("/edit", this.edit.bind(this));
     this.router.post("/evaluate", this.evaluate.bind(this));
+    this.router.post("/create", this.create.bind(this));
     this.router.post("/upsertSubmissionPreload", this.upsertSubmissionPreload.bind(this));
-    // this.router.post("/getMessageTypes", this.getMessageTypes.bind(this));
   }
 }

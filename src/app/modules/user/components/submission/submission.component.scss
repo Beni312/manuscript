@@ -36,4 +36,10 @@ app-expand {
 
 .filter {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#createSubmissionBtn mat-icon {
+  font-size: 36px !important;
 }
