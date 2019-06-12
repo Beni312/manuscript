@@ -15,7 +15,8 @@ import {
   MatSortModule,
   MatTableModule,
   MatTabsModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatTooltipModule
 } from '@angular/material';
 import { NgModule } from '@angular/core';
 
@@ -36,7 +37,8 @@ const importExport = [
   MatSortModule,
   MatTableModule,
   MatTabsModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatTooltipModule
 ];
 
 @NgModule({
