@@ -1,10 +1,11 @@
-import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasOne, Table } from "sequelize-typescript";
-import { AcademicDiscipline } from "./AcademicDiscipline";
-import { AuthorsAcademicDiscipline } from "./AuthorsAcademicDiscipline";
-import { BaseModel } from "./BaseModel";
-import { Role } from "./Role";
-import { UserAlias } from "./UserAlias";
-import { UserStatus } from "./UserStatus";
+import { AcademicDiscipline } from './AcademicDiscipline';
+import { AuthorsAcademicDiscipline } from './AuthorsAcademicDiscipline';
+import { BaseModel } from './BaseModel';
+import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasOne, Table } from 'sequelize-typescript';
+import { Password } from './Password';
+import { Role } from './Role';
+import { UserAlias } from './UserAlias';
+import { UserStatus } from './UserStatus';
 
 @Table
 export class User extends BaseModel<User> {
@@ -46,4 +47,7 @@ export class User extends BaseModel<User> {
 
   @HasOne(() => UserAlias)
   userAlias: UserAlias;
+
+  @HasOne(() => Password)
+  password: Password;
 }

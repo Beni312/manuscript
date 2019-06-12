@@ -1,4 +1,4 @@
-import { Column, DataType, ForeignKey, Table } from "sequelize-typescript";
+import { BelongsTo, Column, DataType, ForeignKey, Table } from 'sequelize-typescript';
 import { ModelRepository } from "../ModelRepository";
 import { Submission } from "./Submission";
 import { User } from "./User";
@@ -11,6 +11,9 @@ export class AuthorsSubmission extends ModelRepository<AuthorsSubmission> {
   authorId: number;
 
   @ForeignKey(() => Submission)
-  @Column(DataType.STRING)
-  submissionId: string;
+  @Column(DataType.INTEGER)
+  submissionId: number;
+
+  @BelongsTo(() => User)
+  author: User;
 }
