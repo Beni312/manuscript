@@ -1,5 +1,5 @@
 import {
-  AuthorsAcademicDiscipline,
+  AuthorsAcademicDiscipline, AuthorsSubmission,
   Conference,
   Keyword,
   Login,
@@ -8,7 +8,7 @@ import {
   SubmissionAcademicDiscipline,
   User,
   UserAlias
-} from "../index";
+} from '../index';
 import * as bcrypt from "bcrypt-nodejs";
 import { MessageType } from '../enum/MessageType';
 import { SubmissionStatus } from '../enum/SubmissionStatus';
@@ -23,9 +23,13 @@ export class TestData {
     await this.createUser("user2", "user2@gmail.com", 1, "Mr.", "User", "Tamás", "user", null, 2, "user");
     await this.createUser("user3", "user3@gmail.com", 1, "Mr.", "User", "Ezékiel", "user", null, 2, "user");
     await this.createUser("user4", "user4@gmail.com", 1, "Mr.", "User", "Britniszpírsz", "user", null, 2, "user");
+    await this.createUser("editor", "editor@gmail.com", 1, "Mr.", "Editor", "", "editor", null, 3, "editor");
+    await this.createUser("reviewer", "reviewer@gmail.com", 1, "Mr.", "reviewer", "", "reviewer", null, 4, "reviewer");
     await this.addAcademicDisciplineToUser(2, 3);
     await this.createConference(2, "testConference", "testDescription");
     await this.createSubmission("testSubmission", "nabzscahduaefhuhefosuhefs", 2, 1, SubmissionStatus.CREATED);
+    await this.createSubmission("testSubmission3", "lorem ipsum", 3, 1, SubmissionStatus.CREATED);
+    await this.createSubmission("testSubmission2", "lorem ipsum", 3, 1, SubmissionStatus.CREATED);
     await this.createSubmissionMessage("submissionMessage", MessageType.INFO);
   }
 
@@ -70,6 +74,7 @@ export class TestData {
     await SubmissionAcademicDiscipline.create({submissionId: submission.id, academicDisciplineId: 4});
     await SubmissionAcademicDiscipline.create({submissionId: submission.id, academicDisciplineId: 5});
     await SubmissionAcademicDiscipline.create({submissionId: submission.id, academicDisciplineId: 6});
+    await AuthorsSubmission.create({submissionId: submission.id, authorId: userId});
     await Keyword.create({submissionId: submission.id, keyword: 'lorem'});
     await Keyword.create({submissionId: submission.id, keyword: 'ipsum'});
   }
