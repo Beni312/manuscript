@@ -2,7 +2,7 @@
   <div>
     <div dropdown-click (clickOutside)="setShowDropdown($event)" (clickInside)="setShowDropdown($event)">
       <mat-form-field #field>
-        <input matInput id="query" type="search" placeholder="{{ placeholder }}" [(ngModel)]="query" (keyup)="filter()" autocomplete="off">
+        <input (focus)="showDropdown = true;" matInput id="query" type="search" placeholder="{{ placeholder }}" [(ngModel)]="query" (keyup)="filter()" autocomplete="off">
         <button mat-button *ngIf="query" matSuffix mat-icon-button aria-label="Clear" (click)="clearSearch()">
           <mat-icon>close</mat-icon>
         </button>
