@@ -13,7 +13,6 @@ import { logger } from "./service/logger";
 import { Models } from "./model";
 import { Roles } from "./auth/Roles";
 import { Router } from "./route";
-import { sequelize } from "./sequelize.config";
 
 export class Server {
 
@@ -74,8 +73,8 @@ export class Server {
   private static initializeAuth() {
     Server.app.use(passport.initialize());
     Server.app.use(passport.session());
-    Auth.serializeUser(sequelize);
-    Auth.useLocalStrategy(sequelize);
+    Auth.serializeUser();
+    Auth.useLocalStrategy();
   }
 
   private static initializeRoles() {
@@ -89,7 +88,9 @@ export class Server {
     Server.app.use(bodyParser.json());
     Server.app.use(cookieParser());
     Server.app.use(session({
-      secret: "asdasdasdasd"
+      secret: "asdasdasdasd",
+      resave: true,
+      saveUninitialized: true
     }));
     Server.app.use(passport.initialize());
     Server.app.use(passport.session());
