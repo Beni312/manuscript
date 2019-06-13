@@ -1,11 +1,12 @@
 import * as express from 'express';
+import { Auth } from '../auth/Auth';
 import { BasicResponse } from '../model/dto/BasicResponse';
 import { controller, httpPost, interfaces } from 'inversify-express-utils';
 import { inject } from 'inversify';
 import { ProfilePreload } from '../model/dto/ProfilePreload';
 import { ProfileService } from '../service/ProfileService';
 
-@controller('/profile')
+@controller('/profile', Auth.isAuthenticated)
 export class ProfileController implements interfaces.Controller{
 
   @inject(ProfileService.name)

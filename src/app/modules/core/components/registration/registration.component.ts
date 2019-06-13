@@ -26,7 +26,6 @@ export class RegistrationComponent implements OnInit {
 
   userRegistration: UserRegistration;
   academicDisciplines: AcademicDiscipline[];
-  selected: AcademicDiscipline[] = [];
   registrationForm: FormGroup;
   result: BasicResponse;
 
@@ -64,12 +63,11 @@ export class RegistrationComponent implements OnInit {
           validators: [Validators.required]
         })
       }),
-      academicDisciplines: this.selected
+      academicDisciplines: new FormControl([])
     });
 
-    this.service.preload().subscribe(
-      data => {
-        this.academicDisciplines = data;
+    this.service.preload().subscribe((academicDisciplines: AcademicDiscipline[]) => {
+        this.academicDisciplines = academicDisciplines;
       },
       err => console.log(err)
     );

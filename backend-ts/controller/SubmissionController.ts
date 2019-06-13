@@ -1,4 +1,5 @@
 import * as express from 'express';
+import { Auth } from '../auth/Auth';
 import { AuthorDto } from '../model/dto/AuthorDto';
 import { BasicResponse } from '../model/dto/BasicResponse';
 import { controller, httpPost, interfaces } from 'inversify-express-utils';
@@ -7,7 +8,7 @@ import { SubmissionPreload } from '../model/dto/SubmissionPreload';
 import { SubmissionService } from '../service/SubmissionService';
 import { UpsertSubmissionPreload } from '../model/dto/UpsertSubmissionPreload';
 
-@controller('/submission')
+@controller('/submission', Auth.isAuthenticated)
 export class SubmissionController implements interfaces.Controller {
 
   @inject(SubmissionService.name)

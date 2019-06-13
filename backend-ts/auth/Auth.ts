@@ -68,6 +68,15 @@ export class Auth {
       });
     }));
   }
+
+  static isAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+      return next();
+    }
+    res.status(401).json({
+      'exceptionMessage': 'Access denied, you must log in!'
+    });
+  }
 }
 
 

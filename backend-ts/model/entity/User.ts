@@ -2,6 +2,7 @@ import { AcademicDiscipline } from './AcademicDiscipline';
 import { AuthorsAcademicDiscipline } from './AuthorsAcademicDiscipline';
 import { BaseModel } from './BaseModel';
 import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasOne, Table } from 'sequelize-typescript';
+import { HasManySetAssociationsMixin } from 'sequelize';
 import { Password } from './Password';
 import { Role } from './Role';
 import { UserAlias } from './UserAlias';
@@ -50,4 +51,6 @@ export class User extends BaseModel<User> {
 
   @HasOne(() => Password)
   password: Password;
+
+  public setAcademicDisciplines!: HasManySetAssociationsMixin<AcademicDiscipline, number>;
 }
