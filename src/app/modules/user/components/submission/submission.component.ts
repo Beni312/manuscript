@@ -106,6 +106,7 @@ export class SubmissionComponent extends PermissionHandler implements AfterViewI
         return;
       }
       this.submissionService.create(result).subscribe((resp: BasicResponse) => {
+        this.reload();
         this.messageService.success(resp.successMessage);
       });
     });
@@ -163,8 +164,8 @@ export class SubmissionComponent extends PermissionHandler implements AfterViewI
         return;
       }
       this.submissionService.evaluate(result).subscribe(response => {
-        this.messageService.success(response.successMessage);
         this.reload();
+        this.messageService.success(response.successMessage);
       });
     });
   }
