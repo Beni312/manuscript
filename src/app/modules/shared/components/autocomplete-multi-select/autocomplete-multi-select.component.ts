@@ -1,4 +1,16 @@
-import { AfterContentInit, AfterViewInit, Component, ElementRef, forwardRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
+import {
+  AfterContentInit,
+  AfterViewInit,
+  Component,
+  ElementRef,
+  forwardRef,
+  Input,
+  OnChanges,
+  OnInit,
+  Renderer2,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatFormField } from '@angular/material';
 
@@ -14,7 +26,7 @@ import { MatFormField } from '@angular/material';
     }
   ]
 })
-export class AutocompleteMultiSelectComponent implements ControlValueAccessor, OnInit, AfterContentInit, AfterViewInit {
+export class AutocompleteMultiSelectComponent implements ControlValueAccessor, OnInit, OnChanges, AfterContentInit, AfterViewInit {
 
   query = '';
   filteredList = [];
@@ -47,6 +59,12 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
   constructor(private renderer: Renderer2) {
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.items) {
+      this.filter();
+    }
+  }
+
   ngOnInit(): void {
     this.propagateChange(this.selected);
   }
@@ -56,7 +74,15 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
       this.selected = this.sortByDisplayedProperty(this.selected);
       this.items = this.sortByDisplayedProperty(this.items);
     }
-    this.filter();
+  }
+
+  ngAfterViewInit(): void {
+    const width = this.field._elementRef.nativeElement.clientWidth;
+    this.renderer.setStyle(
+      this.dropdown.nativeElement,
+      'width',
+      width + 'px'
+    );
   }
 
   clearSearch() {
@@ -129,14 +155,5 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
       }
       return 0;
     });
-  }
-
-  ngAfterViewInit(): void {
-    const width = this.field._elementRef.nativeElement.clientWidth;
-    this.renderer.setStyle(
-      this.dropdown.nativeElement,
-      'width',
-      width + 'px'
-    );
   }
 }
