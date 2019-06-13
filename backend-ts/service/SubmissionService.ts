@@ -1,6 +1,7 @@
 import { AcademicDiscipline, AuthorsSubmission, Conference, Keyword, Role, Submission, User, UserAlias } from '../model/index';
 import { ApplicationService } from './ApplicationService';
 import { AuthorDto } from '../model/dto/AuthorDto';
+import { injectable } from 'inversify';
 import { MessageType } from '../model/enum/MessageType';
 import { RoleEnum } from '../model/enum/RoleEnum';
 import { SubmissionDto } from '../model/dto/SubmissionDto';
@@ -9,6 +10,7 @@ import { SubmissionPreload } from '../model/dto/SubmissionPreload';
 import { SubmissionStatus } from '../model/enum/SubmissionStatus';
 import { UpsertSubmissionPreload } from '../model/dto/UpsertSubmissionPreload';
 
+@injectable()
 export class SubmissionService {
 
   applicationService: ApplicationService;
@@ -256,7 +258,7 @@ export class SubmissionService {
     });
   }
 
-  async getUpsertSubmissionPreload() {
+  async getUpsertSubmissionPreload(): Promise<UpsertSubmissionPreload> {
     return new UpsertSubmissionPreload(await this.applicationService.getAcademicDisciplines(), await this.getAuthors());
   }
 

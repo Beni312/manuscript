@@ -1,34 +1,21 @@
-import * as express from "express";
-import { BaseController } from "./BaseController";
-import { BasicResponse } from "../model/dto/BasicResponse";
-import { logger } from "../service/logger";
-import { RegistrationService } from "../service/RegistrationService";
+import * as express from 'express';
+import { BasicResponse } from '../model/dto/BasicResponse';
+import { controller, httpPost, interfaces } from 'inversify-express-utils';
+import { inject } from 'inversify';
+import { RegistrationService } from '../service/RegistrationService';
 
-export class RegistrationController extends BaseController {
+@controller('')
+export class RegistrationController implements interfaces.Controller{
 
+  @inject(RegistrationService.name)
   registrationService: RegistrationService;
 
-  constructor() {
-    super();
-    this.buildRoutes();
-    this.registrationService = new RegistrationService();
-  }
-
-  async create(req: express.Request, res: express.Response, next: express.NextFunction) {
+  @httpPost('/register')
+  async create(req: express.Request, res: express.Response, next: express.NextFunction): Promise<BasicResponse> {
     const user = req.body;
-    try {
-      await this.registrationService.create(user);
-    } catch(error) {
-      logger.error(error);
-      res.status(401);
-      res.json(new BasicResponse().withExceptionMessage(error.message));
-      return;
-    }
-    res.json({successMessage: 'User created'});
-  }
+    await this.registrationService.create(user);
 
-  buildRoutes() {
-    this.router.post("/create", this.create.bind(this));
+    return new BasicResponse()
+      .withSuccessMessage('Your account has been created');
   }
-
 }

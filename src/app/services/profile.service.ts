@@ -22,19 +22,19 @@ export class ProfileService {
   }
 
   preload() {
-    return this.httpClient.post<PersonalDataPreload>('/personaldatasettings/preload', {});
+    return this.httpClient.post<PersonalDataPreload>('/profile/preload', {});
   }
 
   savePersonalData(user: User) {
-    return this.httpClient.post<BasicResponse>('/personaldatasettings/savepersonaldata', user);
+    return this.httpClient.post<BasicResponse>('/profile/savepersonaldata', user);
   }
 
   changePassword(changePassword: ChangePassword) {
-    return this.httpClient.post<BasicResponse>('/personaldatasettings/changepassword', changePassword);
+    return this.httpClient.post<BasicResponse>('/profile/changepassword', changePassword);
   }
 
   updateAcademicDisciplines(academicDisciplines: AcademicDiscipline[]) {
-    return this.httpClient.post<BasicResponse>('/personaldatasettings/updatedisciplines', academicDisciplines);
+    return this.httpClient.post<BasicResponse>('/profile/updatedisciplines', academicDisciplines);
   }
 
   getAcademicDisciplines() {

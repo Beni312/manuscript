@@ -1,9 +1,11 @@
-import * as bcrypt from "bcrypt-nodejs";
-import { AcademicDiscipline, AuthorsAcademicDiscipline, Password, User, UserAlias } from "../model/index";
-import { ChangePasswordError } from "../model/error/ChangePasswordError";
-import { Model } from "sequelize-typescript";
-import { ProfilePreload } from "../model/dto/ProfilePreload";
+import * as bcrypt from 'bcrypt-nodejs';
+import { AcademicDiscipline, AuthorsAcademicDiscipline, Password, User, UserAlias } from '../model/index';
+import { ChangePasswordError } from '../model/error/ChangePasswordError';
+import { injectable } from 'inversify';
+import { Model } from 'sequelize-typescript';
+import { ProfilePreload } from '../model/dto/ProfilePreload';
 
+@injectable()
 export class ProfileService {
 
   public async getPreload(userId): Promise<ProfilePreload> {

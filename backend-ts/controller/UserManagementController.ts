@@ -1,29 +1,17 @@
 import * as express from 'express';
-import { BaseController } from './BaseController';
-import { UserManagementDto } from '../model/dto/UserManagementDto';
+import { controller, httpPost, interfaces } from 'inversify-express-utils';
+import { inject } from 'inversify';
 import { UserManagementService } from '../service/UserManagementService';
+import { UserManagementDto } from '../model/dto/UserManagementDto';
 
-export class UserManagementController extends BaseController {
+@controller('/usermanagement')
+export class UserManagementController implements interfaces.Controller {
 
+  @inject(UserManagementService.name)
   private userManagementService: UserManagementService;
 
-  constructor() {
-    super();
-    this.buildRoutes();
-    this.userManagementService = new UserManagementService();
-  }
-
-  async getUsers(req: express.Request, res: express.Response, next: express.NextFunction) {
-    let users: UserManagementDto[];
-    try {
-      users = await this.userManagementService.getUsers();
-      res.json(users);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  buildRoutes() {
-    this.router.post('/usermanagement', this.getUsers.bind(this));
+  @httpPost('/getUsers')
+  async getUsers(req: express.Request, res: express.Response, next: express.NextFunction): Promise<UserManagementDto[]> {
+    return await this.userManagementService.getUsers();
   }
 }

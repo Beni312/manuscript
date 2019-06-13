@@ -1,53 +1,43 @@
-import * as express from "express";
-import { BaseController } from "./BaseController";
-import { logger } from "../service/logger";
-import { ProfileService } from "../service/ProfileService";
+import * as express from 'express';
+import { BasicResponse } from '../model/dto/BasicResponse';
+import { controller, httpPost, interfaces } from 'inversify-express-utils';
+import { inject } from 'inversify';
+import { ProfilePreload } from '../model/dto/ProfilePreload';
+import { ProfileService } from '../service/ProfileService';
 
-export class ProfileController extends BaseController {
+@controller('/profile')
+export class ProfileController implements interfaces.Controller{
 
+  @inject(ProfileService.name)
   profileService: ProfileService;
 
-  constructor() {
-    super();
-    this.buildRoutes();
-    this.profileService = new ProfileService();
+  @httpPost('/preload')
+  async preload(req: express.Request, res: express.Response, next: express.NextFunction): Promise<ProfilePreload> {
+    return await this.profileService.getPreload(req.user.userId);
   }
 
-  async preload(req: express.Request, res: express.Response, next: express.NextFunction) {
-    try {
-      const preload = await this.profileService.getPreload(req.user.userId);
-      res.json(preload);
-    } catch(error) {
-      logger.error(error);
-    }
-  }
-
-  async save(req: express.Request, res: express.Response, next: express.NextFunction) {
+  @httpPost('/savepersonaldata')
+  async save(req: express.Request, res: express.Response, next: express.NextFunction): Promise<BasicResponse> {
     const user = req.body;
     await this.profileService.saveProfile(req.user.userId, user);
-    res.json({successMessage: 'Your personal data has been updated successfully!'});
+
+    return new BasicResponse()
+      .withSuccessMessage('Your personal data has been updated successfully!');
   }
 
-  async changePassword(req: express.Request, res: express.Response, next: express.NextFunction) {
-    try {
-      await this.profileService.changePassword(req.user.userId, req.body);
-    } catch(error) {
-      logger.error(error);
-    }
-    res.json({successMessage:"Your password has changed successfully!"});
+  @httpPost('/changepassword')
+  async changePassword(req: express.Request, res: express.Response, next: express.NextFunction): Promise<BasicResponse> {
+    await this.profileService.changePassword(req.user.userId, req.body);
+
+    return new BasicResponse()
+      .withSuccessMessage('Your password has changed successfully!');
   }
 
-  async updateAcademicDisciplines(req: express.Request, res: express.Response, next: express.NextFunction) {
+  @httpPost('/updatedisciplines')
+  async updateAcademicDisciplines(req: express.Request, res: express.Response, next: express.NextFunction): Promise<BasicResponse> {
     await this.profileService.updateAcademicDisciplines(req.user.userId, req.body);
-    res.json({
-      successMessage: 'Your academic disciplines has changed successfully!'
-    });
-  }
 
-  buildRoutes() {
-    this.router.post("/preload", this.preload.bind(this));
-    this.router.post("/updatedisciplines", this.updateAcademicDisciplines.bind(this));
-    this.router.post("/savepersonaldata", this.save.bind(this));
-    this.router.post("/changepassword", this.changePassword.bind(this));
+    return new BasicResponse()
+      .withSuccessMessage('Your academic disciplines has changed successfully!');
   }
 }

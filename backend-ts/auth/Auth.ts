@@ -9,12 +9,12 @@ import { Password, Role, User, UserAlias } from '../model';
 export class Auth {
 
   static serializeUser() {
-    passport.serializeUser(function (user, done) {
+    passport.serializeUser(async function (user, done) {
       done(null, user);
     });
 
-    passport.deserializeUser(function (user: any, done) {
-      User.findByPk(user, {
+    passport.deserializeUser(async function (user: any, done) {
+      await User.findByPk(user, {
         include: [
           {
             model: UserAlias
@@ -42,7 +42,7 @@ export class Auth {
    */
   static useLocalStrategy() {
     passport.use(new LocalStrategy(async function (username, password, done) {
-      User.findOne({
+      await User.findOne({
         include: [
           {
             model: Password

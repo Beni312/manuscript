@@ -1,29 +1,22 @@
-import * as express from "express";
-import { ApplicationService } from "../service/ApplicationService";
-import { AcademicDiscipline } from "../model/index";
-import { BaseController } from "./BaseController";
+import * as express from 'express';
+import { ApplicationService } from '../service/ApplicationService';
+import { AcademicDiscipline } from '../model/index';
+import { controller, httpPost, interfaces } from 'inversify-express-utils';
+import { inject } from 'inversify';
 
-export class ApplicationController extends BaseController {
+@controller('/application')
+export class ApplicationController implements interfaces.Controller{
 
+  @inject(ApplicationService.name)
   private applicationService: ApplicationService;
 
-  constructor() {
-    super();
-    this.buildRoutes();
-    this.applicationService = new ApplicationService();
-  }
-
+  @httpPost('/preload')
   async preload(req: express.Request, res: express.Response, next: express.NextFunction) {
     res.json({username: req.user.username, role: req.user.role});
   }
 
-  async getAcademicDisciplines(req: express.Request, res: express.Response, next: express.NextFunction) {
-    const academicDisciplines: AcademicDiscipline[] = await this.applicationService.getAcademicDisciplines();
-    res.json(academicDisciplines);
-  }
-
-  buildRoutes() {
-    this.router.post("/preload", this.preload.bind(this));
-    this.router.post("/academicdisciplines", this.getAcademicDisciplines.bind(this));
+  @httpPost('/academicdisciplines')
+  async getAcademicDisciplines(req: express.Request, res: express.Response, next: express.NextFunction): Promise<AcademicDiscipline[]> {
+    return await this.applicationService.getAcademicDisciplines();
   }
 }

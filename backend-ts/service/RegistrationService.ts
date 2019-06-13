@@ -1,8 +1,10 @@
-import { RoleEnum } from "../model/enum/RoleEnum";
+import * as bcrypt from "bcrypt-nodejs";
+import { injectable } from 'inversify';
 import { Password, Role, User, UserAlias } from "../model/index";
 import { RegistrationError } from "../model/error/RegistrationError";
-import * as bcrypt from "bcrypt-nodejs";
+import { RoleEnum } from "../model/enum/RoleEnum";
 
+@injectable()
 export class RegistrationService {
 
   async create(params: any): Promise<User> {
@@ -33,5 +35,4 @@ export class RegistrationService {
 
     return user;
   }
-
 }

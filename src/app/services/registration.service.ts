@@ -12,10 +12,10 @@ export class RegistrationService {
   }
 
   preload(): Observable<AcademicDiscipline[]> {
-    return this.httpClient.post<AcademicDiscipline[]>('/application/academicdisciplines', JSON.stringify({}))
+    return this.httpClient.post<AcademicDiscipline[]>('/application/academicdisciplines', JSON.stringify({}));
   }
 
   register(userRegistration: UserRegistration): Observable<BasicResponse> {
-    return this.httpClient.post<BasicResponse>('/registration/create', userRegistration);
+    return this.httpClient.post<BasicResponse>('/register', userRegistration);
   }
 }

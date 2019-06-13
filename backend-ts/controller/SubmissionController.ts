@@ -1,73 +1,66 @@
 import * as express from 'express';
-import { BaseController } from './BaseController';
+import { AuthorDto } from '../model/dto/AuthorDto';
 import { BasicResponse } from '../model/dto/BasicResponse';
+import { controller, httpPost, interfaces } from 'inversify-express-utils';
+import { inject } from 'inversify';
+import { SubmissionPreload } from '../model/dto/SubmissionPreload';
 import { SubmissionService } from '../service/SubmissionService';
+import { UpsertSubmissionPreload } from '../model/dto/UpsertSubmissionPreload';
 
-export class SubmissionController extends BaseController {
+@controller('/submission')
+export class SubmissionController implements interfaces.Controller {
 
+  @inject(SubmissionService.name)
   private submissionService: SubmissionService;
 
-  constructor() {
-    super();
-    this.buildRoutes();
-    this.submissionService = new SubmissionService();
-  }
-
-  async create(req: express.Request, res: express.Response, next: express.NextFunction) {
+  @httpPost('/create')
+  async create(req: express.Request, res: express.Response, next: express.NextFunction): Promise<BasicResponse> {
     await this.submissionService.createSubmission(req.user.userId, req.body);
-    res.json(new BasicResponse()
-      .withSuccessMessage('Submission created')
-    );
+    return new BasicResponse()
+      .withSuccessMessage('Submission created');
   }
 
-  async getAuthors(req: express.Request, res: express.Response, next: express.NextFunction) {
-    res.json(await this.submissionService.getAuthors());
+  @httpPost('/getAuthors')
+  async getAuthors(req: express.Request, res: express.Response, next: express.NextFunction): Promise<AuthorDto[]> {
+    return await this.submissionService.getAuthors();
   }
 
-  async preload(req: express.Request, res: express.Response, next: express.NextFunction) {
-    res.json(await this.submissionService.preload(req.user, req.user.role));
+  @httpPost('/preload')
+  async preload(req: express.Request, res: express.Response, next: express.NextFunction): Promise<SubmissionPreload> {
+    return await this.submissionService.preload(req.user, req.user.role);
   }
 
-  async remove(req: express.Request, res: express.Response, next: express.NextFunction) {
+  @httpPost('/remove')
+  async remove(req: express.Request, res: express.Response, next: express.NextFunction): Promise<BasicResponse> {
     this.submissionService.remove(req.body.submissionId);
-    res.json(new BasicResponse()
-      .withSuccessMessage("Submission deleted"));
+    return new BasicResponse()
+      .withSuccessMessage("Submission deleted");
   }
-  
-  async submit(req: express.Request, res: express.Response, next: express.NextFunction) {
+
+  @httpPost('/submit')
+  async submit(req: express.Request, res: express.Response, next: express.NextFunction): Promise<BasicResponse> {
     const submissionId: string = req.body.submissionId;
     await this.submissionService.submitSubmission(submissionId);
-    res.json(new BasicResponse()
-      .withSuccessMessage('Submission successfully submitted.')
-    );
+    return new BasicResponse()
+      .withSuccessMessage('Submission successfully submitted.');
   }
 
-  async edit(req: express.Request, res: express.Response, next: express.NextFunction) {
+  @httpPost('/edit')
+  async edit(req: express.Request, res: express.Response, next: express.NextFunction): Promise<BasicResponse> {
     await this.submissionService.editSubmission(req.body);
-    res.json(new BasicResponse()
-      .withSuccessMessage('Successfully edited')
-    );
+    return new BasicResponse()
+      .withSuccessMessage('Successfully edited');
   }
 
-  async evaluate(req: express.Request, res: express.Response, next: express.NextFunction) {
+  @httpPost('/evaluate')
+  async evaluate(req: express.Request, res: express.Response, next: express.NextFunction): Promise<BasicResponse> {
     await this.submissionService.evaluateSubmission(req.body, req.user.userId, req.user.role);
-    res.json(new BasicResponse()
-      .withSuccessMessage("Submission evaluated")
-    );
+    return new BasicResponse()
+      .withSuccessMessage("Submission evaluated");
   }
 
-  async upsertSubmissionPreload(req: express.Request, res: express.Response, next: express.NextFunction) {
-    res.json(await this.submissionService.getUpsertSubmissionPreload());
-  }
-
-  buildRoutes() {
-    this.router.post("/preload", this.preload.bind(this));
-    this.router.post("/remove", this.remove.bind(this));
-    this.router.post("/getAuthors", this.getAuthors.bind(this));
-    this.router.post("/submit", this.submit.bind(this));
-    this.router.post("/edit", this.edit.bind(this));
-    this.router.post("/evaluate", this.evaluate.bind(this));
-    this.router.post("/create", this.create.bind(this));
-    this.router.post("/upsertSubmissionPreload", this.upsertSubmissionPreload.bind(this));
+  @httpPost('/upsertSubmissionPreload')
+  async upsertSubmissionPreload(req: express.Request, res: express.Response, next: express.NextFunction): Promise<UpsertSubmissionPreload> {
+    return await this.submissionService.getUpsertSubmissionPreload();
   }
 }
