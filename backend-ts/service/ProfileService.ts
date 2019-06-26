@@ -2,7 +2,6 @@ import * as bcrypt from 'bcrypt-nodejs';
 import { AcademicDiscipline, AuthorsAcademicDiscipline, Password, User, UserAlias } from '../model/index';
 import { ChangePasswordError } from '../model/error/ChangePasswordError';
 import { injectable } from 'inversify';
-import { Model } from 'sequelize-typescript';
 import { ProfilePreload } from '../model/dto/ProfilePreload';
 
 @injectable()
@@ -27,7 +26,7 @@ export class ProfileService {
     }));
   }
 
-  public async saveProfile(userId, params): Promise<Model<User>> {
+  public async saveProfile(userId, params): Promise<User> {
     return await User._updateByPk<User>(userId, {
       title: params.user.title,
       firstName: params.user.firstName,
@@ -39,7 +38,7 @@ export class ProfileService {
 
   public async changePassword(userId, params): Promise<void> {
     if (params.password.password != params.password.passwordAgain) {
-      throw new ChangePasswordError("The given passwords are not matched!");
+      throw new ChangePasswordError('The given passwords are not matched!');
     }
 
     const password = await Password._findOne<Password>({
@@ -50,7 +49,7 @@ export class ProfileService {
 
     const isMatch = bcrypt.compareSync(params.oldPassword, password.password);
     if (!isMatch) {
-      throw new ChangePasswordError("Your password is wrong.");
+      throw new ChangePasswordError('Your password is wrong.');
     }
 
     const salt = bcrypt.genSaltSync();

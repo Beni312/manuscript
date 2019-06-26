@@ -60,7 +60,7 @@ export class ModelRepository<T extends Model<T>> extends Model<T> {
     }
   }
 
-  static async _updateByPk<T extends Model<T>>(id: number | string, data: any, errorMessage: string = this.name + " not found"): Promise<Model<T>> {
+  static async _updateByPk<T extends Model<T>>(id: number | string, data: any, errorMessage: string = this.name + " not found"): Promise<T> {
     const row = await this.findByPk<Model<T>>(id);
     if (!row) {
       throw new NotFoundError(errorMessage);
@@ -71,6 +71,6 @@ export class ModelRepository<T extends Model<T>> extends Model<T> {
       }
       row[key] = data[key];
     });
-    return await row.save();
+    return await row.get();
   }
 }
