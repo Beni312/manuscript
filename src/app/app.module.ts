@@ -2,11 +2,12 @@ import { AuthenticationGuard } from './guards/authentication.guard';
 import { AppComponent } from './app.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { CoreModule } from './modules/core/core.module';
+import { ErrorHandler, ModuleWithProviders, NgModule } from '@angular/core';
+import { GlobalErrorHandler } from './services/global.error.handler';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './modules/core/components/login/login.component';
 import { MaterialModule } from './modules/material/material.module';
 import { MessageService } from './services/message.service';
-import { ModuleWithProviders, NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule } from '@angular/router';
 import { ProgressInterceptor, ProgressSpinnerService } from './services/progress.spinner.service';
 import { RegistrationComponent } from './modules/core/components/registration/registration.component';
@@ -52,7 +53,16 @@ const Routes: ModuleWithProviders = RouterModule.forRoot([
   providers: [
     MessageService,
     ProgressSpinnerService,
-    {provide: HTTP_INTERCEPTORS, useClass: ProgressInterceptor, multi: true, deps: [ProgressSpinnerService]}
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ProgressInterceptor,
+      multi: true,
+      deps: [ProgressSpinnerService]
+    },
+    {
+      provide: ErrorHandler,
+      useClass: GlobalErrorHandler
+    }
   ],
   bootstrap: [AppComponent]
 })
