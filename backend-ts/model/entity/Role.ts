@@ -1,6 +1,5 @@
-import { AutoIncrement, Column, DataType, PrimaryKey, Table } from "sequelize-typescript";
-import { ModelRepository } from "../ModelRepository";
-import { RoleEnum } from '../enum/RoleEnum';
+import { AutoIncrement, Column, DataType, PrimaryKey, Table } from 'sequelize-typescript';
+import { ModelRepository } from '../ModelRepository';
 
 @Table
 export class Role extends ModelRepository<Role> {
@@ -12,11 +11,4 @@ export class Role extends ModelRepository<Role> {
 
   @Column(DataType.STRING)
   name: string;
-
-  public static isAdmin(role): boolean {
-    if (role == RoleEnum.ADMIN) {
-      return true;
-    }
-    return false;
-  }
 }

@@ -1,17 +1,18 @@
 import * as express from 'express';
 import * as passport from 'passport';
+import { authorize } from '../middleware/Authorize';
 import { controller, httpPost, interfaces } from 'inversify-express-utils';
 
 @controller('')
 export class AuthenticationController implements interfaces.Controller {
 
-  @httpPost('/logout')
-  private async logout(req: express.Request, res: express.Response): Promise<any> {
+  @httpPost('/logout', authorize())
+  private async logout(req: express.Request): Promise<any> {
     req.logout();
     return {success: true};
   }
 
   @httpPost('/login', passport.authenticate('local', {successMessage: 'Success login', failureMessage: 'Wrong username or password'}))
-  public async login(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+  public async login(): Promise<void> {
   }
 }

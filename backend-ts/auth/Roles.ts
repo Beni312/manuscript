@@ -1,33 +1,11 @@
-import { RoleEnum } from "../model/enum/RoleEnum";
-import { AuthenticationError } from "../model/error/AuthenticationError";
-
-const ConnectRoles = require('connect-roles');
+import { RoleEnum } from '../model/enum/RoleEnum';
 
 export class Roles {
 
-  public static connectRoles;
-
-  public static middleware() {
-    return Roles.connectRoles.middleware();
-  }
-
-  public static is(role: RoleEnum) {
-    return Roles.connectRoles.is(role.toString());
-  }
-
-  public static buildRoles() {
-    Roles.connectRoles = new ConnectRoles({
-      failureHandler: function (req, res, action) {
-        const error = new AuthenticationError('Access Denied - You don\'t have permission to: ' + action);
-        res.status(403).json(error);
-      },
-      async: true
-    });
-
-    Roles.connectRoles.use(RoleEnum.ADMIN, function (req) {
-      if (req.user.role.toUpperCase() === 'ADMIN') {
-        return true;
-      }
-    });
+  public static isAdmin(role): boolean {
+    if (role == RoleEnum.ADMIN) {
+      return true;
+    }
+    return false;
   }
 }

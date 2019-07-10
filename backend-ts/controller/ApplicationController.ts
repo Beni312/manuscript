@@ -1,9 +1,10 @@
 import * as express from 'express';
-import { AcademicDiscipline } from '../model/index';
+import { AcademicDiscipline } from '../model';
 import { ApplicationService } from '../service/ApplicationService';
-import { Auth } from '../auth/Auth';
+import { authorize } from '../middleware/Authorize';
 import { controller, httpPost, interfaces } from 'inversify-express-utils';
 import { inject } from 'inversify';
+import { PreloadDto } from '../model/dto/PreloadDto';
 
 @controller('/application')
 export class ApplicationController implements interfaces.Controller{
@@ -11,13 +12,13 @@ export class ApplicationController implements interfaces.Controller{
   @inject(ApplicationService.name)
   private applicationService: ApplicationService;
 
-  @httpPost('/preload', Auth.isAuthenticated)
-  async preload(req: express.Request, res: express.Response, next: express.NextFunction) {
-    res.json({username: req.user.username, role: req.user.role});
+  @httpPost('/preload', authorize())
+  async preload(req: express.Request) {
+    return new PreloadDto(req.user.username, req.user.role);
   }
 
   @httpPost('/academicdisciplines')
-  async getAcademicDisciplines(req: express.Request, res: express.Response, next: express.NextFunction): Promise<AcademicDiscipline[]> {
+  async getAcademicDisciplines(): Promise<AcademicDiscipline[]> {
     return await this.applicationService.getAcademicDisciplines();
   }
 }

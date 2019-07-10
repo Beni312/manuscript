@@ -1,9 +1,10 @@
-import { AcademicDiscipline, AuthorsSubmission, Conference, Keyword, Role, Submission, User, UserAlias } from '../model/index';
+import { AcademicDiscipline, AuthorsSubmission, Conference, Keyword, Role, Submission, User, UserAlias } from '../model';
 import { ApplicationService } from './ApplicationService';
 import { AuthorDto } from '../model/dto/AuthorDto';
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 import { MessageType } from '../model/enum/MessageType';
 import { RoleEnum } from '../model/enum/RoleEnum';
+import { Roles } from '../auth/Roles';
 import { SubmissionDto } from '../model/dto/SubmissionDto';
 import { SubmissionMessage } from '../model/entity/SubmissionMessage';
 import { SubmissionPreload } from '../model/dto/SubmissionPreload';
@@ -13,17 +14,15 @@ import { UpsertSubmissionPreload } from '../model/dto/UpsertSubmissionPreload';
 @injectable()
 export class SubmissionService {
 
+  @inject(ApplicationService.name)
   applicationService: ApplicationService;
+
   editableSubmissionStatuses = [
     SubmissionStatus.CREATED,
     SubmissionStatus.REJECTED_BY_EDITOR,
     SubmissionStatus.REJECTED_BY_REVIEWER,
     SubmissionStatus.REJECTED_BY_ADMIN
   ];
-
-  constructor() {
-    this.applicationService = new ApplicationService();
-  }
 
   async preload(user, role): Promise<SubmissionPreload> {
     const submissionOptions: any = {
@@ -66,7 +65,7 @@ export class SubmissionService {
       const filter = {
         model: AuthorsSubmission,
         where: {
-          authorId: user.userId
+          authorId: user.id
         }
       };
       submissionOptions.include.push(filter);
@@ -95,11 +94,11 @@ export class SubmissionService {
     Admins or the submitter of the submission can delete the submission
    */
   private hasPermissionToDelete(user: any, submission: Submission): boolean {
-    if (submission.submitter.id == user.userId) {
+    if (submission.submitter.id == user.id) {
       return true;
     }
 
-    if (Role.isAdmin(user.role)) {
+    if (Roles.isAdmin(user.role)) {
       return true;
     }
 
@@ -110,8 +109,8 @@ export class SubmissionService {
     if the user is an admin or is an author of the submission, he can edit.
    */
   private hasPermissionToEdit(user: any, submission: Submission): boolean {
-    if ((submission.submitter.id === user.userId || submission.authors.find(item => item.id === user.userId)) &&
-      this.editableSubmissionStatuses.indexOf(submission.status) != -1 || Role.isAdmin(user.role)) {
+    if ((submission.submitter.id === user.id || submission.authors.find(item => item.id === user.id)) &&
+      this.editableSubmissionStatuses.indexOf(submission.status) != -1 || Roles.isAdmin(user.role)) {
       return true;
     }
 
@@ -119,7 +118,7 @@ export class SubmissionService {
   }
 
   private hasPermissionToSubmit(user: any, submission: Submission) {
-    if (submission.submitter.id === user.userId && submission.status == SubmissionStatus.CREATED) {
+    if ((submission.submitter.id === user.id || Roles.isAdmin(user.role)) && submission.status == SubmissionStatus.CREATED) {
       return true;
     }
     return false;

@@ -27,7 +27,6 @@
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.3",
     "connect-busboy": "0.0.2",
-    "connect-roles": "^3.1.2",
     "cookie-parser": "^1.4.3",
     "debug": "^4.1.0",
     "dotenv": "^6.2.0",

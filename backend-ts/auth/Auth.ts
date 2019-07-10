@@ -24,7 +24,7 @@ export class Auth {
           }
         ]
       }).then((user: User) => {
-        done(null, {userId: user.id, username: user.userAlias.username, role: user.role.name});
+        done(null, {id: user.id, username: user.userAlias.username, role: user.role.name});
         return null;
       }).catch(err => {
         done(err, {});
@@ -67,15 +67,6 @@ export class Auth {
         console.log(err);
       });
     }));
-  }
-
-  static isAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
-      return next();
-    }
-    res.status(401).json({
-      'exceptionMessage': 'Access denied, you must log in!'
-    });
   }
 }
 
