@@ -3,7 +3,7 @@
     <div class="col-md-6">
       <h4>Authors</h4>
       <div class="mat-elevation-z8">
-        <mat-table #table [dataSource]="dataSource" matSort>
+        <mat-table [dataSource]="dataSource" matSort>
 
           <ng-container matColumnDef="firstName">
             <mat-header-cell *matHeaderCellDef mat-sort-header> First name </mat-header-cell>
@@ -28,7 +28,7 @@
     <div class="col-md-6">
       <h4>Academic disciplines</h4>
       <div class="mat-elevation-z8">
-        <mat-table #table [dataSource]="dataSource2" matSort>
+        <mat-table [dataSource]="dataSource2" matSort>
 
           <ng-container matColumnDef="academicDisciplineName">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>

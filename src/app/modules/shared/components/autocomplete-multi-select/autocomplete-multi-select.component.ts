@@ -5,10 +5,8 @@ import {
   ElementRef,
   forwardRef,
   Input,
-  OnChanges,
   OnInit,
   Renderer2,
-  SimpleChanges,
   ViewChild
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -26,7 +24,7 @@ import { MatFormField } from '@angular/material';
     }
   ]
 })
-export class AutocompleteMultiSelectComponent implements ControlValueAccessor, OnInit, OnChanges, AfterContentInit, AfterViewInit {
+export class AutocompleteMultiSelectComponent implements ControlValueAccessor, OnInit, AfterContentInit, AfterViewInit {
 
   query = '';
   filteredList = [];
@@ -40,11 +38,11 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
   @Input()
   placeholder: string;
   @Input()
-  inputWidth: string = '200px';
+  inputWidth = '200px';
   @Input()
   selectedItemsHeight = '120px';
   @Input()
-  toOrder: boolean = true;
+  toOrder = true;
   @Input()
   displayProperty: Function;
 
@@ -59,12 +57,6 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
   constructor(private renderer: Renderer2) {
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (this.items) {
-      this.filter();
-    }
-  }
-
   ngOnInit(): void {
     this.propagateChange(this.selected);
   }
@@ -73,6 +65,9 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
     if (this.items && this.toOrder) {
       this.selected = this.sortByDisplayedProperty(this.selected);
       this.items = this.sortByDisplayedProperty(this.items);
+
+      this.filteredList = this.items.filter(el => !this.isSelected(el));
+
     }
   }
 
@@ -92,16 +87,14 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
 
   filter() {
     this.filteredList = this.items.filter(el => {
-      if (el !== undefined) {
         return (this.getDisplayProperty(el).toLowerCase().indexOf(this.query.toLowerCase())) > -1 && !this.isSelected(el);
-      }
     });
   }
 
   isSelected(element) {
     let isSelected = false;
     this.selected.forEach(item => {
-      if (this.getDisplayProperty(item) === this.getDisplayProperty(element) && !isSelected) {
+      if (this.getDisplayProperty(item).toLowerCase() === this.getDisplayProperty(element).toLowerCase() && !isSelected) {
         isSelected = true;
       }
     });
@@ -139,7 +132,7 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
     this.propagateTouch = fn;
   }
 
-  getDisplayProperty(item) {
+  getDisplayProperty(item): string {
     if (this.displayProperty) {
       return this.displayProperty(item);
     }
