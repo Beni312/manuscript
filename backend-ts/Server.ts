@@ -1,6 +1,7 @@
 import * as bodyParser from 'body-parser';
 import * as config from './config/config';
 import * as cookieParser from 'cookie-parser';
+import * as express from 'express';
 import * as http from 'http';
 import * as passport from 'passport';
 import * as session from 'express-session';
@@ -16,20 +17,19 @@ import './controller/UserManagementController';
 import { ApplicationService } from './service/ApplicationService';
 import { Auth } from './auth/Auth';
 import { Container } from 'inversify';
-import { errorHandler } from './model/error/ErrorHandler';
+import { errorHandler } from './middleware/ErrorHandler';
 import { InternalServerError } from './model/error/InternalServerError';
 import { InversifyExpressServer } from 'inversify-express-utils';
 import { logger } from './service/logger';
 import { Models } from './model';
 import { ProfileService } from './service/ProfileService';
 import { RegistrationService } from './service/RegistrationService';
-import { Roles } from './auth/Roles';
 import { SubmissionService } from './service/SubmissionService';
 import { UserManagementService } from './service/UserManagementService';
 
 export class Server {
 
-  public static server: InversifyExpressServer;
+  public static inversifyServer: InversifyExpressServer;
 
   constructor() {
   }
@@ -45,8 +45,8 @@ export class Server {
         logger.error('Failed to initialize database', error);
       }
 
-      const app = Server.server.build();
-      return app.listen(3000);
+      const app: express.Application = Server.inversifyServer.build();
+      return app.listen(app.get('port'));
 
     } catch (error) {
       throw new InternalServerError(error.message);
@@ -62,12 +62,11 @@ export class Server {
     container.bind<SubmissionService>(SubmissionService.name).to(SubmissionService);
     container.bind<UserManagementService>(UserManagementService.name).to(UserManagementService);
 
-    Server.server = new InversifyExpressServer(container);
-    Server.server.setConfig((app: any) => {
-      Server.initializeAuth(app);
+    Server.inversifyServer = new InversifyExpressServer(container);
+    Server.inversifyServer.setErrorConfig(app => app.use(errorHandler));
+    Server.inversifyServer.setConfig((app: any) => {
+      Server.initializeAuth();
       Server.configureApp(app);
-      Server.initializeRoles(app);
-      app.use(errorHandler);
     });
   }
 
@@ -82,16 +81,9 @@ export class Server {
     }
   }
 
-  private static initializeAuth(app) {
-    app.use(passport.initialize());
-    app.use(passport.session());
+  private static initializeAuth() {
     Auth.serializeUser();
     Auth.useLocalStrategy();
-  }
-
-  private static initializeRoles(app) {
-    Roles.buildRoles();
-    app.use(Roles.middleware());
   }
 
   private static configureApp(app) {

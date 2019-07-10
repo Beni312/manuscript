@@ -38,8 +38,8 @@ export class LoginComponent implements OnInit {
     this.model = this.loginForm.value;
     this.service.login(this.model.username, this.model.password).subscribe(() => {
       this.service.preload();
-    }, error => {
-      this.messageService.error(error.error.exceptionMessage);
+    }, (error: string) => {
+      this.messageService.error(error);
     });
   }
 }

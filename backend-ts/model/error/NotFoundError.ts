@@ -1,7 +1,7 @@
-import {BaseError} from "./BaseError";
+import { BaseError } from "./BaseError";
 
 export class NotFoundError extends BaseError {
     constructor(errorString: string) {
-        super(errorString, 103, NotFoundError.name);
+        super(errorString, 406, NotFoundError.name);
     }
 }
