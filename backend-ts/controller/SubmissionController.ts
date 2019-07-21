@@ -39,7 +39,7 @@ export class SubmissionController implements interfaces.Controller {
       .withSuccessMessage('Submission successfully submitted.');
   }
 
-  @httpPost('/evaluate', authorize('AUTHOR', 'ADMIN'))
+  @httpPost('/evaluate', authorize('EDITOR', 'ADMIN', 'REVIEWER'))
   async evaluate(req: express.Request): Promise<BasicResponse> {
     await this.submissionService.evaluateSubmission(req.body, req.user.id, req.user.role);
     return new BasicResponse()
