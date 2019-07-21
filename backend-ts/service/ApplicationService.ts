@@ -1,10 +1,14 @@
-import { AcademicDiscipline } from "../model/index";
-import { injectable } from 'inversify';
+import { AcademicDiscipline } from '../model';
+import { AcademicDisciplineRepository } from '../repository/AcademicDisciplineRepository';
+import { inject, injectable } from 'inversify';
 
 @injectable()
 export class ApplicationService {
 
+  @inject(AcademicDisciplineRepository.name)
+  academicDisciplineRepository: AcademicDisciplineRepository;
+
   public async getAcademicDisciplines(): Promise<AcademicDiscipline[]> {
-    return AcademicDiscipline.findAll();
+    return await this.academicDisciplineRepository.findAll();
   }
 }

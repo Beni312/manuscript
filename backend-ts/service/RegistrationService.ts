@@ -1,11 +1,19 @@
-import * as bcrypt from "bcrypt-nodejs";
-import { injectable } from 'inversify';
-import { Password, Role, User, UserAlias } from "../model/index";
-import { RegistrationError } from "../model/error/RegistrationError";
-import { RoleEnum } from "../model/enum/RoleEnum";
+import * as bcrypt from 'bcrypt-nodejs';
+import { inject, injectable } from 'inversify';
+import { Password, User, UserAlias } from '../model';
+import { RegistrationError } from '../model/error/RegistrationError';
+import { RoleEnum } from '../model/enum/RoleEnum';
+import { RoleRepository } from '../repository/RoleRepository';
+import { UserRepository } from '../repository/UserRepository';
 
 @injectable()
 export class RegistrationService {
+
+  @inject(RoleRepository.name)
+  roleRepository: RoleRepository;
+
+  @inject(UserRepository.name)
+  userRepository: UserRepository;
 
   async create(params: any): Promise<void> {
     if (params.password.password != params.password.passwordAgain) {
@@ -18,7 +26,7 @@ export class RegistrationService {
       throw new RegistrationError('Username is already used!');
     }
 
-    const role = await Role._findOne<Role>({where: {name: RoleEnum.AUTHOR}});
+    const role = await this.roleRepository._findOne({where: {name: RoleEnum.AUTHOR}});
     await User.create({
       roleId: role.id,
       title: params.user.title,

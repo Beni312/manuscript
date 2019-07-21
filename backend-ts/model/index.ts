@@ -5,7 +5,7 @@ import { Conference } from './entity/Conference';
 import { InitialDatabaseUploadCommandService } from '../service/InitialDatabaseUploadCommandService';
 import { Keyword } from './entity/Keyword';
 import { Login } from './entity/Login';
-import { Model, Sequelize } from 'sequelize-typescript';
+import { Sequelize } from 'sequelize-typescript';
 import { Password } from './entity/Password';
 import { Role } from './entity/Role';
 import { Submission } from './entity/Submission';
@@ -55,16 +55,6 @@ export class Models {
     return [
       AcademicDiscipline, AuthorsAcademicDiscipline, AuthorsSubmission, Conference, Keyword, Login, Password, Role, Submission, SubmissionAcademicDiscipline, SubmissionMessage, User, UserAlias, UserStatus
     ];
-  }
-
-  static getModel<T extends Model<T>>(expectedModelName: string): any {
-    let modelType: any = null;
-    this.getModels().forEach(model => {
-      if (model.getTableName() == expectedModelName) {
-        modelType = model;
-      }
-    });
-    return modelType;
   }
 }
 

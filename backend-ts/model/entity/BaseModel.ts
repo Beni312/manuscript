@@ -1,8 +1,8 @@
-import { AutoIncrement, Column, CreatedAt, DataType, Model, PrimaryKey, Table, UpdatedAt } from 'sequelize-typescript';
-import { ModelRepository } from "../ModelRepository";
+import { AutoIncrement, Column, CreatedAt, DataType, PrimaryKey, Table, UpdatedAt } from 'sequelize-typescript';
+import { BaseModelTableOptions } from './BaseModelTableOptions';
 
 @Table
-export class BaseModel<T extends Model<T>> extends ModelRepository<T> {
+export class BaseModel<T> extends BaseModelTableOptions<T> {
 
   @PrimaryKey
   @AutoIncrement
@@ -10,8 +10,14 @@ export class BaseModel<T extends Model<T>> extends ModelRepository<T> {
   id: number;
 
   @CreatedAt
+  @Column({
+    field: 'creation_date'
+  })
   creationDate: Date;
 
   @UpdatedAt
+  @Column({
+    field: 'updated_on'
+  })
   updatedOn: Date;
 }

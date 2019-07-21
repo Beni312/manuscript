@@ -1,8 +1,10 @@
-import { AutoIncrement, Column, DataType, PrimaryKey, Table } from "sequelize-typescript";
-import { ModelRepository } from "../ModelRepository";
+import { AutoIncrement, Column, DataType, PrimaryKey, Table } from 'sequelize-typescript';
+import { BaseModelTableOptions } from './BaseModelTableOptions';
 
-@Table
-export class AcademicDiscipline extends ModelRepository<AcademicDiscipline> {
+@Table({
+  modelName: 'academic_discipline'
+})
+export class AcademicDiscipline extends BaseModelTableOptions<AcademicDiscipline> {
 
   @PrimaryKey
   @AutoIncrement

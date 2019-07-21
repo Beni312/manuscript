@@ -1,18 +1,26 @@
-import { AcademicDiscipline } from "./AcademicDiscipline";
-import { Column, DataType, ForeignKey, PrimaryKey, Table } from "sequelize-typescript";
-import { ModelRepository } from "..//ModelRepository";
-import { User } from "./User";
+import { AcademicDiscipline } from './AcademicDiscipline';
+import { BaseModelTableOptions } from './BaseModelTableOptions';
+import { Column, DataType, ForeignKey, PrimaryKey, Table } from 'sequelize-typescript';
+import { User } from './User';
 
-@Table
-export class AuthorsAcademicDiscipline extends ModelRepository<AuthorsAcademicDiscipline> {
+@Table({
+  modelName: 'authors_academic_discipline'
+})
+export class AuthorsAcademicDiscipline extends BaseModelTableOptions<AuthorsAcademicDiscipline> {
 
   @PrimaryKey
   @ForeignKey(() => User)
-  @Column(DataType.INTEGER)
+  @Column({
+    type: DataType.INTEGER,
+    field: 'user_id'
+  })
   userId: number;
 
   @PrimaryKey
   @ForeignKey(() => AcademicDiscipline)
-  @Column(DataType.INTEGER)
+  @Column({
+    type: DataType.INTEGER,
+    field: 'academic_discipline_id'
+  })
   academicDisciplineId: number;
 }

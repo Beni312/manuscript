@@ -1,16 +1,24 @@
 import { AcademicDiscipline } from './AcademicDiscipline';
+import { BaseModelTableOptions } from './BaseModelTableOptions';
 import { Column, DataType, ForeignKey, Table } from 'sequelize-typescript';
-import { ModelRepository } from '../ModelRepository';
 import { Submission } from './Submission';
 
-@Table
-export class SubmissionAcademicDiscipline extends ModelRepository<SubmissionAcademicDiscipline> {
+@Table({
+  modelName: 'submission_academic_discipline'
+})
+export class SubmissionAcademicDiscipline extends BaseModelTableOptions<SubmissionAcademicDiscipline> {
 
   @ForeignKey(() => Submission)
-  @Column(DataType.INTEGER)
+  @Column({
+    type: DataType.INTEGER,
+    field: 'submission_id'
+  })
   submissionId: number;
 
   @ForeignKey(() => AcademicDiscipline)
-  @Column(DataType.INTEGER)
+  @Column({
+    type: DataType.INTEGER,
+    field: 'academic_discipline_id'
+  })
   academicDisciplineId: number;
 }

@@ -8,7 +8,9 @@ import { Role } from './Role';
 import { UserAlias } from './UserAlias';
 import { UserStatus } from './UserStatus';
 
-@Table
+@Table({
+  modelName: 'user'
+})
 export class User extends BaseModel<User> {
 
   @Column(DataType.STRING)
@@ -17,27 +19,42 @@ export class User extends BaseModel<User> {
   @Column(DataType.STRING)
   title: string;
 
-  @Column(DataType.STRING)
+  @Column({
+    type: DataType.STRING,
+    field: 'first_name'
+  })
   firstName: string;
 
-  @Column(DataType.STRING)
+  @Column({
+    type: DataType.STRING,
+    field: 'last_name'
+  })
   lastName: string;
 
   @Column(DataType.STRING)
   job: string;
 
-  @Column(DataType.STRING)
+  @Column({
+    type: DataType.DATE,
+    field: 'birth_date'
+  })
   birthDate: string;
 
   @ForeignKey(() => UserStatus)
-  @Column(DataType.INTEGER)
+  @Column({
+    type: DataType.INTEGER,
+    field: 'status_id'
+  })
   statusId: number;
 
   @BelongsTo(() => UserStatus)
   status: UserStatus;
 
   @ForeignKey(() => Role)
-  @Column(DataType.INTEGER)
+  @Column({
+    type: DataType.INTEGER,
+    field: 'role_id'
+  })
   roleId: number;
 
   @BelongsTo(() => Role)

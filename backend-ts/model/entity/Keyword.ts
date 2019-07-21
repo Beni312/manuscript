@@ -1,9 +1,11 @@
-import { AutoIncrement, Column, DataType, ForeignKey, PrimaryKey, Table } from "sequelize-typescript";
-import { ModelRepository } from "../ModelRepository";
-import { Submission } from "./Submission";
+import { AutoIncrement, Column, DataType, ForeignKey, PrimaryKey, Table } from 'sequelize-typescript';
+import { BaseModelTableOptions } from './BaseModelTableOptions';
+import { Submission } from './Submission';
 
-@Table
-export class Keyword extends ModelRepository<Keyword> {
+@Table({
+  modelName: 'keyword'
+})
+export class Keyword extends BaseModelTableOptions<Keyword> {
 
   @PrimaryKey
   @AutoIncrement
@@ -11,7 +13,10 @@ export class Keyword extends ModelRepository<Keyword> {
   id: number;
 
   @ForeignKey(() => Submission)
-  @Column(DataType.INTEGER)
+  @Column({
+    type: DataType.INTEGER,
+    field: 'submission_id'
+  })
   submissionId: number;
 
   @Column(DataType.STRING)

@@ -33,7 +33,7 @@ export class SubmissionController implements interfaces.Controller {
 
   @httpPost('/submit', authorize('AUTHOR', 'ADMIN'))
   async submit(req: express.Request): Promise<BasicResponse> {
-    const submissionId: string = req.body.submissionId;
+    const submissionId: number = req.body.submissionId;
     await this.submissionService.submitSubmission(submissionId);
     return new BasicResponse()
       .withSuccessMessage('Submission successfully submitted.');

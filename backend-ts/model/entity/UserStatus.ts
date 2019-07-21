@@ -1,8 +1,10 @@
-import { AutoIncrement, Column, DataType, PrimaryKey, Table } from "sequelize-typescript";
-import { ModelRepository } from "../ModelRepository";
+import { AutoIncrement, Column, DataType, PrimaryKey, Table } from 'sequelize-typescript';
+import { BaseModelTableOptions } from './BaseModelTableOptions';
 
-@Table
-export class UserStatus extends ModelRepository<UserStatus> {
+@Table({
+  modelName: 'user_status'
+})
+export class UserStatus extends BaseModelTableOptions<UserStatus> {
 
   @PrimaryKey
   @AutoIncrement

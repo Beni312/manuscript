@@ -14,18 +14,25 @@ import './controller/RegistrationController';
 import './controller/SubmissionController';
 import './controller/UserManagementController';
 
+import { AcademicDisciplineRepository } from './repository/AcademicDisciplineRepository';
 import { ApplicationService } from './service/ApplicationService';
+import { AuthorsAcademicDisciplineRepository } from './repository/AuthorsAcademicDisciplineRepository';
 import { Auth } from './auth/Auth';
 import { Container } from 'inversify';
 import { errorHandler } from './middleware/ErrorHandler';
 import { InternalServerError } from './model/error/InternalServerError';
 import { InversifyExpressServer } from 'inversify-express-utils';
+import { KeywordRepository } from './repository/KeywordRepository';
 import { logger } from './service/logger';
 import { Models } from './model';
+import { PasswordRepository } from './repository/PasswordRepository';
 import { ProfileService } from './service/ProfileService';
 import { RegistrationService } from './service/RegistrationService';
+import { RoleRepository } from './repository/RoleRepository';
+import { SubmissionRepository } from './repository/SubmissionRepository';
 import { SubmissionService } from './service/SubmissionService';
 import { UserManagementService } from './service/UserManagementService';
+import { UserRepository } from './repository/UserRepository';
 
 export class Server {
 
@@ -61,6 +68,13 @@ export class Server {
     container.bind<RegistrationService>(RegistrationService.name).to(RegistrationService);
     container.bind<SubmissionService>(SubmissionService.name).to(SubmissionService);
     container.bind<UserManagementService>(UserManagementService.name).to(UserManagementService);
+    container.bind<AcademicDisciplineRepository>(AcademicDisciplineRepository.name).to(AcademicDisciplineRepository);
+    container.bind<AuthorsAcademicDisciplineRepository>(AuthorsAcademicDisciplineRepository.name).to(AuthorsAcademicDisciplineRepository);
+    container.bind<KeywordRepository>(KeywordRepository.name).to(KeywordRepository);
+    container.bind<PasswordRepository>(PasswordRepository.name).to(PasswordRepository);
+    container.bind<RoleRepository>(RoleRepository.name).to(RoleRepository);
+    container.bind<SubmissionRepository>(SubmissionRepository.name).to(SubmissionRepository);
+    container.bind<UserRepository>(UserRepository.name).to(UserRepository);
 
     Server.inversifyServer = new InversifyExpressServer(container);
     Server.inversifyServer.setErrorConfig(app => app.use(errorHandler));

@@ -1,33 +1,30 @@
 import * as bcrypt from 'bcrypt-nodejs';
-import { AcademicDiscipline, AuthorsAcademicDiscipline, Password, User, UserAlias } from '../model/index';
+import { AcademicDiscipline, AuthorsAcademicDiscipline, User } from '../model';
+import { AuthorsAcademicDisciplineRepository } from '../repository/AuthorsAcademicDisciplineRepository';
 import { ChangePasswordError } from '../model/error/ChangePasswordError';
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
+import { PasswordRepository } from '../repository/PasswordRepository';
 import { ProfilePreload } from '../model/dto/ProfilePreload';
+import { UserRepository } from '../repository/UserRepository';
 
 @injectable()
 export class ProfileService {
 
+  @inject(UserRepository.name)
+  userRepository: UserRepository;
+
+  @inject(PasswordRepository.name)
+  passwordRepository: PasswordRepository;
+
+  @inject(AuthorsAcademicDisciplineRepository.name)
+  authorsAcademicDisciplineRepository: AuthorsAcademicDisciplineRepository;
+
   public async getPreload(userId): Promise<ProfilePreload> {
-    return new ProfilePreload(await User._findByPk<User>(userId, {
-      include: [
-        {
-          model: AcademicDiscipline,
-          attributes: ['id', 'name'],
-          through: {attributes: []},
-          order: [
-            ['name', 'ASC']
-          ]
-        },
-        {
-          model: UserAlias,
-          attributes: ['username']
-        }
-      ]
-    }));
+    return new ProfilePreload(await this.userRepository.findUserProfile(userId));
   }
 
   public async saveProfile(userId, params): Promise<User> {
-    return await User._updateByPk<User>(userId, {
+    return await this.userRepository.updateByPk(userId, {
       title: params.user.title,
       firstName: params.user.firstName,
       lastName: params.user.lastName,
@@ -41,7 +38,7 @@ export class ProfileService {
       throw new ChangePasswordError('The given passwords are not matched!');
     }
 
-    const password = await Password._findOne<Password>({
+    const password = await this.passwordRepository._findOne({
       where: {
         userId: userId
       }
@@ -53,7 +50,7 @@ export class ProfileService {
     }
 
     const salt = bcrypt.genSaltSync();
-    await Password._updateByPk<Password>(password.id, {password: bcrypt.hashSync(params.password.password, salt), salt: salt});
+    await this.passwordRepository.updateByPk(password.id, {password: bcrypt.hashSync(params.password.password, salt), salt: salt});
   }
 
   public async updateAcademicDisciplines(userId: number, userAcademicDisciplines: Array<AcademicDiscipline>): Promise<void> {
@@ -70,7 +67,7 @@ export class ProfileService {
 
     for (let i = 0; i < oldAcademicDisciplines.length; i++) {
       if (!userAcademicDisciplinesMap.get(oldAcademicDisciplines[i].academicDisciplineId)) {
-        await AuthorsAcademicDiscipline._deleteByOptions<AuthorsAcademicDiscipline>({
+        await this.authorsAcademicDisciplineRepository.deleteByOptions<AuthorsAcademicDiscipline>({
           where: {
             userId: userId,
             academicDisciplineId: oldAcademicDisciplines[i].academicDisciplineId

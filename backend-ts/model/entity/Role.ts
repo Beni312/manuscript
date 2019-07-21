@@ -1,8 +1,10 @@
 import { AutoIncrement, Column, DataType, PrimaryKey, Table } from 'sequelize-typescript';
-import { ModelRepository } from '../ModelRepository';
+import { BaseModelTableOptions } from './BaseModelTableOptions';
 
-@Table
-export class Role extends ModelRepository<Role> {
+@Table({
+  modelName: 'role'
+})
+export class Role extends BaseModelTableOptions<Role> {
 
   @PrimaryKey
   @AutoIncrement

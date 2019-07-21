@@ -1,3 +1,5 @@
+import { EnumDataTypeOptions } from 'sequelize';
+
 export enum SubmissionStatus {
   CREATED='CREATED',
   SUBMITTED='SUBMITTED',
@@ -9,4 +11,9 @@ export enum SubmissionStatus {
   ACCEPTED='ACCEPTED'
 }
 
-export const submissionStatuses = Object.keys(SubmissionStatus);
+export class SubmissionStatusEnumerator implements EnumDataTypeOptions<string> {
+  values: string[] = submissionStatuses;
+}
+
+
+export const submissionStatuses: string[] = Object.keys(SubmissionStatus);

@@ -5,38 +5,49 @@ import { BelongsTo, BelongsToMany, Column, DataType, Default, ForeignKey, HasMan
 import { Conference } from './Conference';
 import { HasManySetAssociationsMixin } from 'sequelize';
 import { Keyword } from './Keyword';
-import { SubmissionStatus, submissionStatuses } from '../enum/SubmissionStatus';
 import { SubmissionAcademicDiscipline } from './SubmissionAcademicDiscipline';
+import { SubmissionStatus, SubmissionStatusEnumerator } from '../enum/SubmissionStatus';
 import { User } from './User';
 
-@Table
+@Table({
+  modelName: 'submission'
+})
 export class Submission extends BaseModel<Submission> {
 
   @Column(DataType.STRING)
   title: string;
 
-  @Column(DataType.STRING)
+  @Column({
+    type: DataType.STRING,
+    field: 'manuscript_abstract'
+  })
   manuscriptAbstract: string;
 
   @ForeignKey(() => User)
-  @Column(DataType.INTEGER)
+  @Column({
+    type: DataType.INTEGER,
+    field: 'submitter_id'
+  })
   submitterId: number;
 
   @ForeignKey(() => Conference)
-  @Column(DataType.INTEGER)
+  @Column({
+    type: DataType.INTEGER,
+    field: 'conference_id'
+  })
   conferenceId: number;
 
   @Default(SubmissionStatus.CREATED)
-  @Column(DataType.ENUM(submissionStatuses))
+  @Column(DataType.ENUM(new SubmissionStatusEnumerator()))
   status: SubmissionStatus;
 
   @BelongsToMany(() => AcademicDiscipline, () => SubmissionAcademicDiscipline)
   academicDisciplines: AcademicDiscipline[];
 
-  @BelongsToMany(() => User, {through: () => AuthorsSubmission, as: 'authors', foreignKey: 'submissionId', otherKey: 'authorId'})
+  @BelongsToMany(() => User, () => AuthorsSubmission)
   authors: User[];
 
-  @BelongsTo(() => User, {as: 'submitter'})
+  @BelongsTo(() => User)
   submitter: User;
 
   @BelongsTo(() => Conference)

@@ -1,21 +1,35 @@
-import { AcademicDiscipline, AuthorsSubmission, Conference, Keyword, Role, Submission, User, UserAlias } from '../model';
+import { AcademicDiscipline, AuthorsSubmission, Conference, Keyword, Submission, User, UserAlias } from '../model';
 import { ApplicationService } from './ApplicationService';
 import { AuthorDto } from '../model/dto/AuthorDto';
+import { EditSubmissionDto } from '../model/dto/EditSubmissionDto';
 import { inject, injectable } from 'inversify';
+import { InternalServerError } from '../model/error/InternalServerError';
+import { KeywordRepository } from '../repository/KeywordRepository';
 import { MessageType } from '../model/enum/MessageType';
 import { RoleEnum } from '../model/enum/RoleEnum';
 import { Roles } from '../auth/Roles';
 import { SubmissionDto } from '../model/dto/SubmissionDto';
 import { SubmissionMessage } from '../model/entity/SubmissionMessage';
 import { SubmissionPreload } from '../model/dto/SubmissionPreload';
+import { SubmissionRepository } from '../repository/SubmissionRepository';
 import { SubmissionStatus } from '../model/enum/SubmissionStatus';
 import { UpsertSubmissionPreload } from '../model/dto/UpsertSubmissionPreload';
+import { UserRepository } from '../repository/UserRepository';
 
 @injectable()
 export class SubmissionService {
 
   @inject(ApplicationService.name)
   applicationService: ApplicationService;
+
+  @inject(SubmissionRepository.name)
+  submissionRepository: SubmissionRepository;
+
+  @inject(UserRepository.name)
+  userRepository: UserRepository;
+
+  @inject(KeywordRepository.name)
+  keywordRepository: KeywordRepository;
 
   editableSubmissionStatuses = [
     SubmissionStatus.CREATED,
@@ -139,23 +153,13 @@ export class SubmissionService {
   }
 
   async getAuthors(): Promise<AuthorDto[]> {
-    const users: User[] = await User._findAll<User>({
-      attributes: ['id', 'email', 'firstName', 'lastName'],
-      include: [
-        {
-          model: Role,
-          where: {
-            name: RoleEnum.AUTHOR
-          }
-        }
-      ]
-    });
-
-    return users.map(user => new AuthorDto(user));
+    return (await this.userRepository.findAuthors())
+      .map(user => new AuthorDto(user)
+      );
   }
 
   async remove(submissionId): Promise<void> {
-    await Submission._deleteByPk<Submission>(submissionId);
+    await this.submissionRepository.deleteByPk(submissionId);
   }
 
   async createSubmission(userId, submission): Promise<void> {
@@ -180,7 +184,7 @@ export class SubmissionService {
     }
   }
 
-  async editSubmission(submission): Promise<void> {
+  async editSubmission(submission: EditSubmissionDto): Promise<void> {
     const currentKeywordsMap: Map<string, Keyword> = new Map();
     const toAddKeywordsMap: Map<string, Keyword> = new Map();
     const toAddKeywords: string[] = [];
@@ -204,26 +208,20 @@ export class SubmissionService {
     });
 
     for (let i = 0; i < toDeleteKeywords.length; i++) {
-      await Keyword._deleteByOptions<Keyword>({
-        where: {
-          submissionId: submission.id,
-          keyword: toDeleteKeywords[i]
-        }
-      });
+      await this.keywordRepository.deleteKeywordBySubmissionId(submission.id, toDeleteKeywords[i]);
     }
 
     for (let i = 0; i < toAddKeywords.length; i++) {
       await Keyword.create({submissionId: submission.id, keyword: toAddKeywords[i]});
     }
 
-    await Submission.findByPk(submission.id)
-      .then(async (s: Submission) => {
-        s.title = submission.title;
-        s.manuscriptAbstract = submission.manuscriptAbstract;
-        await s.setAuthors(submission.authors.map(item => item.id));
-        await s.setAcademicDisciplines(submission.academicDisciplines.map(item => item.id));
-        s.save();
-      }).catch(err => console.log(err));
+    await this.submissionRepository.modifySubmission(
+      submission.id,
+      submission.title,
+      submission.manuscriptAbstract,
+      submission.authors.map(item => item.id),
+      submission.academicDisciplines.map(item => item.id)
+    );
   }
 
   async evaluateSubmission(evaluation, userId, userRole): Promise<void> {
@@ -239,6 +237,7 @@ export class SubmissionService {
       case RoleEnum.REVIEWER: evaluation.result.success ? result = SubmissionStatus.ACCEPTED_BY_REVIEWER: result = SubmissionStatus.REJECTED_BY_REVIEWER; break;
       case RoleEnum.EDITOR: evaluation.result.success ? result = SubmissionStatus.ACCEPTED_BY_EDITOR: result = SubmissionStatus.REJECTED_BY_EDITOR; break;
       case RoleEnum.ADMIN: evaluation.result.success ? result = SubmissionStatus.ACCEPTED: result = SubmissionStatus.REJECTED_BY_ADMIN; break;
+      default: throw new InternalServerError('No matching status');
     }
 
     if (type) {
@@ -249,19 +248,15 @@ export class SubmissionService {
         sender: userId
       });
     }
-    return await Submission.findByPk(evaluation.submissionId).then((submission: Submission) => {
-      submission.status = result;
-      submission.save();
-    }).catch(error => {
-      console.log(error);
-    });
+
+    this.submissionRepository.updateSubmissionStatus(evaluation.submissionId, result);
   }
 
   async getUpsertSubmissionPreload(): Promise<UpsertSubmissionPreload> {
     return new UpsertSubmissionPreload(await this.applicationService.getAcademicDisciplines(), await this.getAuthors());
   }
 
-  async submitSubmission(submissionId) {
-    return await Submission._updateByPk<Submission>(submissionId, {status: SubmissionStatus.SUBMITTED});
+  async submitSubmission(submissionId: number) {
+    return await this.submissionRepository.updateSubmissionStatus(submissionId, SubmissionStatus.SUBMITTED);
   }
 }

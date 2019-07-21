@@ -1,17 +1,25 @@
+import { BaseModelTableOptions } from './BaseModelTableOptions';
 import { BelongsTo, Column, DataType, ForeignKey, Table } from 'sequelize-typescript';
-import { ModelRepository } from "../ModelRepository";
-import { Submission } from "./Submission";
-import { User } from "./User";
+import { Submission } from './Submission';
+import { User } from './User';
 
-@Table
-export class AuthorsSubmission extends ModelRepository<AuthorsSubmission> {
+@Table({
+  modelName: 'authors_submission'
+})
+export class AuthorsSubmission extends BaseModelTableOptions<AuthorsSubmission> {
 
   @ForeignKey(() => User)
-  @Column(DataType.INTEGER)
+  @Column({
+    type: DataType.INTEGER,
+    field: 'author_id'
+  })
   authorId: number;
 
   @ForeignKey(() => Submission)
-  @Column(DataType.INTEGER)
+  @Column({
+    type: DataType.INTEGER,
+    field: 'submission_id'
+  })
   submissionId: number;
 
   @BelongsTo(() => User)

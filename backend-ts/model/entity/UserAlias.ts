@@ -1,15 +1,20 @@
-import { Column, DataType, ForeignKey, PrimaryKey, Table } from "sequelize-typescript";
-import { User } from "./User";
-import { ModelRepository } from "../ModelRepository";
+import { BaseModelTableOptions } from './BaseModelTableOptions';
+import { Column, DataType, ForeignKey, PrimaryKey, Table } from 'sequelize-typescript';
+import { User } from './User';
 
-@Table
-export class UserAlias extends ModelRepository<UserAlias> {
+@Table({
+  modelName: 'user_alias'
+})
+export class UserAlias extends BaseModelTableOptions<UserAlias> {
 
   @PrimaryKey
   @Column(DataType.STRING)
   username: string;
 
   @ForeignKey(() => User)
-  @Column(DataType.INTEGER)
+  @Column({
+    type: DataType.INTEGER,
+    field: 'user_id'
+  })
   userId: number;
 }

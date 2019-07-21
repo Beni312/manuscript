@@ -1,9 +1,11 @@
-import { BelongsTo, Column, DataType, ForeignKey, HasMany, Table } from "sequelize-typescript";
 import { BaseModel } from "./BaseModel";
+import { BelongsTo, Column, DataType, ForeignKey, HasMany, Table } from "sequelize-typescript";
 import { Submission } from "./Submission";
 import { User } from "./User";
 
-@Table
+@Table({
+  modelName: 'conference'
+})
 export class Conference extends BaseModel<Conference> {
 
   @Column(DataType.STRING)
@@ -13,7 +15,10 @@ export class Conference extends BaseModel<Conference> {
   description: string;
 
   @ForeignKey(() => User)
-  @Column(DataType.INTEGER)
+  @Column({
+    type: DataType.INTEGER,
+    field: 'submitter_id'
+  })
   submitterId: number;
 
   @BelongsTo(() => User)

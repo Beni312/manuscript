@@ -1,21 +1,25 @@
 import { BaseModel } from './BaseModel';
-import { Column } from 'sequelize-typescript/lib/annotations/Column';
-import { DataType, ForeignKey, Table } from 'sequelize-typescript';
-import { MessageType, messageTypes } from '../enum/MessageType';
+import { DataType, ForeignKey, Column, Table } from 'sequelize-typescript';
+import { MessageType, MessageTypeEnumerator } from '../enum/MessageType';
 import { Submission } from './Submission';
 import { User } from './User';
 
-@Table
+@Table({
+  modelName: 'submission_message'
+})
 export class SubmissionMessage extends BaseModel<SubmissionMessage> {
 
   @Column(DataType.STRING)
   message: string;
 
-  @Column(DataType.ENUM(messageTypes))
+  @Column(DataType.ENUM(new MessageTypeEnumerator()))
   type: MessageType;
 
   @ForeignKey(() => Submission)
-  @Column(DataType.INTEGER)
+  @Column({
+    type: DataType.INTEGER,
+    field: 'submission_id'
+  })
   submissionId: number;
 
   @ForeignKey(() => User)
