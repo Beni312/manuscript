@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../../../../services/user.service';
-import {MessageService} from '../../../../services/message.service';
 
 export class Login {
   username: string;
@@ -19,8 +18,7 @@ export class LoginComponent implements OnInit {
   public loginForm: FormGroup;
 
   constructor(private service: UserService,
-              private fb: FormBuilder,
-              private messageService: MessageService) {
+              private fb: FormBuilder) {
   }
 
   ngOnInit() {
@@ -38,8 +36,6 @@ export class LoginComponent implements OnInit {
     this.model = this.loginForm.value;
     this.service.login(this.model.username, this.model.password).subscribe(() => {
       this.service.preload();
-    }, (error: string) => {
-      this.messageService.error(error);
     });
   }
 }
