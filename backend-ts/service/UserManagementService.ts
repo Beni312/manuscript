@@ -1,5 +1,4 @@
 import { inject, injectable } from 'inversify';
-import { Role, UserAlias, UserStatus } from '../model';
 import { UserManagementDto } from '../model/dto/UserManagementDto';
 import { UserRepository } from '../repository/UserRepository';
 
@@ -10,19 +9,7 @@ export class UserManagementService {
   userRepository: UserRepository;
 
   async getUsers(): Promise<UserManagementDto[]> {
-    const users = await this.userRepository._findAll({
-      include: [
-        {
-          model: UserAlias
-        },
-        {
-          model: Role
-        },
-        {
-          model: UserStatus
-        }
-      ]
-    });
+    const users = await this.userRepository.findUsers();
     return users.map(user => new UserManagementDto(user));
   }
 }

@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
 import { Repository } from './Repository';
-import { AcademicDiscipline, Role, User, UserAlias } from '../model';
+import { AcademicDiscipline, Role, User, UserAlias, UserStatus } from '../model';
 import { RoleEnum } from '../model/enum/RoleEnum';
 
 @injectable()
@@ -38,6 +38,22 @@ export class UserRepository extends Repository<User> {
         {
           model: UserAlias,
           attributes: ['username']
+        }
+      ]
+    });
+  }
+
+  async findUsers(): Promise<User[]> {
+    return await this._findAll({
+      include: [
+        {
+          model: UserAlias
+        },
+        {
+          model: Role
+        },
+        {
+          model: UserStatus
         }
       ]
     });
