@@ -57,10 +57,10 @@ export class RegistrationComponent implements OnInit {
       }),
       password: this.fb.group({
         password: new FormControl('', {
-          validators: [Validators.required]
+          validators: [Validators.required, Validators.minLength(4)]
         }),
         passwordAgain: new FormControl('', {
-          validators: [Validators.required]
+          validators: [Validators.required, Validators.minLength(4)]
         })
       }),
       academicDisciplines: new FormControl([])

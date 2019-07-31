@@ -58,10 +58,10 @@ export class ProfileComponent extends PermissionHandler implements OnInit, After
 
     this.changePasswordForm = this.fb.group({
       password: this.fb.group({
-        password: new FormControl('', {validators: [Validators.required]}),
-        passwordAgain: new FormControl('', {validators: [Validators.required]})
+        password: new FormControl('', {validators: [Validators.required, Validators.minLength(4)]}),
+        passwordAgain: new FormControl('', {validators: [Validators.required, Validators.minLength(4)]})
       }),
-      oldPassword: new FormControl('', {validators: [Validators.required]})
+      oldPassword: new FormControl('', {validators: [Validators.required, Validators.minLength(4)]})
     });
   }
 
@@ -82,6 +82,9 @@ export class ProfileComponent extends PermissionHandler implements OnInit, After
   }
 
   changePassword() {
+    if (!this.changePasswordForm.valid) {
+      return;
+    }
     this.profileService.changePassword(this.changePasswordForm.value).subscribe(response => {
       this.messageService.success(response.successMessage);
     }, (error: string) => {
