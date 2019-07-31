@@ -1,5 +1,5 @@
 import * as express from 'express';
-import * as passport from 'passport';
+import { authentication } from '../middleware/Authentication';
 import { authorize } from '../middleware/Authorize';
 import { controller, httpPost, interfaces } from 'inversify-express-utils';
 
@@ -12,7 +12,7 @@ export class AuthenticationController implements interfaces.Controller {
     return {success: true};
   }
 
-  @httpPost('/login', passport.authenticate('local', {successMessage: 'Success login', failureMessage: 'Wrong username or password'}))
+  @httpPost('/login', authentication())
   public async login(): Promise<void> {
   }
 }

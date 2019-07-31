@@ -17,6 +17,10 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           const messageService = this.injector.get(MessageService);
           const router = this.injector.get(Router);
 
+          if (error.url.includes('login')) {
+            return throwError(error.error);
+          }
+
           if (error.status === 401) {
             localStorage.removeItem('currentUser');
             this.ngZone.run(() => {
