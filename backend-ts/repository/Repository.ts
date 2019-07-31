@@ -59,17 +59,20 @@ export abstract class Repository<T extends Model> {
         .replace('TABLE_NAME', this.model.getTableName().toString())
       );
     }
-    Object.keys(data).forEach(key => {
-      if (!row[key]) {
+
+    const keys = Object.keys(data);
+
+    for(let i = 0; i < keys.length; i++) {
+      if (row[keys[i]] == undefined) {
         throw new InternalServerError(this.PROPERTY_NOT_FOUND_ERROR_MESSAGE
           .replace('TABLE_NAME', this.model.getTableName().toString())
-          .replace('PROPERTY_KEY', key)
+          .replace('PROPERTY_KEY', keys[i])
         );
       }
-      row[key] = data[key];
-    });
+      row[keys[i]] = data[keys[i]];
+    }
 
-    row.save();
+    await row.save();
 
     return row as T;
   }
