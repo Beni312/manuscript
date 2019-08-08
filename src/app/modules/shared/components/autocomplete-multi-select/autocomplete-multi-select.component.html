@@ -8,9 +8,9 @@
         </button>
       </mat-form-field>
     </div>
-    <ul [hidden]="!showDropdown">
-      <li #dropdown class="mat-elevation-z8">
-        <div *ngFor="let item of filteredList" (click)="select(item)">{{ getDisplayProperty(item) }}</div>
+    <ul #dropdown [hidden]="!showDropdown" class="mat-elevation-z8" [ngStyle]="{'width': inputWidth}">
+      <li *ngFor="let item of filteredList" (click)="select(item)">
+        {{ getDisplayProperty(item) }}
       </li>
     </ul>
   </div>

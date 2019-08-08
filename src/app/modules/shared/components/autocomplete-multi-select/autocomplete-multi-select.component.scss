@@ -18,32 +18,23 @@
 }
 
 ul {
-  padding-bottom: 40px;
   text-align: left;
-  display: inline;
-  overflow-y: scroll;
-  padding-left: 0;
-}
-ul li {
-  display: block;
-  overflow-y: scroll;
   position: absolute;
-  background: #fff;
+  overflow-y: auto;
+  padding-left: 0;
+  z-index: 999;
+  margin-top: -1.25em;
+  max-height: 245px;
+}
+
+ul li {
+  background-color: #fff;
   cursor: pointer;
-  height: 300px;
-  z-index: 100;
-  margin-top: -17px;
-
-  background-clip: padding-box;
+  padding: 14px 4px 14px 5px;
 }
 
-li div {
-  padding: 15px 4px 17px 5px;
-  border: 0;
-}
-
-li div:hover {
-  background-color: #f1f1f1;
+li:hover {
+  background-color: #f1f1f1 !important;
 }
 
 .item {
