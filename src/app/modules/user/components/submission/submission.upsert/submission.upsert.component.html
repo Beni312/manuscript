@@ -32,12 +32,11 @@
 
         <app-autocomplete-multi-select class="col-12 mb-3"
                                        [items]="preload.authors"
-                                       [property]="'firstName'"
                                        formControlName="authors"
                                        [placeholder]="'Add authors'"
                                        [selectedItemsHeight]="'200px'"
                                        [inputWidth]="'100%'"
-                                       [displayProperty]="getFullName">
+                                       [property]="getFullName">
         </app-autocomplete-multi-select>
       </div>
   </form>

@@ -36,7 +36,7 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
   @Input()
   items: any[];
   @Input()
-  property;
+  property: string | Function;
   @Input()
   placeholder: string;
   @Input()
@@ -45,8 +45,6 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
   selectedItemsHeight = '120px';
   @Input()
   toOrder = true;
-  @Input()
-  displayProperty: Function;
 
   @ViewChild('field')
   field: MatFormField;
@@ -131,8 +129,8 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
   }
 
   getDisplayProperty(item): string {
-    if (this.displayProperty) {
-      return this.displayProperty(item);
+    if (typeof this.property === 'function') {
+      return this.property(item);
     }
     return item[this.property];
   }
