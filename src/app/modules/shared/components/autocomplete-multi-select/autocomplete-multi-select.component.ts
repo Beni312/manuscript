@@ -5,8 +5,10 @@ import {
   ElementRef,
   forwardRef,
   Input,
+  OnChanges,
   OnInit,
   Renderer2,
+  SimpleChanges,
   ViewChild
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -24,7 +26,7 @@ import { MatFormField } from '@angular/material';
     }
   ]
 })
-export class AutocompleteMultiSelectComponent implements ControlValueAccessor, OnInit, AfterContentInit, AfterViewInit {
+export class AutocompleteMultiSelectComponent implements ControlValueAccessor, OnInit, AfterContentInit, AfterViewInit, OnChanges {
 
   query = '';
   filteredList = [];
@@ -65,9 +67,6 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
     if (this.items && this.toOrder) {
       this.selected = this.sortByDisplayedProperty(this.selected);
       this.items = this.sortByDisplayedProperty(this.items);
-
-      this.filteredList = this.items.filter(el => !this.isSelected(el));
-
     }
   }
 
@@ -148,5 +147,11 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
       }
       return 0;
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.items) {
+      this.filter();
+    }
   }
 }
