@@ -66,7 +66,6 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
   ngAfterContentInit(): void {
     if (this.items && this.toOrder) {
       this.selected = this.sortByDisplayedProperty(this.selected);
-      this.items = this.sortByDisplayedProperty(this.items);
     }
   }
 
@@ -151,6 +150,7 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.items) {
+      this.items = this.sortByDisplayedProperty(this.items);
       this.filter();
     }
   }
