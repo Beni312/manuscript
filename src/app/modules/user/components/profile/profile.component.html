@@ -26,8 +26,8 @@
         </div>
       </div>
 
-      <button mat-raised-button color="primary" (click)="save()" [disabled]="!personalDataForm.dirty">Save</button>
-      <button mat-raised-button (click)="resetForm()" [disabled]="!personalDataForm.dirty">Reset</button>
+      <button mat-raised-button class="mr-2" color="primary" (click)="save()" [disabled]="!personalDataForm.dirty">Save</button>
+      <button mat-raised-button class="ml-2" (click)="resetForm()" [disabled]="!personalDataForm.dirty">Reset</button>
     </form>
   </mat-card-content>
 </mat-card>
@@ -64,7 +64,7 @@
   </mat-card-header>
   <mat-card-content>
     <div class="mat-elevation-z8">
-      <mat-table [dataSource]="dataSource" matSort id="academicDisciplinesTable">
+      <mat-table [dataSource]="dataSource" matSort>
 
         <ng-container matColumnDef="academicDisciplineId">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Id </mat-header-cell>
@@ -85,7 +85,7 @@
                      [pageSizeOptions]="[5, 10, 25, 100]">
       </mat-paginator>
     </div>
-    <div class="button-row">
+    <div class="mt-4 text-left">
       <button mat-raised-button color="primary" (click)="updateAcademicDisciplines()">
         <mat-icon>add</mat-icon>
           Update

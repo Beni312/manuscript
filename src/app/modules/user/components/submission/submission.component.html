@@ -13,8 +13,8 @@
 
 </div>
 
-<div class="mat-elevation-z8" *ngIf="preload.submissions.length > 0">
-  <mat-table #table [dataSource]="dataSource" matSort id="submissionsTable">
+<div class="mat-elevation-z8 text-left" *ngIf="preload.submissions.length > 0">
+  <mat-table [dataSource]="dataSource" matSort id="submissionsTable">
 
     <ng-container matColumnDef="title">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Title</mat-header-cell>
