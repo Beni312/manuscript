@@ -61,9 +61,23 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
     this.propagateChange(this.selected);
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.toOrder) {
+      this.items = this.sortByDisplayedProperty(this.items);
+    }
+
+    if (this.items) {
+      this.filter();
+    }
+  }
+
   ngAfterContentInit(): void {
-    if (this.items && this.toOrder) {
+    if (this.toOrder) {
       this.selected = this.sortByDisplayedProperty(this.selected);
+    }
+
+    if (this.items) {
+      this.filteredList = this.items.filter(el => !this.isSelected(el));
     }
   }
 
@@ -99,7 +113,9 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
 
   select(item) {
     this.selected.push(item);
-    this.sortByDisplayedProperty(this.selected);
+    if (this.toOrder) {
+      this.sortByDisplayedProperty(this.selected);
+    }
     this.query = '';
     this.filteredList.splice(this.filteredList.indexOf(item), 1);
   }
@@ -144,12 +160,5 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
       }
       return 0;
     });
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (this.items) {
-      this.items = this.sortByDisplayedProperty(this.items);
-      this.filter();
-    }
   }
 }
