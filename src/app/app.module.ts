@@ -5,6 +5,7 @@ import { CoreModule } from './modules/core/core.module';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { HttpErrorInterceptor } from './services/http.error.interceptor';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { JwtInterceptor } from './services/jwt.interceptor';
 import { LoginComponent } from './modules/core/components/login/login.component';
 import { MaterialModule } from './modules/material/material.module';
 import { MessageService } from './services/message.service';
@@ -63,7 +64,12 @@ const Routes: ModuleWithProviders = RouterModule.forRoot([
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,
       multi: true
-    }
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true
+    },
   ],
   bootstrap: [AppComponent]
 })

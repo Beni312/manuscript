@@ -33,7 +33,7 @@ export class ProfileService {
     });
   }
 
-  public async changePassword(userId, params): Promise<void> {
+  public async changePassword(userId: number, params): Promise<void> {
     if (params.password.password != params.password.passwordAgain) {
       throw new ChangePasswordError('The given passwords are not matched!');
     }

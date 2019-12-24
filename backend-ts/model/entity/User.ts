@@ -69,5 +69,5 @@ export class User extends BaseModel<User> {
   @HasOne(() => Password)
   password: Password;
 
-  public setAcademicDisciplines!: HasManySetAssociationsMixin<AcademicDiscipline, number>;
+  public setAcademicDisciplines!: HasManySetAssociationsMixin<AcademicDiscipline[], number>;
 }

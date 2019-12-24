@@ -18,6 +18,7 @@ import { AcademicDisciplineRepository } from './repository/AcademicDisciplineRep
 import { ApplicationService } from './service/ApplicationService';
 import { AuthorsAcademicDisciplineRepository } from './repository/AuthorsAcademicDisciplineRepository';
 import { Auth } from './auth/Auth';
+import { AuthProvider } from './service/AuthProvider';
 import { Container } from 'inversify';
 import { errorHandler } from './middleware/ErrorHandler';
 import { InternalServerError } from './model/error/InternalServerError';
@@ -76,7 +77,9 @@ export class Server {
     container.bind<SubmissionRepository>(SubmissionRepository.name).to(SubmissionRepository);
     container.bind<UserRepository>(UserRepository.name).to(UserRepository);
 
-    Server.inversifyServer = new InversifyExpressServer(container);
+    container.bind<AuthProvider>(AuthProvider.name).to(AuthProvider);
+
+    Server.inversifyServer = new InversifyExpressServer(container, null, null, null, AuthProvider);
     Server.inversifyServer.setErrorConfig(app => app.use(errorHandler));
     Server.inversifyServer.setConfig((app: any) => {
       Server.initializeAuth();
@@ -98,6 +101,7 @@ export class Server {
   private static initializeAuth() {
     Auth.serializeUser();
     Auth.useLocalStrategy();
+    Auth.useJWTStrategy();
   }
 
   private static configureApp(app) {

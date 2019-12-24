@@ -1,4 +1,6 @@
+import * as jwt from 'jsonwebtoken';
 import * as passport from 'passport';
+import { PreloadDto } from '../model/dto/PreloadDto';
 
 export const authentication = () => {
   return async (req, res, next) => {
@@ -14,10 +16,9 @@ export const authentication = () => {
           if (err) {
             return next(err);
           }
-          res.status(200);
-          res.json({
-            'successMessage': "Success login"
-          });
+
+          const token = jwt.sign({data: user}, process.env.JWT_SECRET);
+          return res.json(new PreloadDto(user.id, user.username, user.role, token));
         });
       }
     })(req, res, next);

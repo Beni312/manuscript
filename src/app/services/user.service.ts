@@ -50,8 +50,9 @@ export class UserService {
   }
 
   logout() {
-    localStorage.removeItem('currentUser');
-    this.router.navigate(['login']);
-    this.httpClient.post('/logout', {}).subscribe();
+    this.httpClient.post('/logout', {}).subscribe(() => {
+      localStorage.removeItem('currentUser');
+      this.router.navigate(['login']);
+    });
   }
 }

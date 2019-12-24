@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from '../../../../services/message.service';
+import { Router } from '@angular/router';
 import { UserService } from '../../../../services/user.service';
 
 export class Login {
@@ -20,7 +21,8 @@ export class LoginComponent implements OnInit {
 
   constructor(private service: UserService,
               private fb: FormBuilder,
-              private messageService: MessageService) {
+              private messageService: MessageService,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -36,8 +38,9 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.model = this.loginForm.value;
-    this.service.login(this.model.username, this.model.password).subscribe(() => {
-      this.service.preload();
+    this.service.login(this.model.username, this.model.password).subscribe((resp) => {
+      localStorage.setItem('currentUser', JSON.stringify(resp));
+      this.router.navigate(['']);
     }, error => {
       this.messageService.error(error.exceptionMessage);
     });

@@ -1,13 +1,13 @@
 import * as express from 'express';
 import { authentication } from '../middleware/Authentication';
-import { authorize } from '../middleware/Authorize';
-import { controller, httpPost, interfaces } from 'inversify-express-utils';
+import { controller, httpPost, interfaces, request } from 'inversify-express-utils';
+import { JWTAuthentication } from '../middleware/JWTAuthentication';
 
 @controller('')
 export class AuthenticationController implements interfaces.Controller {
 
-  @httpPost('/logout', authorize())
-  private async logout(req: express.Request): Promise<any> {
+  @httpPost('/logout', JWTAuthentication())
+  private async logout(@request() req: express.Request): Promise<any> {
     req.logout();
     return {success: true};
   }

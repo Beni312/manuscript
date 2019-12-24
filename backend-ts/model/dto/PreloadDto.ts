@@ -1,9 +1,13 @@
 export class PreloadDto {
+  id: number;
   username: string;
   role: string;
+  token: string;
 
-  constructor(username: string, role: string) {
+  constructor(id: number, username: string, role: string, token: string) {
+    this.id = id;
     this.username = username;
     this.role = role;
+    this.token = token;
   }
 }

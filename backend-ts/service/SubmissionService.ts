@@ -13,6 +13,7 @@ import { SubmissionMessage } from '../model/entity/SubmissionMessage';
 import { SubmissionPreload } from '../model/dto/SubmissionPreload';
 import { SubmissionRepository } from '../repository/SubmissionRepository';
 import { SubmissionStatus } from '../model/enum/SubmissionStatus';
+import { UserInfo } from '../model/dto/UserInfo';
 import { UpsertSubmissionPreload } from '../model/dto/UpsertSubmissionPreload';
 import { UserRepository } from '../repository/UserRepository';
 
@@ -38,7 +39,7 @@ export class SubmissionService {
     SubmissionStatus.REJECTED_BY_ADMIN
   ];
 
-  async preload(user, role): Promise<SubmissionPreload> {
+  async preload(user: UserInfo): Promise<SubmissionPreload> {
     const submissionOptions: any = {
       include: [
         {
@@ -75,7 +76,7 @@ export class SubmissionService {
     };
     const conferenceOptions: any = {attributes: ['id', 'title']};
 
-    if (role.toUpperCase() == RoleEnum.AUTHOR) {
+    if (user.role.toUpperCase() == RoleEnum.AUTHOR) {
       const filter = {
         model: AuthorsSubmission,
         where: {
@@ -88,7 +89,7 @@ export class SubmissionService {
     const submissions: Submission[] = await Submission.findAll(submissionOptions);
     const submissionIds: number[] = submissions.map(item => item.id);
 
-    if (role !== RoleEnum.ADMIN) {
+    if (user.role !== RoleEnum.ADMIN) {
       conferenceOptions.include = [{model: Submission, where: {id: submissionIds}}];
     }
 
@@ -162,7 +163,7 @@ export class SubmissionService {
     await this.submissionRepository.deleteByPk(submissionId);
   }
 
-  async createSubmission(userId, submission): Promise<void> {
+  async createSubmission(userId: number, submission: any): Promise<void> {
     await Submission.create({
       title: submission.title,
       manuscriptAbstract: submission.manuscriptAbstract,
@@ -249,7 +250,7 @@ export class SubmissionService {
       });
     }
 
-    this.submissionRepository.updateSubmissionStatus(evaluation.submissionId, result);
+    await this.submissionRepository.updateSubmissionStatus(evaluation.submissionId, result);
   }
 
   async getUpsertSubmissionPreload(): Promise<UpsertSubmissionPreload> {

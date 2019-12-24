@@ -4,7 +4,13 @@
 import * as passport from "passport";
 import * as LocalStrategy from "passport-local";
 import * as bcrypt from "bcrypt";
+import * as passportJWT from 'passport-jwt';
+
 import { Password, Role, User, UserAlias } from '../model';
+import { UserInfo } from '../model/dto/UserInfo';
+
+const ExtractJWT = passportJWT.ExtractJwt;
+const JWTStrategy   = passportJWT.Strategy;
 
 export class Auth {
 
@@ -14,7 +20,7 @@ export class Auth {
     });
 
     passport.deserializeUser(async function (user: any, done) {
-      await User.findByPk(user, {
+      await User.findByPk(user.id, {
         include: [
           {
             model: UserAlias
@@ -24,7 +30,7 @@ export class Auth {
           }
         ]
       }).then((user: User) => {
-        done(null, {id: user.id, username: user.userAlias.username, role: user.role.name});
+        done(null, new UserInfo(user.id, user.userAlias.username, user.role.name));
         return null;
       }).catch(err => {
         done(err, {});
@@ -48,6 +54,9 @@ export class Auth {
             model: Password
           },
           {
+            model: Role
+          },
+          {
             model: UserAlias,
             where: {
               username: username
@@ -57,7 +66,7 @@ export class Auth {
       }).then((user: User) => {
         if (user) {
           if (bcrypt.compareSync(password, user.password.password)) {
-            done(null, user.id);
+            done(null, new UserInfo(user.id, user.userAlias.username, user.role.name));
             return null;
           }
         }
@@ -67,6 +76,18 @@ export class Auth {
         console.log(err);
       });
     }));
+  }
+
+  static useJWTStrategy() {
+    passport.use(new JWTStrategy({
+        jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+        secretOrKey: process.env.JWT_SECRET
+      },
+      function (jwtPayload, cb) {
+        const userInfo: UserInfo = jwtPayload.data;
+        return cb(null, userInfo);
+      }
+    ));
   }
 }
 
