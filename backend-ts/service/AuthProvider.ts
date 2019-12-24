@@ -11,7 +11,7 @@ export class AuthProvider implements interfaces.AuthProvider {
 
   getUser(req: express.Request, res: express.Response, next: express.NextFunction): Promise<interfaces.Principal> {
     if (!req.headers.authorization) {
-      throw new IncorrectTokenError();
+      return Promise.resolve(new Principal(null));
     }
     const token = this.getAndValidateBearerToken(req.headers.authorization);
     let user = null;

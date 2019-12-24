@@ -22,7 +22,6 @@ export class SubmissionController implements interfaces.Controller {
 
   @httpPost('/preload', JWTAuthentication())
   async preload(@principal() userPrincipal: Principal): Promise<SubmissionPreload> {
-    console.log(userPrincipal.details);
     return await this.submissionService.preload(userPrincipal.details);
   }
 

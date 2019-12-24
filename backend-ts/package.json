@@ -5,11 +5,12 @@
   "main": "server.js",
   "scripts": {
     "develop": "nodemon app.ts",
-    "start": "npm run build && npm run serve",
+    "start": "npm run build-frontend && npm run build && npm run serve",
     "build": "npm run clean && tsc",
     "tslint": "tslint -c tslint.json -p tsconfig.json",
     "clean": "rimraf dist",
-    "serve": "tsc-watch --outDir ./dist --onSuccess \"node ./dist/app.js\""
+    "serve": "tsc-watch --outDir ./dist --onSuccess \"node ./dist/app.js\"",
+    "build-frontend": "cd .. && ng build"
   },
   "author": "Beni",
   "license": "ISC",
@@ -20,10 +21,11 @@
     "@types/body-parser": "^1.16.2",
     "@types/errorhandler": "0.0.30",
     "@types/express": "^4.0.35",
-    "@types/node": "^12.12.21",
+    "@types/node": "^13.1.0",
     "@types/passport": "^0.3.3",
     "@types/request": "0.0.45",
     "@types/sequelize": "^4.28.8",
+    "asciiart-logo": "^0.2.6",
     "bcrypt": "^3.0.4",
     "bcrypt-nodejs": "0.0.3",
     "bluebird": "^3.5.1",

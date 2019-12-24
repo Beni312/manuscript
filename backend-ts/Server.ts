@@ -105,6 +105,7 @@ export class Server {
   }
 
   private static configureApp(app) {
+    app.use(express.static('./resource/WEB-INF'));
     app.set('port', process.env.PORT || 3000);
     app.use(bodyParser.urlencoded({extended: true}));
     app.use(bodyParser.json());

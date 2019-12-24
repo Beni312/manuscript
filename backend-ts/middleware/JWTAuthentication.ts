@@ -14,7 +14,7 @@ export const JWTAuthentication = (...roles) => {
         return next(new AuthenticationError());
       }
 
-      if (roles.length > 0 && roles.indexOf(req.user.role) == -1) {
+      if (roles.length > 0 && roles.indexOf(user.role) == -1) {
         return next(new PermissionError());
       }
 
