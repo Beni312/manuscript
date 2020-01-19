@@ -80,7 +80,7 @@ export abstract class Repository<T extends Model> {
   async deleteByPk<T extends Model<T>>(id: number | string): Promise<void> {
     const rowToDelete: Model<T> | null = await this.model.findByPk(id);
     if (rowToDelete) {
-      return await rowToDelete.destroy();
+      return rowToDelete.destroy();
     } else {
       throw new NotFoundError(this.NOT_FOUND_ERROR_MESSAGE
         .replace('TABLE_NAME', this.model.getTableName().toString())
@@ -92,7 +92,7 @@ export abstract class Repository<T extends Model> {
     const rowToDelete = await this.model.findOne(options);
 
     if (rowToDelete) {
-      return await rowToDelete.destroy();
+      return rowToDelete.destroy();
     } else {
       throw new NotFoundError(this.NOT_FOUND_ERROR_MESSAGE
         .replace('TABLE_NAME', this.model.getTableName().toString())

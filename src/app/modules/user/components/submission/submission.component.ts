@@ -13,6 +13,7 @@ import { SubmissionPreloadResponse } from '../../../../models/submission.preload
 import { SubmissionService } from '../../../../services/submission.service';
 import { SubmissionUpsertComponent, UpsertSubmissionPreload } from './submission.upsert/submission.upsert.component';
 import { SubmissionEvaluateComponent } from './submission.evaluate/submission.evaluate.component';
+import { SubmissionCreate } from '../../../../models/submission.create';
 
 @Component({
   selector: 'app-submission',
@@ -105,7 +106,16 @@ export class SubmissionComponent extends PermissionHandler implements AfterViewI
       if (!result) {
         return;
       }
-      this.submissionService.create(result).subscribe((resp: BasicResponse) => {
+      this.submissionService.create(
+        new SubmissionCreate(
+          result.title,
+          result.manuscriptAbstract,
+          result
+            .conferenceId,
+          result.authors.map(a => a.id),
+          result.keywords,
+          result.academicDisciplines.map(a => a.id))
+      ).subscribe((resp: BasicResponse) => {
         this.reload();
         this.messageService.success(resp.successMessage);
       });

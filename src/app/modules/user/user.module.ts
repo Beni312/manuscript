@@ -1,6 +1,8 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { ConferenceComponent } from './components/conference/conference.component';
+import { ConferencePreloadResolver } from './components/conference/conference.preload.resolver';
+import { ConferenceService } from './components/conference/conference.service';
 import { FileDropModule } from 'ngx-file-drop';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './components/home/home.component';
@@ -62,6 +64,22 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
           label: 'Conference',
           icon: 'group_work',
           place: 'sidebar'
+        },
+        resolve: {
+          preload: ConferencePreloadResolver
+        }
+      },
+      {
+        path: 'conference/:id',
+        component: ConferenceComponent,
+        data: {
+          expectedRoles: ['REVIEWER', 'EDITOR', 'AUTHOR', 'ADMIN'],
+          label: 'Conference',
+          icon: 'group_work',
+          place: 'conferenceComponent'
+        },
+        resolve: {
+          preload: ConferencePreloadResolver
         }
       },
       {
@@ -149,7 +167,9 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
     RoleGuard,
     SubmissionPreloadResolver,
     SubmissionService,
-    UserService
+    UserService,
+    ConferencePreloadResolver,
+    ConferenceService
   ],
   entryComponents: [
     SubmissionEvaluateComponent,

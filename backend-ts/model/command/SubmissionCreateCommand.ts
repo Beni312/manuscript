@@ -1,4 +1,3 @@
-// TODO
 export class SubmissionCreateCommand {
   title: string;
   manuscriptAbstract: string;

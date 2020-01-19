@@ -1,0 +1,38 @@
+
+<div class="mat-elevation-z8 text-left" *ngIf="preload.length > 0">
+  <mat-table [dataSource]="dataSource" matSort>
+
+    <ng-container matColumnDef="title">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Title</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.title}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="description">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Description</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.description}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="submitter">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Submitter</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.submitter.firstName + ' '  + element.submitter.lastName}}</mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"
+             matRipple
+             class="element-row"
+             [matRowExpand]="row" [matRowExpandTemplate]="template">
+    </mat-row>
+  </mat-table>
+  <mat-paginator #paginator
+                 [showFirstLastButtons]="true"
+                 [pageSize]="10"
+                 [pageSizeOptions]="[5, 10, 25, 100]">
+  </mat-paginator>
+</div>
+
+<ng-template #template let-element>
+  <div class="mat-row" [@detailExpand] style="overflow: hidden">
+    <app-expand [data]="element"></app-expand>
+  </div>
+</ng-template>

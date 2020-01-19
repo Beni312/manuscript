@@ -25,5 +25,5 @@ export class Conference extends BaseModel<Conference> {
   submitter: User;
 
   @HasMany(() => Submission)
-  keyword: Submission[];
+  submissions: Submission[];
 }

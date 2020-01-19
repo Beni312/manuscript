@@ -1,65 +1,78 @@
 import * as express from 'express';
 import { AuthorDto } from '../model/dto/AuthorDto';
 import { BasicResponse } from '../model/dto/BasicResponse';
-import { controller, httpPost, interfaces, principal } from 'inversify-express-utils';
+import { BaseHttpController, controller, httpPost, interfaces, principal, requestBody } from 'inversify-express-utils';
+import { HasPermissionToDeleteSubmissionValidator } from '../validator/HasPermissionToDeleteSubmissionValidator';
+import { HasPermissionToSubmitSubmissionValidator } from '../validator/HasPermissionToSubmitSubmissionValidator';
 import { inject } from 'inversify';
-import { JWTAuthentication } from '../middleware/JWTAuthentication';
+import { isAuthenticated } from '../decorator/IsAuthenticated';
 import { Principal } from '../model/Principal';
+import { SubmissionCreateCommand } from '../model/command/SubmissionCreateCommand';
+import { SubmissionEvaluateCommand } from '../model/command/SubmissionEvaluateCommand';
 import { SubmissionPreload } from '../model/dto/SubmissionPreload';
+import { SubmissionRemoveCommand } from '../model/command/SubmissionRemoveCommand';
 import { SubmissionService } from '../service/SubmissionService';
+import { SubmissionSubmitCommand } from '../model/command/SubmissionSubmitCommand';
 import { UpsertSubmissionPreload } from '../model/dto/UpsertSubmissionPreload';
 
-@controller('/submission', JWTAuthentication())
-export class SubmissionController implements interfaces.Controller {
+@controller('/submission')
+export class SubmissionController extends BaseHttpController implements interfaces.Controller {
 
   @inject(SubmissionService.name)
   private submissionService: SubmissionService;
 
-  @httpPost('/getAuthors', JWTAuthentication())
+  @isAuthenticated()
+  @httpPost('/getAuthors')
   async getAuthors(): Promise<AuthorDto[]> {
     return await this.submissionService.getAuthors();
   }
 
-  @httpPost('/preload', JWTAuthentication())
+  @isAuthenticated()
+  @httpPost('/preload')
   async preload(@principal() userPrincipal: Principal): Promise<SubmissionPreload> {
     return await this.submissionService.preload(userPrincipal.details);
   }
 
-  @httpPost('/remove', JWTAuthentication('AUTHOR', 'ADMIN'))
-  async remove(req: express.Request): Promise<BasicResponse> {
-    await this.submissionService.remove(req.body.submissionId);
+  @isAuthenticated('AUTHOR', 'ADMIN')
+  @httpPost('/remove', HasPermissionToDeleteSubmissionValidator.name)
+  async remove(@principal() userPrincipal: Principal, @requestBody() submissionRemoveCommand: SubmissionRemoveCommand): Promise<BasicResponse> {
+    await this.submissionService.remove(submissionRemoveCommand.submissionId);
     return new BasicResponse()
       .withSuccessMessage("Submission deleted");
   }
 
-  @httpPost('/submit', JWTAuthentication('AUTHOR', 'ADMIN'))
-  async submit(req: express.Request): Promise<BasicResponse> {
-    const submissionId: number = req.body.submissionId;
-    await this.submissionService.submitSubmission(submissionId);
+  @isAuthenticated('AUTHOR', 'ADMIN')
+  @httpPost('/submit', HasPermissionToSubmitSubmissionValidator.name)
+  async submit(@requestBody() submissionSubmitCommand: SubmissionSubmitCommand): Promise<BasicResponse> {
+    await this.submissionService.submitSubmission(submissionSubmitCommand.submissionId);
     return new BasicResponse()
       .withSuccessMessage('Submission successfully submitted.');
   }
 
-  @httpPost('/evaluate', JWTAuthentication('EDITOR', 'ADMIN', 'REVIEWER'))
-  async evaluate(@principal() userPrincipal: Principal, req: express.Request): Promise<BasicResponse> {
-    await this.submissionService.evaluateSubmission(req.body, userPrincipal.details.id, userPrincipal.details.role);
+  @isAuthenticated('EDITOR', 'ADMIN', 'REVIEWER')
+  @httpPost('/evaluate')
+  async evaluate(@principal() userPrincipal: Principal, @requestBody() submissionEvaluateCommand: SubmissionEvaluateCommand): Promise<BasicResponse> {
+    await this.submissionService.evaluateSubmission(submissionEvaluateCommand, userPrincipal.details.id, userPrincipal.details.role);
     return new BasicResponse()
       .withSuccessMessage("Submission evaluated");
   }
 
-  @httpPost('/upsertSubmissionPreload', JWTAuthentication('AUTHOR', 'ADMIN'))
+  @isAuthenticated('AUTHOR', 'ADMIN')
+  @httpPost('/upsertSubmissionPreload')
   async upsertSubmissionPreload(): Promise<UpsertSubmissionPreload> {
     return await this.submissionService.getUpsertSubmissionPreload();
   }
 
-  @httpPost('/create', JWTAuthentication('AUTHOR', 'ADMIN'))
-  async create(@principal() userPrincipal: Principal, req: express.Request): Promise<BasicResponse> {
-    await this.submissionService.createSubmission(userPrincipal.details.id, req.body);
+  @isAuthenticated('AUTHOR', 'ADMIN')
+  @httpPost('/create')
+  async create(@principal() userPrincipal: Principal, @requestBody() submissionCreateCommand: SubmissionCreateCommand): Promise<BasicResponse> {
+    await this.submissionService.createSubmission(userPrincipal.details.id, submissionCreateCommand);
     return new BasicResponse()
       .withSuccessMessage('Submission created');
   }
 
-  @httpPost('/edit', JWTAuthentication('AUTHOR', 'ADMIN'))
+  @isAuthenticated('AUTHOR', 'ADMIN')
+  @httpPost('/edit')
   async edit(req: express.Request): Promise<BasicResponse> {
     await this.submissionService.editSubmission(req.body);
     return new BasicResponse()

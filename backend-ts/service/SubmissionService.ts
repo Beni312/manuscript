@@ -9,6 +9,7 @@ import { MessageType } from '../model/enum/MessageType';
 import { RoleEnum } from '../model/enum/RoleEnum';
 import { Roles } from '../auth/Roles';
 import { SubmissionDto } from '../model/dto/SubmissionDto';
+import { SubmissionEvaluateCommand } from '../model/command/SubmissionEvaluateCommand';
 import { SubmissionMessage } from '../model/entity/SubmissionMessage';
 import { SubmissionPreload } from '../model/dto/SubmissionPreload';
 import { SubmissionRepository } from '../repository/SubmissionRepository';
@@ -163,7 +164,8 @@ export class SubmissionService {
     await this.submissionRepository.deleteByPk(submissionId);
   }
 
-  async createSubmission(userId: number, submission: any): Promise<void> {
+  // TODO SubmissionCreateCommand
+  async createSubmission(userId: number, submission): Promise<void> {
     await Submission.create({
       title: submission.title,
       manuscriptAbstract: submission.manuscriptAbstract,
@@ -173,6 +175,7 @@ export class SubmissionService {
       await createdSubmission.setAuthors(submission.authors.map(item => item.id).push(userId));
       await createdSubmission.setAcademicDisciplines(submission.academicDisciplines.map(item => item.id));
       createdSubmission.save();
+      await this.createKeywords(submission.id, submission.keywords);
     }).catch(err => {
       console.log(err);
     });
@@ -225,19 +228,19 @@ export class SubmissionService {
     );
   }
 
-  async evaluateSubmission(evaluation, userId, userRole): Promise<void> {
+  async evaluateSubmission(evaluation: SubmissionEvaluateCommand, userId, userRole): Promise<void> {
     let result: SubmissionStatus;
     let type;
-    if (!evaluation.result) {
+    if (!evaluation.success) {
       type = MessageType.ERROR;
     } else if (evaluation.message && evaluation.message.length > 0) {
       type = MessageType.INFO;
     }
 
     switch (userRole) {
-      case RoleEnum.REVIEWER: evaluation.result.success ? result = SubmissionStatus.ACCEPTED_BY_REVIEWER: result = SubmissionStatus.REJECTED_BY_REVIEWER; break;
-      case RoleEnum.EDITOR: evaluation.result.success ? result = SubmissionStatus.ACCEPTED_BY_EDITOR: result = SubmissionStatus.REJECTED_BY_EDITOR; break;
-      case RoleEnum.ADMIN: evaluation.result.success ? result = SubmissionStatus.ACCEPTED: result = SubmissionStatus.REJECTED_BY_ADMIN; break;
+      case RoleEnum.REVIEWER: evaluation.success ? result = SubmissionStatus.ACCEPTED_BY_REVIEWER: result = SubmissionStatus.REJECTED_BY_REVIEWER; break;
+      case RoleEnum.EDITOR: evaluation.success ? result = SubmissionStatus.ACCEPTED_BY_EDITOR: result = SubmissionStatus.REJECTED_BY_EDITOR; break;
+      case RoleEnum.ADMIN: evaluation.success ? result = SubmissionStatus.ACCEPTED: result = SubmissionStatus.REJECTED_BY_ADMIN; break;
       default: throw new InternalServerError('No matching status');
     }
 

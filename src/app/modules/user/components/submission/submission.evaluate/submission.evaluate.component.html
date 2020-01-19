@@ -18,8 +18,8 @@
 
     <div class="row">
       <mat-form-field class="col-12 mb-3">
-        <mat-select (selectionChange)="accept($event)" placeholder="Select the result of the evaluation." formControlName="result">
-          <mat-option *ngFor="let item of results" [value]="item">
+        <mat-select (selectionChange)="accept($event)" placeholder="Select the result of the evaluation." formControlName="success">
+          <mat-option *ngFor="let item of results" [value]="item.success">
             {{ item.label }}
           </mat-option>
         </mat-select>

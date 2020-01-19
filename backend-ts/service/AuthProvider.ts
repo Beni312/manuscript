@@ -1,39 +1,33 @@
 import * as express from 'express';
 import * as jwt from 'jsonwebtoken';
-import { IncorrectTokenError } from '../model/error/IncorrectTokenError';
+import * as passport from 'passport';
 import { injectable } from 'inversify';
-import { interfaces } from 'inversify-express-utils';
-import { logger } from './logger';
+import { interfaces, next, request, response } from 'inversify-express-utils';
 import { Principal } from '../model/Principal';
+import { UserInfo } from '../model/dto/UserInfo';
 
 @injectable()
 export class AuthProvider implements interfaces.AuthProvider {
 
-  getUser(req: express.Request, res: express.Response, next: express.NextFunction): Promise<interfaces.Principal> {
+  getUser(@request() req: express.Request, @response() res: express.Response, @next() next: express.NextFunction): Promise<interfaces.Principal> {
+    let user = null;
     if (!req.headers.authorization) {
       return Promise.resolve(new Principal(null));
     }
-    const token = this.getAndValidateBearerToken(req.headers.authorization);
-    let user = null;
-
-    try {
-      user = jwt.verify(token, process.env.JWT_SECRET).data;
-    } catch(err) {
-      logger.info('Authentication error');
-    }
-
+    passport.authenticate('jwt', {session: false}, function (err, JWTData, info) {
+      user = JWTData;
+    })(req, res, next);
     return Promise.resolve(new Principal(user));
   }
 
-  getAndValidateBearerToken(bearerAuthorization: string): string {
-    if (!bearerAuthorization.includes('Bearer')) {
-      throw new IncorrectTokenError();
-    }
-    const tokenParts = bearerAuthorization.split(' ');
-    if (tokenParts.length !== 2) {
-      throw new IncorrectTokenError();
-    }
+  authenticate(req, res, next): UserInfo | null {
+    let user: UserInfo | null = null;
+    passport.authenticate('jwt', {session: false}, function (err, JWTData, info) {
+      user = JWTData;
+    })(req, res, next);
 
-    return tokenParts[1];
+    return user;
   }
+
+
 }

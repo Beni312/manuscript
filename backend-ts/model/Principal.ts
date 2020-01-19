@@ -1,4 +1,5 @@
 import { interfaces } from 'inversify-express-utils';
+import { Resource } from './Resource';
 import { UserInfo } from './dto/UserInfo';
 
 export class Principal implements interfaces.Principal {
@@ -12,17 +13,23 @@ export class Principal implements interfaces.Principal {
   }
 
   isAuthenticated(): Promise<boolean> {
+    // TODO verify token
     const isAuthenticated: boolean = this.details && this.details.username !== null;
     return Promise.resolve(isAuthenticated);
   }
 
   isInRole(role: string): Promise<boolean> {
-    // TODO
-    return Promise.resolve(true);
+    return Promise.resolve(this.details.role === role);
   }
 
-  isResourceOwner(resourceId: any): Promise<boolean> {
+  hasRole(roles: string[]): boolean {
+    return roles.indexOf(this.details.role) !== -1;
+    // return roles.find(r => this.details.role === r) === null;
+  }
+
+  isResourceOwner(resource: Resource<any>): Promise<boolean> {
     // TODO ?
+
     return Promise.resolve(true);
   }
 }

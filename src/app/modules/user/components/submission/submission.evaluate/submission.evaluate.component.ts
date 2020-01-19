@@ -2,6 +2,12 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatSelectChange } from '@angular/material';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
+// class SubmissionEvaluate {
+//   submissionId: number;
+//   message: string;
+//   success: boolean;
+// }
+
 @Component({
   selector: 'app-submission.evaluate',
   templateUrl: './submission.evaluate.component.html',
@@ -29,7 +35,7 @@ export class SubmissionEvaluateComponent implements OnInit {
     this.submissionEvaluateForm = this.fb.group({
       submissionId: new FormControl({value: this.submissionId, disabled: true}),
       message: new FormControl('', Validators.required),
-      result: new FormControl()
+      success: new FormControl({value: false})
     });
   }
 
@@ -52,5 +58,4 @@ export class SubmissionEvaluateComponent implements OnInit {
   cancel(): void {
     this.dialogRef.close();
   }
-
 }

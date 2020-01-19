@@ -9,6 +9,7 @@ import * as session from 'express-session';
 import 'reflect-metadata';
 import './controller/AuthenticationController';
 import './controller/ApplicationController';
+import './controller/ConferenceController';
 import './controller/ProfileController';
 import './controller/RegistrationController';
 import './controller/SubmissionController';
@@ -19,8 +20,11 @@ import { ApplicationService } from './service/ApplicationService';
 import { AuthorsAcademicDisciplineRepository } from './repository/AuthorsAcademicDisciplineRepository';
 import { Auth } from './auth/Auth';
 import { AuthProvider } from './service/AuthProvider';
+import { ConferenceRepository } from './repository/ConferenceRepository';
+import { ConferenceService } from './service/ConferenceService';
 import { Container } from 'inversify';
 import { errorHandler } from './middleware/ErrorHandler';
+import { HasPermissionToDeleteSubmissionValidator } from './validator/HasPermissionToDeleteSubmissionValidator';
 import { InternalServerError } from './model/error/InternalServerError';
 import { InversifyExpressServer } from 'inversify-express-utils';
 import { KeywordRepository } from './repository/KeywordRepository';
@@ -34,6 +38,7 @@ import { SubmissionRepository } from './repository/SubmissionRepository';
 import { SubmissionService } from './service/SubmissionService';
 import { UserManagementService } from './service/UserManagementService';
 import { UserRepository } from './repository/UserRepository';
+import { HasPermissionToSubmitSubmissionValidator } from './validator/HasPermissionToSubmitSubmissionValidator';
 
 export class Server {
 
@@ -76,8 +81,13 @@ export class Server {
     container.bind<RoleRepository>(RoleRepository.name).to(RoleRepository);
     container.bind<SubmissionRepository>(SubmissionRepository.name).to(SubmissionRepository);
     container.bind<UserRepository>(UserRepository.name).to(UserRepository);
+    container.bind<ConferenceService>(ConferenceService.name).to(ConferenceService);
+    container.bind<ConferenceRepository>(ConferenceRepository.name).to(ConferenceRepository);
 
     container.bind<AuthProvider>(AuthProvider.name).to(AuthProvider);
+
+    container.bind<HasPermissionToDeleteSubmissionValidator>(HasPermissionToDeleteSubmissionValidator.name).to(HasPermissionToDeleteSubmissionValidator);
+    container.bind<HasPermissionToSubmitSubmissionValidator>(HasPermissionToSubmitSubmissionValidator.name).to(HasPermissionToSubmitSubmissionValidator);
 
     Server.inversifyServer = new InversifyExpressServer(container, null, null, null, AuthProvider);
     Server.inversifyServer.setErrorConfig(app => app.use(errorHandler));
