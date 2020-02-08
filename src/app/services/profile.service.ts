@@ -2,8 +2,8 @@ import { AcademicDiscipline } from '../models/academic.discipline';
 import { BasicResponse } from '../models/basic.response';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Password } from '../modules/core/components/registration/registration.component';
 import { User } from '../models/user';
+import { Password } from '../models/password';
 
 export class PersonalDataPreload extends BasicResponse {
   user: User;
@@ -26,18 +26,18 @@ export class ProfileService {
   }
 
   savePersonalData(user: User) {
-    return this.httpClient.post<BasicResponse>('/profile/savepersonaldata', user);
+    return this.httpClient.post<BasicResponse>('/profile/save-personal-data', user);
   }
 
   changePassword(changePassword: ChangePassword) {
-    return this.httpClient.post<BasicResponse>('/profile/changepassword', changePassword);
+    return this.httpClient.post<BasicResponse>('/profile/change-password', changePassword);
   }
 
   updateAcademicDisciplines(academicDisciplines: AcademicDiscipline[]) {
-    return this.httpClient.post<BasicResponse>('/profile/updatedisciplines', academicDisciplines);
+    return this.httpClient.post<BasicResponse>('/profile/update-academic-disciplines', academicDisciplines);
   }
 
   getAcademicDisciplines() {
-    return this.httpClient.post<AcademicDiscipline[]>('/application/academicdisciplines', JSON.stringify({}));
+    return this.httpClient.post<AcademicDiscipline[]>('/application/academic-disciplines', JSON.stringify({}));
   }
 }

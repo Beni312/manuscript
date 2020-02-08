@@ -37,7 +37,7 @@ export class SubmissionUpsertComponent implements OnInit {
     this.submissionCreateForm = this.fb.group({
       id: new FormControl({value: this.submission.id, disabled: true}),
       title: new FormControl(this.submission.title, Validators.minLength(5)),
-      manuscriptAbstract: new FormControl(this.submission.manuscriptAbstract, Validators.minLength(10)),
+      manuscriptAbstract: new FormControl(this.submission.manuscriptAbstract, Validators.minLength(5)),
       conference: new FormControl(this.conferences.find(item => item.id === this.submission.conferenceId), Validators.required),
       authors: new FormControl(this.submission.authors),
       academicDisciplines: new FormControl(this.submission.academicDisciplines, Validators.minLength(1)),

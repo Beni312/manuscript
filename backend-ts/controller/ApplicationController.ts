@@ -9,7 +9,7 @@ export class ApplicationController implements interfaces.Controller {
   @inject(ApplicationService.name)
   private applicationService: ApplicationService;
 
-  @httpPost('/academicdisciplines')
+  @httpPost('/academic-disciplines')
   async getAcademicDisciplines(): Promise<AcademicDiscipline[]> {
     return await this.applicationService.getAcademicDisciplines();
   }

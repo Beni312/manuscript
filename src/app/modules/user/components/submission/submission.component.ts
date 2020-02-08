@@ -110,10 +110,9 @@ export class SubmissionComponent extends PermissionHandler implements AfterViewI
         new SubmissionCreate(
           result.title,
           result.manuscriptAbstract,
-          result
-            .conferenceId,
+          result.conference.id,
           result.authors.map(a => a.id),
-          result.keywords,
+          result.keywords.map(k => k.keyword),
           result.academicDisciplines.map(a => a.id))
       ).subscribe((resp: BasicResponse) => {
         this.reload();

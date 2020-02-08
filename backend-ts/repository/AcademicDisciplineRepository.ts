@@ -9,4 +9,12 @@ export class AcademicDisciplineRepository extends Repository<AcademicDiscipline>
     super(AcademicDiscipline);
   }
 
+  findAcademicDisciplinesByIds(academicDisciplines: number[]): Promise<Array<AcademicDiscipline>> {
+    return this.findAll({
+      where: {
+        id: academicDisciplines
+      }
+    });
+  }
+
 }

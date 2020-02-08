@@ -34,7 +34,7 @@ export class RegistrationService {
       lastName: params.user.lastName,
       email: params.user.email
     }).then(async (user: User) => {
-      await user.setAcademicDisciplines(params.academicDisciplines.map(item => item.id));
+      await user.setAcademicDisciplines(params.academicDisciplines);
       await UserAlias.create({userId: user.id, username: params.user.username});
 
       const salt = bcrypt.genSaltSync();

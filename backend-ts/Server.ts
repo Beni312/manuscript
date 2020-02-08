@@ -25,6 +25,7 @@ import { ConferenceService } from './service/ConferenceService';
 import { Container } from 'inversify';
 import { errorHandler } from './middleware/ErrorHandler';
 import { HasPermissionToDeleteSubmissionValidator } from './validator/HasPermissionToDeleteSubmissionValidator';
+import { HasPermissionToSubmitSubmissionValidator } from './validator/HasPermissionToSubmitSubmissionValidator';
 import { InternalServerError } from './model/error/InternalServerError';
 import { InversifyExpressServer } from 'inversify-express-utils';
 import { KeywordRepository } from './repository/KeywordRepository';
@@ -34,11 +35,12 @@ import { PasswordRepository } from './repository/PasswordRepository';
 import { ProfileService } from './service/ProfileService';
 import { RegistrationService } from './service/RegistrationService';
 import { RoleRepository } from './repository/RoleRepository';
+import { SubmissionCreateValidator } from './validator/SubmissionCreateValidator';
 import { SubmissionRepository } from './repository/SubmissionRepository';
 import { SubmissionService } from './service/SubmissionService';
 import { UserManagementService } from './service/UserManagementService';
 import { UserRepository } from './repository/UserRepository';
-import { HasPermissionToSubmitSubmissionValidator } from './validator/HasPermissionToSubmitSubmissionValidator';
+import { UpdateAcademicDisciplinesValidator } from './validator/UpdateAcademicDisciplinesValidator';
 
 export class Server {
 
@@ -88,6 +90,8 @@ export class Server {
 
     container.bind<HasPermissionToDeleteSubmissionValidator>(HasPermissionToDeleteSubmissionValidator.name).to(HasPermissionToDeleteSubmissionValidator);
     container.bind<HasPermissionToSubmitSubmissionValidator>(HasPermissionToSubmitSubmissionValidator.name).to(HasPermissionToSubmitSubmissionValidator);
+    container.bind<SubmissionCreateValidator>(SubmissionCreateValidator.name).to(SubmissionCreateValidator);
+    container.bind<UpdateAcademicDisciplinesValidator>(UpdateAcademicDisciplinesValidator.name).to(UpdateAcademicDisciplinesValidator);
 
     Server.inversifyServer = new InversifyExpressServer(container, null, null, null, AuthProvider);
     Server.inversifyServer.setErrorConfig(app => app.use(errorHandler));

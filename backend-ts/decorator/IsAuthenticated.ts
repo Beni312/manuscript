@@ -7,7 +7,6 @@ export function isAuthenticated (...roles: string[]): any {
   return function (target: any, key: string | symbol, descriptor: TypedPropertyDescriptor<Function>) {
     const fn = descriptor.value as Handler;
     descriptor.value = async function (...args) {
-      console.log('decorator');
       let req;
       let nextFunction;
       let principal: Principal | null = null;
@@ -25,7 +24,6 @@ export function isAuthenticated (...roles: string[]): any {
 
       if (!principal || !principal.details) {
         principal = Reflect.getMetadata('inversify-express-utils:httpcontext', req).user;
-        console.log(principal);
         if (!principal || !principal.details) {
           return nextFunction(new AuthenticationError());
         }

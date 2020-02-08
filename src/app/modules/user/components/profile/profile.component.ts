@@ -37,22 +37,20 @@ export class ProfileComponent extends PermissionHandler implements OnInit, After
 
   ngOnInit() {
     this.personalDataForm = this.fb.group({
-      user: this.fb.group({
-        title: new FormControl(this.preload.user.title, {
-          validators: [Validators.required]
-        }),
-        firstName: new FormControl(this.preload.user.firstName, {
-          validators: [Validators.required]
-        }),
-        lastName: new FormControl(this.preload.user.lastName, {
-          validators: [Validators.required]
-        }),
-        job: new FormControl(this.preload.user.job, {
-          validators: [Validators.required]
-        }),
-        email: new FormControl(this.preload.user.email, {
-          validators: [Validators.required, Validators.email]
-        })
+      title: new FormControl(this.preload.user.title, {
+        validators: [Validators.required]
+      }),
+      firstName: new FormControl(this.preload.user.firstName, {
+        validators: [Validators.required]
+      }),
+      lastName: new FormControl(this.preload.user.lastName, {
+        validators: [Validators.required]
+      }),
+      job: new FormControl(this.preload.user.job, {
+        validators: [Validators.required]
+      }),
+      email: new FormControl(this.preload.user.email, {
+        validators: [Validators.required, Validators.email]
       })
     });
 
@@ -75,8 +73,6 @@ export class ProfileComponent extends PermissionHandler implements OnInit, After
       this.profileService.savePersonalData(this.personalDataForm.value).subscribe(response => {
         this.personalDataForm.reset(this.personalDataForm.value);
         this.messageService.success(response.successMessage);
-      }, (error: string) => {
-        this.messageService.error(error);
       });
     }
   }
@@ -87,8 +83,6 @@ export class ProfileComponent extends PermissionHandler implements OnInit, After
     }
     this.profileService.changePassword(this.changePasswordForm.value).subscribe(response => {
       this.messageService.success(response.successMessage);
-    }, (error: string) => {
-      this.messageService.error(error);
     });
   }
 

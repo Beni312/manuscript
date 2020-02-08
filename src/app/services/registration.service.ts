@@ -3,7 +3,7 @@ import { BasicResponse } from '../models/basic.response';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { UserRegistration } from '../modules/core/components/registration/registration.component';
+import { RegisterUser } from '../models/register.user';
 
 @Injectable()
 export class RegistrationService {
@@ -12,10 +12,10 @@ export class RegistrationService {
   }
 
   preload(): Observable<AcademicDiscipline[]> {
-    return this.httpClient.post<AcademicDiscipline[]>('/application/academicdisciplines', JSON.stringify({}));
+    return this.httpClient.post<AcademicDiscipline[]>('/application/academic-disciplines', JSON.stringify({}));
   }
 
-  register(userRegistration: UserRegistration): Observable<BasicResponse> {
+  register(userRegistration: RegisterUser): Observable<BasicResponse> {
     return this.httpClient.post<BasicResponse>('/register', userRegistration);
   }
 }

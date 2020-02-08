@@ -1,10 +1,13 @@
 import * as bcrypt from 'bcrypt-nodejs';
-import { AcademicDiscipline, AuthorsAcademicDiscipline, User } from '../model';
+import { AcademicDisciplineDto } from '../model/dto/AcademicDisciplineDto';
+import { AuthorsAcademicDiscipline, User } from '../model';
 import { AuthorsAcademicDisciplineRepository } from '../repository/AuthorsAcademicDisciplineRepository';
+import { ChangePasswordCommand } from '../model/command/ChangePasswordCommand';
 import { ChangePasswordError } from '../model/error/ChangePasswordError';
 import { inject, injectable } from 'inversify';
 import { PasswordRepository } from '../repository/PasswordRepository';
 import { ProfilePreload } from '../model/dto/ProfilePreload';
+import { SavePersonalDataCommand } from '../model/command/SavePersonalDataCommand';
 import { UserRepository } from '../repository/UserRepository';
 
 @injectable()
@@ -23,18 +26,18 @@ export class ProfileService {
     return new ProfilePreload(await this.userRepository.findUserProfile(userId));
   }
 
-  public async saveProfile(userId, params): Promise<User> {
+  public async saveProfile(userId, savePersonalDataCommand: SavePersonalDataCommand): Promise<User> {
     return await this.userRepository.updateByPk(userId, {
-      title: params.user.title,
-      firstName: params.user.firstName,
-      lastName: params.user.lastName,
-      job: params.user.job,
-      email: params.user.email
+      title: savePersonalDataCommand.title,
+      firstName: savePersonalDataCommand.firstName,
+      lastName: savePersonalDataCommand.lastName,
+      job: savePersonalDataCommand.job,
+      email: savePersonalDataCommand.email
     });
   }
 
-  public async changePassword(userId: number, params): Promise<void> {
-    if (params.password.password != params.password.passwordAgain) {
+  public async changePassword(userId: number, changePasswordCommand: ChangePasswordCommand): Promise<void> {
+    if (changePasswordCommand.password.password != changePasswordCommand.password.passwordAgain) {
       throw new ChangePasswordError('The given passwords are not matched!');
     }
 
@@ -44,19 +47,19 @@ export class ProfileService {
       }
     });
 
-    const isMatch = bcrypt.compareSync(params.oldPassword, password.password);
+    const isMatch = bcrypt.compareSync(changePasswordCommand.oldPassword, password.password);
     if (!isMatch) {
       throw new ChangePasswordError('Your password is wrong.');
     }
 
     const salt = bcrypt.genSaltSync();
-    await this.passwordRepository.updateByPk(password.id, {password: bcrypt.hashSync(params.password.password, salt), salt: salt});
+    await this.passwordRepository.updateByPk(password.id, {password: bcrypt.hashSync(changePasswordCommand.password.password, salt), salt: salt});
   }
 
-  public async updateAcademicDisciplines(userId: number, userAcademicDisciplines: Array<AcademicDiscipline>): Promise<void> {
+  public async updateAcademicDisciplines(userId: number, userAcademicDisciplines: Array<AcademicDisciplineDto>): Promise<void> {
     const oldAcademicDisciplines: AuthorsAcademicDiscipline[] = await AuthorsAcademicDiscipline.findAll({where: {userId: userId}});
 
-    const userAcademicDisciplinesMap: Map<number, AcademicDiscipline> = new Map();
+    const userAcademicDisciplinesMap: Map<number, AcademicDisciplineDto> = new Map();
     const oldAcademicDisciplinesMap: Map<number, AuthorsAcademicDiscipline> = new Map();
     userAcademicDisciplines.forEach(item => {
       userAcademicDisciplinesMap.set(item.id, item);

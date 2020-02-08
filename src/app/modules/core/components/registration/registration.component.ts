@@ -4,17 +4,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { RegistrationService } from '../../../../services/registration.service';
 import { User } from '../../../../models/user';
-
-export class UserRegistration {
-  user: User;
-  password: Password;
-  academicDisciplines: AcademicDiscipline[];
-}
-
-export class Password {
-  password: string;
-  passwordAgain: string;
-}
+import { RegisterUser } from '../../../../models/register.user';
+import { Password } from '../../../../models/password';
 
 @Component({
   selector: 'app-registration',
@@ -24,43 +15,43 @@ export class Password {
 })
 export class RegistrationComponent implements OnInit {
 
-  userRegistration: UserRegistration;
   academicDisciplines: AcademicDiscipline[];
   registrationForm: FormGroup;
   result: BasicResponse;
 
   constructor(private service: RegistrationService,
               private fb: FormBuilder) {
+    this.result = new BasicResponse();
   }
 
   ngOnInit() {
     this.registrationForm = this.fb.group({
       user: this.fb.group({
-        title: new FormControl('', {
+        title: new FormControl('123', {
           validators: [Validators.required]
         }),
-        firstName: new FormControl('', {
+        firstName: new FormControl('asdas', {
           validators: [Validators.required]
         }),
-        lastName: new FormControl('', {
+        lastName: new FormControl('asdda', {
           validators: [Validators.required]
         }),
-        job: new FormControl('', {
+        job: new FormControl('asdas', {
           validators: [Validators.required]
         }),
-        email: new FormControl('', {
+        email: new FormControl('asd@ifeifn.com', {
           validators: [Validators.required, Validators.email]
         }),
-        username: new FormControl('', {
+        username: new FormControl('qweqdc', {
           validators: [Validators.required]
         })
       }),
       password: this.fb.group({
-        password: new FormControl('', {
-          validators: [Validators.required, Validators.minLength(4)]
+        password: new FormControl('asdqwe123', {
+          validators: [Validators.required, Validators.minLength(3)]
         }),
-        passwordAgain: new FormControl('', {
-          validators: [Validators.required, Validators.minLength(4)]
+        passwordAgain: new FormControl('asdqwe123', {
+          validators: [Validators.required, Validators.minLength(3)]
         })
       }),
       academicDisciplines: new FormControl([])
@@ -74,12 +65,17 @@ export class RegistrationComponent implements OnInit {
   }
 
   register() {
-    this.userRegistration = this.registrationForm.value;
+    const form = this.registrationForm.value;
+    const createUserCommand = new RegisterUser(
+      new User(form.user.title, form.user.firstName, form.user.lastName, form.user.username, form.user.job, form.user.email),
+      new Password(form.password.password, form.password.passwordAgain),
+      form.academicDisciplines.map(item => item.id)
+    );
     if (this.registrationForm.valid) {
-      this.service.register(this.userRegistration).subscribe(result => {
+      this.service.register(createUserCommand).subscribe(result => {
           this.result = result;
         }, error => {
-          this.result = error;
+          this.result.exceptionMessage = error;
         }
       );
     }

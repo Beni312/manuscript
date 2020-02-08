@@ -8,6 +8,7 @@ import { KeywordRepository } from '../repository/KeywordRepository';
 import { MessageType } from '../model/enum/MessageType';
 import { RoleEnum } from '../model/enum/RoleEnum';
 import { Roles } from '../auth/Roles';
+import { SubmissionCreateCommand } from '../model/command/SubmissionCreateCommand';
 import { SubmissionDto } from '../model/dto/SubmissionDto';
 import { SubmissionEvaluateCommand } from '../model/command/SubmissionEvaluateCommand';
 import { SubmissionMessage } from '../model/entity/SubmissionMessage';
@@ -164,27 +165,26 @@ export class SubmissionService {
     await this.submissionRepository.deleteByPk(submissionId);
   }
 
-  // TODO SubmissionCreateCommand
-  async createSubmission(userId: number, submission): Promise<void> {
+  async createSubmission(userId: number, submission: SubmissionCreateCommand): Promise<void> {
     await Submission.create({
       title: submission.title,
       manuscriptAbstract: submission.manuscriptAbstract,
       submitterId: userId,
-      conferenceId: submission.conference.id
+      conferenceId: submission.conferenceId
     }).then(async (createdSubmission) => {
-      await createdSubmission.setAuthors(submission.authors.map(item => item.id).push(userId));
-      await createdSubmission.setAcademicDisciplines(submission.academicDisciplines.map(item => item.id));
+      submission.authors.push(userId);
+      await createdSubmission.setAuthors(submission.authors);
+      await createdSubmission.setAcademicDisciplines(submission.academicDisciplines);
       createdSubmission.save();
-      await this.createKeywords(submission.id, submission.keywords);
+      await this.createKeywords(createdSubmission.id, submission.keywords);
     }).catch(err => {
       console.log(err);
     });
-    await this.createKeywords(submission.id, submission.keywords);
   }
 
-  private async createKeywords(submissionId: number, keywords: Keyword[]) {
+  private async createKeywords(submissionId: number, keywords: string[]) {
     for (let i = 0; i < keywords.length; i++) {
-      await Keyword.create({submissionId: submissionId, keyword: keywords[i].keyword});
+      await Keyword.create({submissionId: submissionId, keyword: keywords[i]});
     }
   }
 

@@ -28,10 +28,6 @@ export class SubmissionService {
     return this.httpClient.post('/submission/getAuthors', {});
   }
 
-  // getMessageTypes() {
-  //   return this.httpClient.post('/submission/getMessageTypes', {});
-  // }
-
   create(submission): Observable<BasicResponse> {
     return this.httpClient.post<BasicResponse>('/submission/create', submission);
   }
@@ -44,7 +40,7 @@ export class SubmissionService {
   }
 
   upsertSubmissionPreload(): Observable<UpsertSubmissionPreload> {
-    return this.httpClient.post<UpsertSubmissionPreload>('/submission/upsertSubmissionPreload', {});
+    return this.httpClient.post<UpsertSubmissionPreload>('/submission/upsert-submission-preload', {});
   }
 
   submit(submissionId): Observable<BasicResponse> {
@@ -55,6 +51,6 @@ export class SubmissionService {
     const formData: FormData = new FormData();
     formData.append(file.name, file, file.name);
 
-    return this.httpClient.post<BasicResponse>('/submission/uploadsubmission', formData);
+    return this.httpClient.post<BasicResponse>('/submission/upload-submission', formData);
   }
 }

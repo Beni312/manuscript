@@ -1,11 +1,12 @@
-import * as express from 'express';
+import { inject } from 'inversify';
+import { isAuthenticated } from '../decorator/IsAuthenticated';
+import { validateBody } from '../decorator/ValidateBody';
 import { AuthorDto } from '../model/dto/AuthorDto';
 import { BasicResponse } from '../model/dto/BasicResponse';
 import { BaseHttpController, controller, httpPost, interfaces, principal, requestBody } from 'inversify-express-utils';
+import { EditSubmissionDto } from '../model/dto/EditSubmissionDto';
 import { HasPermissionToDeleteSubmissionValidator } from '../validator/HasPermissionToDeleteSubmissionValidator';
 import { HasPermissionToSubmitSubmissionValidator } from '../validator/HasPermissionToSubmitSubmissionValidator';
-import { inject } from 'inversify';
-import { isAuthenticated } from '../decorator/IsAuthenticated';
 import { Principal } from '../model/Principal';
 import { SubmissionCreateCommand } from '../model/command/SubmissionCreateCommand';
 import { SubmissionEvaluateCommand } from '../model/command/SubmissionEvaluateCommand';
@@ -35,6 +36,7 @@ export class SubmissionController extends BaseHttpController implements interfac
 
   @isAuthenticated('AUTHOR', 'ADMIN')
   @httpPost('/remove', HasPermissionToDeleteSubmissionValidator.name)
+  @validateBody(SubmissionRemoveCommand)
   async remove(@principal() userPrincipal: Principal, @requestBody() submissionRemoveCommand: SubmissionRemoveCommand): Promise<BasicResponse> {
     await this.submissionService.remove(submissionRemoveCommand.submissionId);
     return new BasicResponse()
@@ -43,6 +45,7 @@ export class SubmissionController extends BaseHttpController implements interfac
 
   @isAuthenticated('AUTHOR', 'ADMIN')
   @httpPost('/submit', HasPermissionToSubmitSubmissionValidator.name)
+  @validateBody(SubmissionSubmitCommand)
   async submit(@requestBody() submissionSubmitCommand: SubmissionSubmitCommand): Promise<BasicResponse> {
     await this.submissionService.submitSubmission(submissionSubmitCommand.submissionId);
     return new BasicResponse()
@@ -51,6 +54,7 @@ export class SubmissionController extends BaseHttpController implements interfac
 
   @isAuthenticated('EDITOR', 'ADMIN', 'REVIEWER')
   @httpPost('/evaluate')
+  @validateBody(SubmissionEvaluateCommand)
   async evaluate(@principal() userPrincipal: Principal, @requestBody() submissionEvaluateCommand: SubmissionEvaluateCommand): Promise<BasicResponse> {
     await this.submissionService.evaluateSubmission(submissionEvaluateCommand, userPrincipal.details.id, userPrincipal.details.role);
     return new BasicResponse()
@@ -58,13 +62,14 @@ export class SubmissionController extends BaseHttpController implements interfac
   }
 
   @isAuthenticated('AUTHOR', 'ADMIN')
-  @httpPost('/upsertSubmissionPreload')
+  @httpPost('/upsert-submission-preload')
   async upsertSubmissionPreload(): Promise<UpsertSubmissionPreload> {
     return await this.submissionService.getUpsertSubmissionPreload();
   }
 
   @isAuthenticated('AUTHOR', 'ADMIN')
   @httpPost('/create')
+  @validateBody(SubmissionCreateCommand)
   async create(@principal() userPrincipal: Principal, @requestBody() submissionCreateCommand: SubmissionCreateCommand): Promise<BasicResponse> {
     await this.submissionService.createSubmission(userPrincipal.details.id, submissionCreateCommand);
     return new BasicResponse()
@@ -73,8 +78,9 @@ export class SubmissionController extends BaseHttpController implements interfac
 
   @isAuthenticated('AUTHOR', 'ADMIN')
   @httpPost('/edit')
-  async edit(req: express.Request): Promise<BasicResponse> {
-    await this.submissionService.editSubmission(req.body);
+  @validateBody(EditSubmissionDto)
+  async edit(@requestBody() editSubmissionDto: EditSubmissionDto): Promise<BasicResponse> {
+    await this.submissionService.editSubmission(editSubmissionDto);
     return new BasicResponse()
       .withSuccessMessage('Successfully edited');
   }
