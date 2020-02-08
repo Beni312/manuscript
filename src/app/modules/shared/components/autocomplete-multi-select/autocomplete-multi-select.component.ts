@@ -62,7 +62,7 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.toOrder) {
+    if (this.toOrder && this.items) {
       this.items = this.sortByDisplayedProperty(this.items);
     }
 
