@@ -35,6 +35,8 @@ export class HttpErrorInterceptor implements HttpInterceptor {
               this.location.back();
             });
           }
+
+          messageService.error(error.error);
           return throwError(error.error);
         })
       );
