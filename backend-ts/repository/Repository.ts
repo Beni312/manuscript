@@ -52,7 +52,7 @@ export abstract class Repository<T extends Model> {
     return row as T;
   }
 
-  async updateByPk(id: number | string, data: any): Promise<T> {
+  async updateByPk(id: number | string, data: Partial<T>): Promise<T> {
     const row = await this.model.findByPk(id);
     if (!row) {
       throw new NotFoundError(this.NOT_FOUND_ERROR_MESSAGE

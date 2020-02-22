@@ -11,7 +11,9 @@ export class SubmissionRepository extends Repository<Submission> {
   }
 
   async updateSubmissionStatus(submissionId: number, status: SubmissionStatus): Promise<Submission> {
-    return await this.updateByPk(submissionId, {status: status});
+    return await this.updateByPk(submissionId, {
+      status: status
+    });
   }
 
   async modifySubmission(submissionId: number, title: string, manuscriptAbstract: string, authors: number[], academicDisciplines: number[]): Promise<Submission> {

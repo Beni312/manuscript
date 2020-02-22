@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit {
       localStorage.setItem('currentUser', JSON.stringify(resp));
       this.router.navigate(['']);
     }, error => {
-      this.messageService.error(error.exceptionMessage);
+      this.messageService.error(error);
     });
   }
 }

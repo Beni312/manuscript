@@ -1,5 +1,6 @@
 import {
-  AuthorsAcademicDiscipline, AuthorsSubmission,
+  AuthorsAcademicDiscipline,
+  AuthorsSubmission,
   Conference,
   Keyword,
   Login,
@@ -9,7 +10,7 @@ import {
   User,
   UserAlias
 } from '../index';
-import * as bcrypt from "bcrypt-nodejs";
+import * as bcrypt from 'bcrypt-nodejs';
 import { MessageType } from '../enum/MessageType';
 import { SubmissionStatus } from '../enum/SubmissionStatus';
 import { SubmissionMessage } from '../entity/SubmissionMessage';
@@ -18,7 +19,7 @@ export class TestData {
 
   static async initData() {
     await this.createUser("admin", "admin@gmail.com", 1, "Mr.", "Admin", "admin", "admin", null, 1, "admin");
-    await this.createUser("user", "user@gmail.com", 1, "Mr.", "User", "Lajos", "user", null, 2, "user");
+    await this.createUser("user", "user@gmail.com", 2, "Mr.", "User", "Lajos", "user", null, 2, "user");
     await this.createUser("user1", "user1@gmail.com", 1, "Mr.", "User", "Béla", "user", null, 2, "user");
     await this.createUser("user2", "user2@gmail.com", 1, "Mr.", "User", "Tamás", "user", null, 2, "user");
     await this.createUser("user3", "user3@gmail.com", 1, "Mr.", "User", "Ezékiel", "user", null, 2, "user");
@@ -52,8 +53,9 @@ export class TestData {
       salt: salt,
       userId: user.id
     });
-    await Login.create({username: username, passwordId: userPassword.id});
+
     await UserAlias.create({username: username, userId: user.id});
+    await Login.create({username: username, passwordId: userPassword.id});
   }
 
   static async createConference(userId, title, description) {

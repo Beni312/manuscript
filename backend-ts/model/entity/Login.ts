@@ -1,12 +1,12 @@
-import { BaseModelTableOptions } from './BaseModelTableOptions';
-import { Column, DataType, ForeignKey, Table } from 'sequelize-typescript';
+import { BaseModel } from './BaseModel';
+import { Column, DataType, Default, ForeignKey, Table } from 'sequelize-typescript';
 import { Password } from './Password';
 import { UserAlias } from './UserAlias';
 
 @Table({
   modelName: 'login'
 })
-export class Login extends BaseModelTableOptions<Login> {
+export class Login extends BaseModel<Login> {
 
   @ForeignKey(() => UserAlias)
   @Column(DataType.STRING)
@@ -19,12 +19,14 @@ export class Login extends BaseModelTableOptions<Login> {
   })
   passwordId: number;
 
+  @Default(0)
   @Column({
     type: DataType.INTEGER,
     field: 'failed_login_counter'
   })
   failedLoginCounter: number;
 
+  @Default(true)
   @Column(DataType.BOOLEAN)
   enabled: boolean;
 }

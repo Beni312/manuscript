@@ -1,5 +1,6 @@
 import { BaseModelTableOptions } from './BaseModelTableOptions';
-import { Column, DataType, ForeignKey, PrimaryKey, Table } from 'sequelize-typescript';
+import { Column, DataType, ForeignKey, HasOne, PrimaryKey, Table } from 'sequelize-typescript';
+import { Login } from './Login';
 import { User } from './User';
 
 @Table({
@@ -17,4 +18,7 @@ export class UserAlias extends BaseModelTableOptions<UserAlias> {
     field: 'user_id'
   })
   userId: number;
+
+  @HasOne(() => Login)
+  login: Login;
 }

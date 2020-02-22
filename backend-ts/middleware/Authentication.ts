@@ -10,7 +10,7 @@ export const authentication = () => {
       }
       if (!user) {
         res.status(401);
-        res.json({exceptionMessage: info.message});
+        res.json(info.message);
       } else {
         req.logIn(user, function (err) {
           if (err) {
