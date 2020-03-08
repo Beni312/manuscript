@@ -1,6 +1,7 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { ConferenceComponent } from './components/conference/conference.component';
+import { ConferenceDetailsComponent } from './components/conference/conference-details/conference-details.component';
 import { ConferencePreloadResolver } from './components/conference/conference.preload.resolver';
 import { ConferenceService } from './components/conference/conference.service';
 import { FileDropModule } from 'ngx-file-drop';
@@ -159,7 +160,8 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
     SubmissionUpsertComponent,
     UpdateAcademicDisciplinesComponent,
     UserComponent,
-    UserManagementComponent
+    UserManagementComponent,
+    ConferenceDetailsComponent
   ],
   providers: [
     PersonalDataPreloadResolver,

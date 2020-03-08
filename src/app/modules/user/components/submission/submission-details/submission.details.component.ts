@@ -23,7 +23,6 @@ export class SubmissionDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.dataSource = new MatTableDataSource<any>(this.data.authors);
     this.dataSource2 = new MatTableDataSource<any>(this.data.academicDisciplines);
   }
 }

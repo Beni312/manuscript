@@ -8,6 +8,6 @@ export class UserManagementService {
   }
 
   getUsers() {
-    return this.httpClient.post('/usermanagement/getUsers', {});
+    return this.httpClient.post('/user-management/get-users', {});
   }
 }

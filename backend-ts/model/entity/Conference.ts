@@ -1,7 +1,9 @@
-import { BaseModel } from "./BaseModel";
-import { BelongsTo, Column, DataType, ForeignKey, HasMany, Table } from "sequelize-typescript";
-import { Submission } from "./Submission";
-import { User } from "./User";
+import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasMany, Table } from 'sequelize-typescript';
+import { AcademicDiscipline } from './AcademicDiscipline';
+import { BaseModel } from './BaseModel';
+import { ConferenceAcademicDiscipline } from './ConferenceAcademicDiscipline';
+import { Submission } from './Submission';
+import { User } from './User';
 
 @Table({
   modelName: 'conference'
@@ -26,4 +28,7 @@ export class Conference extends BaseModel<Conference> {
 
   @HasMany(() => Submission)
   submissions: Submission[];
+
+  @BelongsToMany(() => AcademicDiscipline, () => ConferenceAcademicDiscipline)
+  academicDisciplines: AcademicDiscipline[];
 }

@@ -1,5 +1,4 @@
 import { AcademicDiscipline } from './AcademicDiscipline';
-import { AuthorsSubmission } from './AuthorsSubmission';
 import { BaseModel } from './BaseModel';
 import { BelongsTo, BelongsToMany, Column, DataType, Default, ForeignKey, HasMany, Table } from 'sequelize-typescript';
 import { Conference } from './Conference';
@@ -44,9 +43,6 @@ export class Submission extends BaseModel<Submission> {
   @BelongsToMany(() => AcademicDiscipline, () => SubmissionAcademicDiscipline)
   academicDisciplines: AcademicDiscipline[];
 
-  @BelongsToMany(() => User, () => AuthorsSubmission)
-  authors: User[];
-
   @BelongsTo(() => User)
   submitter: User;
 
@@ -56,10 +52,5 @@ export class Submission extends BaseModel<Submission> {
   @HasMany(() => Keyword)
   keywords: Keyword[];
 
-  @HasMany(() => AuthorsSubmission, {as: 'authorsSubmission'})
-  authorsSubmission: AuthorsSubmission[];
-
   public setAcademicDisciplines!: HasManySetAssociationsMixin<AcademicDiscipline, number>;
-
-  public setAuthors!: HasManySetAssociationsMixin<User, number>;
 }

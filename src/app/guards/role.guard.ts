@@ -10,9 +10,15 @@ export class RoleGuard implements CanActivateChild {
   }
 
   canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    let preload = UserService.getPreload();
+    const preload = UserService.getPreload();
 
     if (!preload) {
+      this.router.navigate(['login']);
+      return false;
+    }
+
+    if (!preload.role) {
+      localStorage.removeItem('currentUser');
       this.router.navigate(['login']);
       return false;
     }

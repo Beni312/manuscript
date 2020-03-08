@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "develop": "nodemon app.ts",
-    "start": "npm run build-frontend && npm run copy-environments && npm run build && npm run serve",
+    "start": "npm run copy-environments && npm run build && npm run serve",
     "build": "npm run clean && tsc",
     "tslint": "tslint -c tslint.json -p tsconfig.json",
     "clean": "rimraf dist",

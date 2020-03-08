@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MessageService } from '../../../../services/message.service';
+import { Conference } from '../../../../models/conference';
 import { MatPaginator, MatSort, MatTable, MatTableDataSource } from '@angular/material';
 import { SlideRowAnimation } from '../../../shared/components/mat.row.expand.directive';
 
@@ -14,7 +14,7 @@ export class ConferenceComponent implements OnInit, AfterViewInit {
 
   preload: any;
 
-  dataSource: MatTableDataSource<any>;
+  dataSource: MatTableDataSource<Conference>;
 
   displayedColumns = ['title', 'description', 'submitter'];
 

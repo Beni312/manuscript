@@ -1,7 +1,7 @@
 import { AcademicDiscipline } from './entity/AcademicDiscipline';
 import { AuthorsAcademicDiscipline } from './entity/AuthorsAcademicDiscipline';
-import { AuthorsSubmission } from './entity/AuthorsSubmission';
 import { Conference } from './entity/Conference';
+import { ConferenceAcademicDiscipline } from './entity/ConferenceAcademicDiscipline';
 import { InitialDatabaseUploadCommandService } from '../service/InitialDatabaseUploadCommandService';
 import { Keyword } from './entity/Keyword';
 import { Login } from './entity/Login';
@@ -18,7 +18,6 @@ import { UserStatus } from './entity/UserStatus';
 
 export { AcademicDiscipline } from './entity/AcademicDiscipline';
 export { AuthorsAcademicDiscipline } from './entity/AuthorsAcademicDiscipline';
-export { AuthorsSubmission } from './entity/AuthorsSubmission';
 export { Conference } from './entity/Conference';
 export { Keyword } from './entity/Keyword';
 export { Login } from './entity/Login';
@@ -45,6 +44,7 @@ export class Models {
 
   public async initModels() {
     this.sequelize.addModels(Models.getModels());
+    // this.sequelize.addModels([__dirname + '/model/entity/*']);
     await this.sequelize.sync({force: true});
     await InitialDatabaseUploadCommandService.initData();
     await TestData.initData();
@@ -53,7 +53,7 @@ export class Models {
   // TODO Scan models folder to build list
   private static getModels() {
     return [
-      AcademicDiscipline, AuthorsAcademicDiscipline, AuthorsSubmission, Conference, Keyword, Login, Password, Role, Submission, SubmissionAcademicDiscipline, SubmissionMessage, User, UserAlias, UserStatus
+      AcademicDiscipline, AuthorsAcademicDiscipline, Conference, ConferenceAcademicDiscipline, Keyword, Login, Password, Role, Submission, SubmissionAcademicDiscipline, SubmissionMessage, User, UserAlias, UserStatus
     ];
   }
 }

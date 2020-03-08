@@ -16,11 +16,10 @@ export class SubmissionRepository extends Repository<Submission> {
     });
   }
 
-  async modifySubmission(submissionId: number, title: string, manuscriptAbstract: string, authors: number[], academicDisciplines: number[]): Promise<Submission> {
+  async modifySubmission(submissionId: number, title: string, manuscriptAbstract: string, academicDisciplines: number[]): Promise<Submission> {
     const submission = await this._findByPk(submissionId);
     submission.title = title;
     submission.manuscriptAbstract = manuscriptAbstract;
-    await submission.setAuthors(authors);
     await submission.setAcademicDisciplines(academicDisciplines);
     return submission.save();
   }

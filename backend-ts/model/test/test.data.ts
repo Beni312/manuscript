@@ -1,6 +1,5 @@
 import {
   AuthorsAcademicDiscipline,
-  AuthorsSubmission,
   Conference,
   Keyword,
   Login,
@@ -14,6 +13,7 @@ import * as bcrypt from 'bcrypt-nodejs';
 import { MessageType } from '../enum/MessageType';
 import { SubmissionStatus } from '../enum/SubmissionStatus';
 import { SubmissionMessage } from '../entity/SubmissionMessage';
+import { ConferenceAcademicDiscipline } from '../entity/ConferenceAcademicDiscipline';
 
 export class TestData {
 
@@ -59,7 +59,11 @@ export class TestData {
   }
 
   static async createConference(userId, title, description) {
-    await Conference.create({title: title, description: description, submitterId: userId});
+    const conference = await Conference.create({title: title, description: description, submitterId: userId});
+    await ConferenceAcademicDiscipline.create({
+      conferenceId: conference.id,
+      academicDisciplineId: 2
+    });
   }
 
   static async createSubmission(title, manuscriptAbstract, userId, conferenceId, status) {
@@ -76,7 +80,7 @@ export class TestData {
     await SubmissionAcademicDiscipline.create({submissionId: submission.id, academicDisciplineId: 4});
     await SubmissionAcademicDiscipline.create({submissionId: submission.id, academicDisciplineId: 5});
     await SubmissionAcademicDiscipline.create({submissionId: submission.id, academicDisciplineId: 6});
-    await AuthorsSubmission.create({submissionId: submission.id, authorId: userId});
+    // await AuthorsSubmission.create({submissionId: submission.id, authorId: userId});
     await Keyword.create({submissionId: submission.id, keyword: 'lorem'});
     await Keyword.create({submissionId: submission.id, keyword: 'ipsum'});
   }

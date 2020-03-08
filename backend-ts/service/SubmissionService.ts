@@ -1,4 +1,4 @@
-import { AcademicDiscipline, AuthorsSubmission, Conference, Keyword, Submission, User, UserAlias } from '../model';
+import { AcademicDiscipline, Conference, Keyword, Submission, User } from '../model';
 import { ApplicationService } from './ApplicationService';
 import { AuthorDto } from '../model/dto/AuthorDto';
 import { EditSubmissionDto } from '../model/dto/EditSubmissionDto';
@@ -51,17 +51,6 @@ export class SubmissionService {
         },
         {
           model: User,
-          as: 'authors',
-          attributes: ['id', 'email', 'firstName', 'lastName'],
-          through: {attributes: []},
-          include: [
-            {
-              model: UserAlias
-            }
-          ]
-        },
-        {
-          model: User,
           as: 'submitter',
           attributes: ['id', 'email', 'firstName', 'lastName']
         },
@@ -71,21 +60,15 @@ export class SubmissionService {
       ],
       order: [
         ['title', 'ASC'],
-        ['academicDisciplines', 'name', 'ASC'],
-        ['authors', 'firstName', 'ASC'],
-        ['authors', 'lastName', 'ASC']
+        ['academicDisciplines', 'name', 'ASC']
       ]
     };
     const conferenceOptions: any = {attributes: ['id', 'title']};
 
     if (user.role.toUpperCase() == RoleEnum.AUTHOR) {
-      const filter = {
-        model: AuthorsSubmission,
-        where: {
-          authorId: user.id
-        }
+      submissionOptions.where = {
+        submitterId: user.id
       };
-      submissionOptions.include.push(filter);
     }
 
     const submissions: Submission[] = await Submission.findAll(submissionOptions);
@@ -126,7 +109,7 @@ export class SubmissionService {
     if the user is an admin or is an author of the submission, he can edit.
    */
   private hasPermissionToEdit(user: any, submission: Submission): boolean {
-    if ((submission.submitter.id === user.id || submission.authors.find(item => item.id === user.id)) &&
+    if ((submission.submitter.id === user.id) &&
       this.editableSubmissionStatuses.indexOf(submission.status) != -1 || Roles.isAdmin(user.role)) {
       return true;
     }
@@ -172,8 +155,6 @@ export class SubmissionService {
       submitterId: userId,
       conferenceId: submission.conferenceId
     }).then(async (createdSubmission) => {
-      submission.authors.push(userId);
-      await createdSubmission.setAuthors(submission.authors);
       await createdSubmission.setAcademicDisciplines(submission.academicDisciplines);
       createdSubmission.save();
       await this.createKeywords(createdSubmission.id, submission.keywords);
@@ -223,7 +204,6 @@ export class SubmissionService {
       submission.id,
       submission.title,
       submission.manuscriptAbstract,
-      submission.authors.map(item => item.id),
       submission.academicDisciplines.map(item => item.id)
     );
   }

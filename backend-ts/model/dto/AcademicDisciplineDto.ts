@@ -1,4 +1,7 @@
+import { IsPositive } from 'class-validator';
+
 export class AcademicDisciplineDto {
+  @IsPositive()
   id: number;
   name: string;
 

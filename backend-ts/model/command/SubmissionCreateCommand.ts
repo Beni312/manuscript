@@ -8,7 +8,6 @@ export class SubmissionCreateCommand {
   @IsNumber()
   @IsNotEmpty()
   conferenceId: number;
-  authors: number[];
   keywords: string[];
   @ArrayMinSize(1)
   academicDisciplines: number[];
