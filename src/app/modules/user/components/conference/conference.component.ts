@@ -1,8 +1,11 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Conference } from '../../../../models/conference';
-import { MatPaginator, MatSort, MatTable, MatTableDataSource } from '@angular/material';
+// import { MatPaginator, MatSort, MatTable, MatTableDataSource } from '@angular/material';
 import { SlideRowAnimation } from '../../../shared/components/mat.row.expand.directive';
+import { MatSort } from "@angular/material/sort";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTable, MatTableDataSource } from "@angular/material/table";
 
 @Component({
   selector: 'app-conference',
@@ -18,9 +21,9 @@ export class ConferenceComponent implements OnInit, AfterViewInit {
 
   displayedColumns = ['title', 'description', 'submitter'];
 
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatTable) table: MatTable<any>;
+  @ViewChild(MatSort, {static: false}) sort: MatSort;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  @ViewChild(MatTable, {static: false}) table: MatTable<any>;
 
   constructor(private activatedRoute: ActivatedRoute) {
   }

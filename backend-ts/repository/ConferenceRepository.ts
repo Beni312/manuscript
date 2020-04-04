@@ -9,7 +9,7 @@ export class ConferenceRepository extends Repository<Conference> {
     super(Conference);
   }
 
-  async findConferences(): Promise<Conference[]> {
+  findConferences(): Promise<Conference[]> {
     return this.findAll({
       include: [
         {

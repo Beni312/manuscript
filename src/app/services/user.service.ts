@@ -1,7 +1,7 @@
 import { BasicResponse } from '../models/basic.response';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Preload } from '../models/preload';
 import { Router } from '@angular/router';
 

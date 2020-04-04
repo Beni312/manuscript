@@ -1,8 +1,9 @@
 import { AcademicDiscipline } from '../../../../../models/academic.discipline';
 import { Author } from '../../../../../models/author';
 import { Component, Input, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material';
+// import { MatTableDataSource } from '@angular/material';
 import { Submission } from '../../../../../models/submission';
+import { MatTableDataSource } from "@angular/material/table";
 
 @Component({
   selector: 'app-expand',

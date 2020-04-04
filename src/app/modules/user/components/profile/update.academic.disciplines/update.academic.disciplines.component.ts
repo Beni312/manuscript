@@ -2,7 +2,8 @@ import * as cloneDeep from 'lodash/cloneDeep';
 import { AcademicDiscipline } from '../../../../../models/academic.discipline';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+// import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 @Component({
   selector: 'app-update-academic-disciplines',

@@ -4,11 +4,12 @@ import { ConferenceComponent } from './components/conference/conference.componen
 import { ConferenceDetailsComponent } from './components/conference/conference-details/conference-details.component';
 import { ConferencePreloadResolver } from './components/conference/conference.preload.resolver';
 import { ConferenceService } from './components/conference/conference.service';
-import { FileDropModule } from 'ngx-file-drop';
+// import { FileDropModule } from 'ngx-file-drop';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './components/home/home.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from '../material/material.module';
+import { MessagesComponent } from './components/messages/messages.component';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { PersonalDataPreloadResolver } from './components/profile/personal.data.preload.resolver';
 import { ProfileComponent } from './components/profile/profile.component';
@@ -27,6 +28,7 @@ import { UserComponent } from './user.component';
 import { UserManagementComponent } from './components/user.management/user.management.component';
 import { UserService } from '../../services/user.service';
 import { SubmissionEvaluateComponent } from './components/submission/submission.evaluate/submission.evaluate.component';
+import { NgxFileDropModule } from "ngx-file-drop";
 
 const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
   {
@@ -132,6 +134,16 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
           place: 'sidebar'
         }
       },
+      {
+        path: 'messages',
+        component: MessagesComponent,
+        data: {
+          expectedRoles: ['REVIEWER', 'EDITOR', 'AUTHOR', 'ADMIN'],
+          label: 'Messages',
+          icon: 'message',
+          place: 'header'
+        }
+      },
       {path: '', pathMatch: 'full', redirectTo: 'home'}
     ]
   }
@@ -141,7 +153,7 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
   imports: [
     BrowserAnimationsModule,
     CommonModule,
-    FileDropModule,
+    NgxFileDropModule,
     FormsModule,
     HttpClientModule,
     MaterialModule,
@@ -161,7 +173,8 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
     UpdateAcademicDisciplinesComponent,
     UserComponent,
     UserManagementComponent,
-    ConferenceDetailsComponent
+    ConferenceDetailsComponent,
+    MessagesComponent
   ],
   providers: [
     PersonalDataPreloadResolver,
@@ -172,11 +185,6 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
     UserService,
     ConferencePreloadResolver,
     ConferenceService
-  ],
-  entryComponents: [
-    SubmissionEvaluateComponent,
-    SubmissionUpsertComponent,
-    UpdateAcademicDisciplinesComponent
   ]
 })
 export class UserModule {

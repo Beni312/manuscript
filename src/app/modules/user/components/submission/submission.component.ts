@@ -3,8 +3,6 @@ import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { Author } from '../../../../models/author';
 import { BasicResponse } from '../../../../models/basic.response';
 import { ConferenceIdNamePair } from '../../../../models/conference.id.name.pair';
-import { FileSystemFileEntry, UploadEvent, UploadFile } from 'ngx-file-drop';
-import { MatDialog, MatPaginator, MatSort, MatTable, MatTableDataSource } from '@angular/material';
 import { MessageService } from '../../../../services/message.service';
 import { PermissionHandler } from '../permission.handler';
 import { SlideRowAnimation } from '../../../shared/components/mat.row.expand.directive';
@@ -14,6 +12,10 @@ import { SubmissionService } from '../../../../services/submission.service';
 import { SubmissionUpsertComponent, UpsertSubmissionPreload } from './submission.upsert/submission.upsert.component';
 import { SubmissionEvaluateComponent } from './submission.evaluate/submission.evaluate.component';
 import { SubmissionCreate } from '../../../../models/submission.create';
+import { MatTable, MatTableDataSource } from "@angular/material/table";
+import { MatSort } from "@angular/material/sort";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatDialog } from "@angular/material/dialog";
 
 @Component({
   selector: 'app-submission',
@@ -32,11 +34,11 @@ export class SubmissionComponent extends PermissionHandler implements AfterViewI
 
   authors: Author[];
 
-  public files: UploadFile[] = [];
+  // public files: UploadFile[] = [];
 
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatTable) table: MatTable<Submission>;
+  @ViewChild(MatSort, {static: false}) sort: MatSort;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  @ViewChild(MatTable, {static: false}) table: MatTable<Submission>;
 
   constructor(private submissionService: SubmissionService,
               private activatedRoute: ActivatedRoute,
@@ -222,27 +224,27 @@ export class SubmissionComponent extends PermissionHandler implements AfterViewI
     });
   }
 
-  public dropped(event: UploadEvent) {
-    this.files = event.files;
-    if (event.files.length > 1) {
-      this.messageService.warning('warning', 'It\'s a directory, choose only one file!');
-      return;
-    }
-    for (const droppedFile of event.files) {
-      if (droppedFile.fileEntry.isFile) {
-        const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
-
-        fileEntry.file((file: File) => {
-          const formData = new FormData();
-          formData.append(file.name, file, droppedFile.relativePath);
-
-          this.submissionService.uploadFile(file).subscribe(response => {
-            this.messageService.success(response.successMessage);
-          });
-        });
-      } else {
-        this.messageService.warning('It\'s an empty directory, choose a file.');
-      }
-    }
-  }
+  // public dropped(event: UploadEvent) {
+  //   this.files = event.files;
+  //   if (event.files.length > 1) {
+  //     this.messageService.warning('warning', 'It\'s a directory, choose only one file!');
+  //     return;
+  //   }
+  //   for (const droppedFile of event.files) {
+  //     if (droppedFile.fileEntry.isFile) {
+  //       const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
+  //
+  //       fileEntry.file((file: File) => {
+  //         const formData = new FormData();
+  //         formData.append(file.name, file, droppedFile.relativePath);
+  //
+  //         this.submissionService.uploadFile(file).subscribe(response => {
+  //           this.messageService.success(response.successMessage);
+  //         });
+  //       });
+  //     } else {
+  //       this.messageService.warning('It\'s an empty directory, choose a file.');
+  //     }
+  //   }
+  // }
 }

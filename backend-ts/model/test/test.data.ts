@@ -14,14 +14,15 @@ import { MessageType } from '../enum/MessageType';
 import { SubmissionStatus } from '../enum/SubmissionStatus';
 import { SubmissionMessage } from '../entity/SubmissionMessage';
 import { ConferenceAcademicDiscipline } from '../entity/ConferenceAcademicDiscipline';
+import { Message } from '../entity/Message';
 
 export class TestData {
 
   static async initData() {
     await this.createUser("admin", "admin@gmail.com", 1, "Mr.", "Admin", "admin", "admin", null, 1, "admin");
-    await this.createUser("user", "user@gmail.com", 2, "Mr.", "User", "Lajos", "user", null, 2, "user");
-    await this.createUser("user1", "user1@gmail.com", 1, "Mr.", "User", "Béla", "user", null, 2, "user");
-    await this.createUser("user2", "user2@gmail.com", 1, "Mr.", "User", "Tamás", "user", null, 2, "user");
+    const user = await this.createUser("user", "user@gmail.com", 1, "Mr.", "User", "Lajos", "user", null, 2, "user");
+    const user1 = await this.createUser("user1", "user1@gmail.com", 1, "Mr.", "User", "Béla", "user", null, 2, "user");
+    const user2 = await this.createUser("user2", "user2@gmail.com", 1, "Mr.", "User", "Tamás", "user", null, 2, "user");
     await this.createUser("user3", "user3@gmail.com", 1, "Mr.", "User", "Ezékiel", "user", null, 2, "user");
     await this.createUser("user4", "user4@gmail.com", 1, "Mr.", "User", "Britniszpírsz", "user", null, 2, "user");
     await this.createUser("editor", "editor@gmail.com", 1, "Mr.", "Editor", "", "editor", null, 3, "editor");
@@ -32,9 +33,19 @@ export class TestData {
     await this.createSubmission("testSubmission3", "lorem ipsum", 3, 1, SubmissionStatus.CREATED);
     await this.createSubmission("testSubmission2", "lorem ipsum", 3, 1, SubmissionStatus.CREATED);
     await this.createSubmissionMessage("submissionMessage", MessageType.INFO);
+
+    await this.createMessage(user1.id, user.id, 'mess', new Date(2020, 1, 13, 13, 14, 20));
+    await this.createMessage(user1.id, user.id, 'gmrkmgkrm', new Date(2020, 1, 13, 13, 15, 20));
+    await this.createMessage(user1.id, user.id, 'mess', new Date(2020, 1, 13, 13, 16, 20));
+    await this.createMessage(user2.id, user.id, 'mess', new Date(2020, 1, 13, 13, 14, 20));
+    await this.createMessage(user2.id, user.id, 'mess', new Date(2020, 1, 13, 13, 15, 20));
+    await this.createMessage(user2.id, user.id, 'mess', new Date(2020, 1, 13, 13, 18, 20));
+    await this.createMessage(user.id, user1.id, 'mess', new Date(2020, 1, 13, 13, 14, 50));
+    await this.createMessage(user.id, user1.id, 'mess', new Date(2020, 1, 13, 13, 15, 30));
+    await this.createMessage(user.id, user2.id, 'mess', new Date(2020, 1, 13, 13, 17, 30));
   }
 
-  static async createUser(username, email, statusId, title, firstName, lastName, job, birthDate, roleId, password) {
+  static async createUser(username, email, statusId, title, firstName, lastName, job, birthDate, roleId, password): Promise<User> {
     const user = await User.create({
       email: email,
       statusId: statusId,
@@ -56,6 +67,8 @@ export class TestData {
 
     await UserAlias.create({username: username, userId: user.id});
     await Login.create({username: username, passwordId: userPassword.id});
+
+    return user;
   }
 
   static async createConference(userId, title, description) {
@@ -95,5 +108,15 @@ export class TestData {
 
   static async addAcademicDisciplineToUser(userId, academicDisciplineId) {
     await AuthorsAcademicDiscipline.create({userId: userId, academicDisciplineId: academicDisciplineId});
+  }
+
+  static async createMessage(userId: number, to: number, message: string, creationDate: Date, isRead: boolean = false) {
+    await Message.create({
+      userId: userId,
+      to: to,
+      message: message,
+      creationDate: creationDate,
+      isRead: isRead
+    })
   }
 }

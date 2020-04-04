@@ -1,6 +1,6 @@
-import { InternalServerError } from "../model/error/InternalServerError";
 import { logger } from "../service/logger";
 import { BaseError } from '../model/error/BaseError';
+import { InternalServerError } from "../model/error/InternalServerError";
 
 export const errorHandler = (error: Error, req, res, next) => {
   logger.error(error.name + ' ' + error.message + ' ' + error.stack);

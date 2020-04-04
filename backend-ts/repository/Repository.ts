@@ -27,7 +27,7 @@ export abstract class Repository<T extends Model> {
   }
 
   async findAll(options: FindOptions = {}): Promise<T[]> {
-    return await this.model.findAll(options) as T[];
+    return this.model.findAll<T>(options);
   }
 
   async _findAll(options: FindOptions = {}): Promise<T[]> {
@@ -98,6 +98,10 @@ export abstract class Repository<T extends Model> {
         .replace('TABLE_NAME', this.model.getTableName().toString())
       );
     }
+  }
+
+  async create(values): Promise<T> {
+    return this.model.create<T>(values);
   }
 
 }

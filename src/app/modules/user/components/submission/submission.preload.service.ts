@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { SubmissionPreloadResponse } from '../../../../models/submission.preload.response';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { SubmissionService } from '../../../../services/submission.service';
 
 @Injectable()

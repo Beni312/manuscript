@@ -44,3 +44,16 @@ button {
 #currentPage {
   padding-left: 8px;
 }
+
+.bigIconButton {
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+
+  .mat-icon {
+    font-size: 30px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+}

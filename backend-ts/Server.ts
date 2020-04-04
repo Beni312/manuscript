@@ -14,6 +14,7 @@ import './controller/ProfileController';
 import './controller/RegistrationController';
 import './controller/SubmissionController';
 import './controller/UserManagementController';
+import './controller/MessageController';
 
 import { AcademicDisciplineRepository } from './repository/AcademicDisciplineRepository';
 import { ApplicationService } from './service/ApplicationService';
@@ -41,6 +42,12 @@ import { SubmissionService } from './service/SubmissionService';
 import { UserManagementService } from './service/UserManagementService';
 import { UserRepository } from './repository/UserRepository';
 import { UpdateAcademicDisciplinesValidator } from './validator/UpdateAcademicDisciplinesValidator';
+import { MessageService } from './service/MessageService';
+import { MessageRepository } from './repository/MessageRepository';
+import { UtilsService } from './service/UtilsService';
+import { SocketServer } from "./SocketServer";
+import { SocketService } from "./service/SocketService";
+import { SocketController } from "./controller/SocketController";
 
 export class Server {
 
@@ -52,7 +59,7 @@ export class Server {
   public static async initializeApp(): Promise<http.Server> {
     try {
       require('dotenv').config();
-      await Server.initInversify();
+      const container: Container = await Server.initInversify();
 
       try {
         await Server.initializeDatabase();
@@ -61,14 +68,22 @@ export class Server {
       }
 
       const app: express.Application = Server.inversifyServer.build();
-      return app.listen(app.get('port'));
+      const server = app.listen(app.get('port'));
+
+      Server.initApplication(server, container);
+
+      return server;
 
     } catch (error) {
       throw new InternalServerError(error.message);
     }
   }
 
-  private static async initInversify() {
+  private static initApplication(app: http.Server, container: Container) {
+    container.get<SocketServer>(SocketServer.name).init(app, container)
+  }
+
+  private static initInversify(): Container {
     const container = new Container();
 
     container.bind<ApplicationService>(ApplicationService.name).to(ApplicationService);
@@ -93,12 +108,21 @@ export class Server {
     container.bind<SubmissionCreateValidator>(SubmissionCreateValidator.name).to(SubmissionCreateValidator);
     container.bind<UpdateAcademicDisciplinesValidator>(UpdateAcademicDisciplinesValidator.name).to(UpdateAcademicDisciplinesValidator);
 
+    container.bind<MessageService>(MessageService.name).to(MessageService);
+    container.bind<MessageRepository>(MessageRepository.name).to(MessageRepository);
+    container.bind<UtilsService>(UtilsService.name).to(UtilsService);
+    container.bind<SocketServer>(SocketServer.name).to(SocketServer);
+    container.bind<SocketService>(SocketService.name).to(SocketService);
+    container.bind<SocketController>(SocketController.name).to(SocketController);
+
     Server.inversifyServer = new InversifyExpressServer(container, null, null, null, AuthProvider);
     Server.inversifyServer.setErrorConfig(app => app.use(errorHandler));
     Server.inversifyServer.setConfig((app: any) => {
       Server.initializeAuth();
       Server.configureApp(app);
     });
+
+    return container;
   }
 
   private static async initializeDatabase() {

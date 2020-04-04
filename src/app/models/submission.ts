@@ -22,7 +22,7 @@ export class Submission {
   constructor() {
     this.title = '';
     this.manuscriptAbstract = '';
-    this.submitter = new Author('', '', '', '');
+    this.submitter = new Author(null, '', '', '');
     this.authors = [];
     this.keywords = [];
     this.academicDisciplines = [];

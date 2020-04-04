@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material';
+// import { MatTableDataSource } from '@angular/material';
 import { AcademicDiscipline } from '../../../../../models/academic.discipline';
 import { Conference } from '../../../../../models/conference';
 import { ConferenceSubmission } from '../../../../../models/conference.submission';
+import { MatTableDataSource } from "@angular/material/table";
 
 @Component({
   selector: 'app-conference-details',

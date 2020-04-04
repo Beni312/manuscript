@@ -1,7 +1,7 @@
 import { BasicResponse } from '../models/basic.response';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { SubmissionPreloadResponse } from '../models/submission.preload.response';
 import { Submission } from '../models/submission';
 import { UpsertSubmissionPreload } from '../modules/user/components/submission/submission.upsert/submission.upsert.component';

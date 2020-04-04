@@ -2,6 +2,7 @@ import { injectable } from 'inversify';
 import { Repository } from './Repository';
 import { AcademicDiscipline, Role, User, UserAlias, UserStatus } from '../model';
 import { RoleEnum } from '../model/enum/RoleEnum';
+import { Op } from 'sequelize';
 
 @injectable()
 export class UserRepository extends Repository<User> {
@@ -56,6 +57,19 @@ export class UserRepository extends Repository<User> {
           model: UserStatus
         }
       ]
+    });
+  }
+
+  findUsersByIds(userIds: number[]): Promise<User[]> {
+    return this.findAll({
+      where: {
+        // [Op.in]: {
+        //   id: userIds
+        // }
+        id: {
+          [Op.in]: userIds
+        }
+      }
     });
   }
 }

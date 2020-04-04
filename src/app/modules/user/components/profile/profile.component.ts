@@ -2,11 +2,15 @@ import { AcademicDiscipline } from '../../../../models/academic.discipline';
 import { ActivatedRoute } from '@angular/router';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+// import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { MessageService } from '../../../../services/message.service';
 import { PersonalDataPreload, ProfileService } from '../../../../services/profile.service';
 import { PermissionHandler } from '../permission.handler';
 import { UpdateAcademicDisciplinesComponent } from './update.academic.disciplines/update.academic.disciplines.component';
+import { MatTableDataSource } from "@angular/material/table";
+import { MatSort } from "@angular/material/sort";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatDialog } from "@angular/material/dialog";
 
 @Component({
   selector: 'app-profile',
@@ -21,8 +25,8 @@ export class ProfileComponent extends PermissionHandler implements OnInit, After
   displayedColumns = ['academicDisciplineName'];
   dataSource: MatTableDataSource<AcademicDiscipline>;
 
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: false}) sort: MatSort;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
 
 
   constructor(private profileService: ProfileService,

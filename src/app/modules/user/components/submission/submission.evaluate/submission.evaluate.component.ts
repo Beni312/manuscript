@@ -1,6 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef, MatSelectChange } from '@angular/material';
+// import { MAT_DIALOG_DATA, MatDialogRef, MatSelectChange } from '@angular/material';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { MatSelectChange } from "@angular/material/select";
 
 // class SubmissionEvaluate {
 //   submissionId: number;

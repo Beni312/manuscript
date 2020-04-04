@@ -15,6 +15,7 @@ import { TestData } from './test/test.data';
 import { User } from './entity/User';
 import { UserAlias } from './entity/UserAlias';
 import { UserStatus } from './entity/UserStatus';
+import { Message } from './entity/Message';
 
 export { AcademicDiscipline } from './entity/AcademicDiscipline';
 export { AuthorsAcademicDiscipline } from './entity/AuthorsAcademicDiscipline';
@@ -53,7 +54,7 @@ export class Models {
   // TODO Scan models folder to build list
   private static getModels() {
     return [
-      AcademicDiscipline, AuthorsAcademicDiscipline, Conference, ConferenceAcademicDiscipline, Keyword, Login, Password, Role, Submission, SubmissionAcademicDiscipline, SubmissionMessage, User, UserAlias, UserStatus
+      AcademicDiscipline, AuthorsAcademicDiscipline, Conference, ConferenceAcademicDiscipline, Keyword, Login, Password, Role, Submission, SubmissionAcademicDiscipline, SubmissionMessage, User, UserAlias, UserStatus, Message
     ];
   }
 }

@@ -13,8 +13,10 @@ import { PreloadAllModules, RouterModule } from '@angular/router';
 import { ProgressInterceptor, ProgressSpinnerService } from './services/progress.spinner.service';
 import { RegistrationComponent } from './modules/core/components/registration/registration.component';
 import { SharedModule } from './modules/shared/shared.module';
+import { SocketService } from "./services/socket.service";
 import { ToastrModule } from 'ngx-toastr';
 import { UserModule } from './modules/user/user.module';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from "@angular/material/form-field";
 
 const Routes: ModuleWithProviders = RouterModule.forRoot([
   {
@@ -51,8 +53,9 @@ const Routes: ModuleWithProviders = RouterModule.forRoot([
     ToastrModule.forRoot(),
     UserModule
   ],
-  providers: [
+  providers: [ { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
     MessageService,
+    SocketService,
     ProgressSpinnerService,
     {
       provide: HTTP_INTERCEPTORS,

@@ -1,7 +1,9 @@
+
+import {tap} from 'rxjs/operators';
 import { EventEmitter, Injectable } from '@angular/core';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/do';
+import { Observable } from 'rxjs';
+
 
 export class ProgressInterceptor implements HttpInterceptor {
   constructor(private progressSpinnerService: ProgressSpinnerService) {
@@ -10,8 +12,8 @@ export class ProgressInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     this.progressSpinnerService.increase();
     return next
-      .handle(req)
-      .do(event => {
+      .handle(req).pipe(
+      tap(event => {
           if (event instanceof HttpResponse) {
             this.progressSpinnerService.decrease();
           }
@@ -19,7 +21,7 @@ export class ProgressInterceptor implements HttpInterceptor {
         () => {
           this.progressSpinnerService.decrease();
         }
-      );
+      ));
   }
 }
 

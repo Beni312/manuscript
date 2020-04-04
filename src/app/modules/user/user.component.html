@@ -1,11 +1,14 @@
 <div class="sidenav-area">
   <mat-toolbar color="primary">
-    <button mat-icon-button (click)="snav.toggle()">
+    <button class="bigIconButton" mat-icon-button (click)="snav.toggle()">
       <mat-icon>menu</mat-icon>
     </button>
     <h3 id="currentPage">{{currentPage}}</h3>
     <span class="fill-space"></span>
-    <button mat-icon-button id="logout-button" (click)="logout()">
+    <button mat-icon-button class="mt-1 mr-4 bigIconButton" id="messages-button" (click)="showMessages()">
+      <mat-icon>message</mat-icon>
+    </button>
+    <button mat-icon-button class="bigIconButton" id="logout-button" (click)="logout()">
       <mat-icon>exit_to_app</mat-icon>
     </button>
   </mat-toolbar>
