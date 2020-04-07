@@ -3,29 +3,40 @@
 <!--<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
 <!--<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" rel="stylesheet"-->
 
-<div class="container">
+<div class="container messagesContainer">
   <h3 class=" text-center">Messaging</h3>
   <div class="messaging">
-    <div class="inbox_msg">
-      <div class="inbox_people">
+    <div class="inbox_msg d-flex">
+      <div class="inbox_people col-4">
         <div class="headind_srch">
           <div class="recent_heading">
             <h4>Recent</h4>
           </div>
           <div class="srch_bar">
             <div class="stylish-input-group">
-              <input type="text" class="search-bar"  placeholder="Search" >
-              <span class="input-group-addon">
-                <button type="button"> <i class="fa fa-search" aria-hidden="true"></i> </button>
-                </span> </div>
+
+
+                <input type="text"
+                       placeholder="Search author"
+                       aria-label="Number"
+                       [formControl]="myControl"
+                       matInput
+                       [matAutocomplete]="auto">
+                <mat-autocomplete #auto="matAutocomplete">
+                  <mat-option (onSelectionChange)="changeUser(option.id)" *ngFor="let option of filteredOptions | async" [value]="getFullName(option.firstName, option.lastName)">
+                    {{getFullName(option.firstName, option.lastName)}}
+                  </mat-option>
+                </mat-autocomplete>
+
+            </div>
           </div>
         </div>
         <div class="inbox_chat">
-          <div class="chat_list" *ngFor="let user of messagePreload.users" (click)="changeUser(user.id)">
+          <div class="chat_list" *ngFor="let userId of getUsersFromMessages()" (click)="changeUser(userId)">
             <div class="chat_people">
               <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
               <div class="chat_ib">
-                <h5>{{user.firstName + ' ' + user.lastName}} <span class="chat_date">Dec 25</span></h5>
+                <h5>{{getFullNameByUserId(userId)}} <span class="chat_date">{{getLatestMessageDateByUserId(userId) | date:'dd MMM'}}</span></h5>
                 <p>Test, which is a new approach to have all solutions
                   astrology under one roof.</p>
               </div>
@@ -33,8 +44,8 @@
           </div>
         </div>
       </div>
-      <div class="mesgs">
-        <div class="msg_history">
+      <div class="mesgs col-8">
+        <div class="msg_history" #messageHistory>
           <div *ngFor="let message of messages" [ngClass]="message.incoming ? 'incoming_msg' : 'outgoing_msg'">
             <div *ngIf="message.incoming" class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
 
@@ -50,11 +61,11 @@
             </div>
           </div>
         </div>
-        <div class="type_msg">
+        <div class="type_msg" *ngIf="selectedAuthor">
           <div class="input_msg_write">
-            <input type="text" class="write_msg" placeholder="Type a message" />
+            <input type="text" class="write_msg" placeholder="Type a message" [(ngModel)]="actualMessage" (keyup.enter)="sendMessage()"/>
             <button mat-icon-button class="msg_send_btn" type="button">
-              <mat-icon>send</mat-icon>
+              <mat-icon (click)="sendMessage()">send</mat-icon>
             </button>
           </div>
         </div>

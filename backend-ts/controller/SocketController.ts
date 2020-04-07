@@ -1,4 +1,5 @@
 import { inject, injectable } from "inversify";
+import { MessageDto } from "../model/dto/MessageDto";
 import { MessageService } from "../service/MessageService";
 import { SendMessageCommand } from "../model/command/SendMessageCommand";
 import { Socket } from 'socket.io';
@@ -27,8 +28,9 @@ export class SocketController {
 
   sendMessage(socket: Socket, msg: SendMessageCommand) {
     this.messageService.addMessage(socket.request.user.id, msg)
-      .then(() => {
-        this.socketService.sendMessageBySocketId(socket.id, msg);
+      .then((message) => {
+        this.socketService.sendMessageBySocketId(socket.id, new MessageDto(message.to, message.message, message.creationDate, message.toUser === socket.request.user.id, message.isRead));
+        this.socketService.sendMessageByUserId(msg.to, new MessageDto(socket.request.user.id, message.message, message.creationDate, true, message.isRead));
       })
       .catch(err => {
         this.socketService.handleError(socket, err);

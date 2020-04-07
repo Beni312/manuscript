@@ -1,7 +1,16 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { map, startWith } from "rxjs/operators";
+import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Author } from '../../../../models/author';
 import { ChatService } from '../../../../services/chat.service';
-import { MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { FormControl } from "@angular/forms";
+import { Message } from "../../../../models/message";
+import { MessageState } from "../../../../store/message/MessageReducer";
+import { Store } from "@ngrx/store";
+import { getMessageState } from "../../../../store/message/MessageSelector";
+import { Observable } from "rxjs";
+import { SocketService } from "../../../../services/socket.service";
+
 // import { MAT_DIALOG_DATA } from '@angular/material';
 
 export class MessagePreload {
@@ -9,22 +18,8 @@ export class MessagePreload {
   users: Author[];
 
   constructor() {
-    this.messages = new Map<number, Message[]>();
+    // this.messages = new Map<number, Message[]>();
     this.users = [];
-  }
-}
-
-class Message {
-  message: string;
-  sentDate: Date;
-  incoming: boolean;
-  seen: boolean;
-
-  constructor(message: string, sentDate: Date, incoming: boolean, seen: boolean) {
-    this.message = message;
-    this.sentDate = sentDate;
-    this.incoming = incoming;
-    this.seen = seen;
   }
 }
 
@@ -35,18 +30,45 @@ class Message {
 })
 export class MessagesComponent implements OnInit {
 
-  messagePreload: MessagePreload;
-  // messages: Map<number, Message[]>;
-  messages: Message[] = [];
-  users: Author[];
+  @ViewChild('messageHistory') private myScrollContainer: ElementRef;
+
+  messagePreload: MessagePreload = new MessagePreload();
+  messages: Array<Message>;
+  // users: Author[] = [];
   selectedAuthor: number;
+  actualMessage: string;
+  searchedAuthor: string;
+  filteredOptions: Observable<Author[]>;
+  myControl = new FormControl();
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
-              private chatService: ChatService) {
+              private chatService: ChatService,
+              private socketService: SocketService,
+              private readonly store: Store<MessageState>) {
   }
+
+  // ngAfterViewInit(): void {
+  //   this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+  // }
 
   ngOnInit() {
     this.messagePreload = this.data.messagePreload;
+    this.store.select(getMessageState).subscribe((state) => {
+      this.messagePreload = state;
+      if (this.selectedAuthor) {
+        this.messages = state.messages[this.selectedAuthor];
+        this.scrollDown();
+      }
+      // this.messagePreload.users = state.users;
+      // this.users = state.users;
+    });
+
+    this.filteredOptions = this.myControl.valueChanges
+      .pipe(
+        startWith(''),
+        map(value => this._filter(value))
+      );
+
     // this.messagePreload = new MessagePreload();
     // const user1Messages = [];
     // user1Messages.push(new Message('test mesafginasdofnmasoefnas', new Date(), false, true));
@@ -87,8 +109,51 @@ export class MessagesComponent implements OnInit {
   changeUser(userId: number) {
     this.selectedAuthor = userId;
     this.messages = this.messagePreload.messages[userId];
-    console.log(this.messagePreload);
-    console.log(userId);
+    if (!this.messages) {
+      this.messages = [];
+    }
+    // console.log(this.messagePreload);
+    // console.log(userId);
+    this.scrollDown();
   }
 
+  scrollDown() {
+    setTimeout(() => {
+      this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+    }, 1)
+  }
+
+  sendMessage() {
+    this.socketService.sendMessage({message: this.actualMessage, to: this.selectedAuthor});
+    this.actualMessage = '';
+  }
+
+  private _filter(value: string): Author[] {
+    if (value.length < 3) {
+      return [];
+    }
+    return this.messagePreload.users.filter(user => this.getFullName(user.firstName, user.lastName).toLowerCase().includes(value.toLowerCase()));
+  }
+
+  getFullName(firstName: string, lastName: string): string {
+    return firstName + ' ' + lastName;
+  }
+
+  getFullNameByUserId(userId: number): string {
+    const user = this.messagePreload.users.find(u => u.id === userId);
+    return this.getFullName(user.firstName, user.lastName);
+  }
+
+  getLatestMessageDateByUserId(userId: number) {
+    const messagesForUser: Message[] = this.messagePreload.messages[userId];
+    return messagesForUser[messagesForUser.length - 1].sentDate;
+  }
+
+  getUserById(userId: number) {
+    return this.messagePreload.users.find(u => u.id === userId);
+  }
+
+  getUsersFromMessages(): number[] {
+    return Object.keys(this.messagePreload.messages).map(item => Number(item));
+  }
 }

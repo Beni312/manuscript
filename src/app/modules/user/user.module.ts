@@ -1,10 +1,10 @@
+import { messageReducer } from "../../store/message/MessageReducer";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { ConferenceComponent } from './components/conference/conference.component';
 import { ConferenceDetailsComponent } from './components/conference/conference-details/conference-details.component';
 import { ConferencePreloadResolver } from './components/conference/conference.preload.resolver';
 import { ConferenceService } from './components/conference/conference.service';
-// import { FileDropModule } from 'ngx-file-drop';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './components/home/home.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -17,6 +17,7 @@ import { ProfileService } from '../../services/profile.service';
 import { RouterModule } from '@angular/router';
 import { RoleGuard } from '../../guards/role.guard';
 import { SharedModule } from '../shared/shared.module';
+import { StoreModule } from "@ngrx/store";
 import { SubmissionComponent } from './components/submission/submission.component';
 import { SubmissionUpsertComponent } from './components/submission/submission.upsert/submission.upsert.component';
 import { SubmissionDetailsComponent } from './components/submission/submission-details/submission.details.component';
@@ -160,7 +161,9 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
     ReactiveFormsModule,
     SecureRoutes,
     SharedModule,
-    TagInputModule
+    TagInputModule,
+    StoreModule.forRoot({}),
+    StoreModule.forFeature('message', messageReducer)
   ],
   declarations: [
     ConferenceComponent,

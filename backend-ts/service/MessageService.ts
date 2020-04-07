@@ -38,12 +38,13 @@ export class MessageService {
     const grouped = this.utilsService.groupBy('to')(messages.map(m => new MessageDto(m.to === userId ? m.userId : m.to, m.message, m.creationDate, m.userId !== userId, m.isRead)));
     console.log(grouped);
 
-    let users: any[] = [];
-    if (Array.from(mess.keys()).length > 0) {
-      users = await this.userRepository.findUsersByIds(Array.from(mess.keys()));
-    }
+    // let users: any[] = [];
+    // if (Array.from(mess.keys()).length > 0) {
+    //   users = await this.userRepository.findUsersByIds(Array.from(mess.keys()));
+    // }
+    const users = await this.userRepository.findUsers();
 
-    return new MessagePreload(grouped, users.map(u => new AuthorDto(u)));
+    return new MessagePreload(grouped, users.filter(u => u.id !== userId).map(u => new AuthorDto(u)));
   }
 
   addMessage(userId: number, sendMessageCommand: SendMessageCommand): Promise<Message> {

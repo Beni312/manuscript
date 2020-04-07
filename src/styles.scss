@@ -13,6 +13,7 @@
 $my-custom-primary: mat-palette($mat-grey, 700, 400);
 $my-custom-accent: mat-palette($mat-green, 100, 500, A100);
 $my-custom-warn: mat-palette($mat-lime);
+$custom-border-color: white;
 
 //$my-custom-theme: mat-light-theme($my-custom-primary, $my-custom-accent, $my-custom-warn);
 $my-custom-theme: mat-dark-theme($my-custom-primary, $my-custom-accent);
@@ -21,4 +22,31 @@ $my-custom-theme: mat-dark-theme($my-custom-primary, $my-custom-accent);
 
 .mat-form-field-appearance-fill .mat-form-field-flex {
   background-color: unset;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+}
+
+.mat-row:hover {
+  background-color: grey !important;
+}
+
+//mat-table tr:hover{
+//  background-color: grey !important;
+//}
+
+//.mat-row:hover mat-cell {
+//  background: #165ba8;
+//}
+
+.mat-row.expanded {
+  background-color: #727272 !important;
 }

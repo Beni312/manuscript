@@ -13,10 +13,11 @@ export class SocketService {
 
   private static connectedUsers: Map<number, ConnectedSocketUser> = new Map<number, ConnectedSocketUser>();
 
-  private io: SocketIO.Server;
+  private static io: SocketIO.Server;
 
   init(io: SocketIO.Server) {
-    this.io = io;
+    SocketService.io = io;
+    // console.log(SocketService.io);
   }
 
   public connectUser(socketId: string, userInfo: UserInfo) {
@@ -32,21 +33,21 @@ export class SocketService {
     if (!connectedUser) {
       return;
     }
-    this.io.to(connectedUser.socketId).emit('message', message);
+    SocketService.io.to(connectedUser.socketId).emit('message', message);
   }
 
   sendMessageBySocketId(socketId: string, message: any) {
-    this.io.to(socketId).emit('message', message);
+    SocketService.io.to(socketId).emit('message', message);
   }
 
   sendSignSeenMessages(socketId: string, message: any) {
-    this.io.to(socketId).emit('signSeenMessage', message);
+    SocketService.io.to(socketId).emit('signSeenMessage', message);
   }
 
   sendSignSeenMessagesByUserId(userId: number, message: any) {
     const connectedUser = this.getUserIfConnected(userId);
     if (connectedUser) {
-      this.io.to(connectedUser.socketId).emit('signSeenMessage', message);
+      SocketService.io.to(connectedUser.socketId).emit('signSeenMessage', message);
     }
   }
 
@@ -68,6 +69,6 @@ export class SocketService {
   }
 
   sendError(socketId: string, message: any) {
-    this.io.to(socketId).emit('error', message);
+    SocketService.io.to(socketId).emit('error', message);
   }
 }
