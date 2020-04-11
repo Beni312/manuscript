@@ -60,12 +60,15 @@ export class UserRepository extends Repository<User> {
     });
   }
 
+  changeUserStatusById(userId: number, statusId: number) {
+    return this.updateByPk(userId, {
+      statusId: statusId
+    })
+  }
+
   findUsersByIds(userIds: number[]): Promise<User[]> {
     return this.findAll({
       where: {
-        // [Op.in]: {
-        //   id: userIds
-        // }
         id: {
           [Op.in]: userIds
         }

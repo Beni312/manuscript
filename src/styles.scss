@@ -18,6 +18,11 @@ $custom-border-color: white;
 $custom-ul-li-background-color: #595959f3;
 $custom-ul-li-background-color-on-hover: #3f3f3f;
 $custom-not-seen-message-color: #5e5e5e;
+$custom-received-message-background-color: #ebebeb;
+$custom-received-message-color: #646464;
+$custom-sent-message-background-color: #05728f;
+$custom-sent-message-color: #fff;
+$custom-message-sent-date-color: #747474;
 
 //$my-custom-theme: mat-light-theme($my-custom-primary, $my-custom-accent, $my-custom-warn);
 $my-custom-theme: mat-dark-theme($my-custom-primary, $my-custom-accent);

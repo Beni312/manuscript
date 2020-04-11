@@ -1,7 +1,10 @@
-import { BaseHttpController, controller, httpPost, interfaces, principal } from 'inversify-express-utils';
 import { inject } from 'inversify';
 import { isAuthenticated } from '../decorator/IsAuthenticated';
-import { Principal } from '../model/Principal';
+import { validateBody } from '../decorator/ValidateBody';
+import { AddUserCommand } from '../model/command/AddUserCommand';
+import { BaseHttpController, controller, httpPost, interfaces, requestBody } from 'inversify-express-utils';
+import { ChangePasswordCommand } from '../model/command/ChangePasswordCommand';
+import { ChangeUserStatusCommand } from '../model/command/ChangeUserStatusCommand';
 import { UserManagementService } from '../service/UserManagementService';
 import { UserManagementDto } from '../model/dto/UserManagementDto';
 
@@ -13,7 +16,30 @@ export class UserManagementController extends BaseHttpController implements inte
 
   @isAuthenticated('ADMIN')
   @httpPost('/get-users')
-  async getUsers(@principal() userPrincipal: Principal): Promise<UserManagementDto[]> {
+  async getUsers(): Promise<UserManagementDto[]> {
     return await this.userManagementService.getUsers();
   }
+
+  @isAuthenticated('ADMIN')
+  @httpPost('add-user')
+  @validateBody(AddUserCommand)
+  async addUser() {
+
+  }
+
+  @isAuthenticated('ADMIN')
+  @httpPost('change-user-password')
+  @validateBody(ChangePasswordCommand)
+  async changeUserPassword() {
+
+  }
+
+  @isAuthenticated('ADMIN')
+  @httpPost('change-user-status')
+  @validateBody(ChangeUserStatusCommand)
+  async changeUserStatus(@requestBody() changeUserStatusCommand: ChangeUserStatusCommand) {
+    await this.userManagementService.changeUserStatus(changeUserStatusCommand.userId, changeUserStatusCommand.statusId);
+  }
+
+
 }

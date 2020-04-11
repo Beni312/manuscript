@@ -41,5 +41,4 @@ export function messageReducer(state: MessageState = initialState, action: Messa
         users: action.payload.users
       }
   }
-
 }

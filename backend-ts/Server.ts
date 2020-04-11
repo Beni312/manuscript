@@ -48,6 +48,7 @@ import { UtilsService } from './service/UtilsService';
 import { SocketServer } from "./SocketServer";
 import { SocketService } from "./service/SocketService";
 import { SocketController } from "./controller/SocketController";
+import { UserStatusRepository } from './repository/UserStatusRepository';
 
 export class Server {
 
@@ -100,6 +101,7 @@ export class Server {
     container.bind<UserRepository>(UserRepository.name).to(UserRepository);
     container.bind<ConferenceService>(ConferenceService.name).to(ConferenceService);
     container.bind<ConferenceRepository>(ConferenceRepository.name).to(ConferenceRepository);
+    container.bind<UserStatusRepository>(UserStatusRepository.name).to(UserStatusRepository);
 
     container.bind<AuthProvider>(AuthProvider.name).to(AuthProvider);
 

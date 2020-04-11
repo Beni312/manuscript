@@ -8,4 +8,7 @@ export class PasswordRepository extends Repository<Password> {
   constructor() {
     super(Password);
   }
+
+  changeUserPassword() {
+  }
 }

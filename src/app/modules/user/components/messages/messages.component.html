@@ -1,8 +1,3 @@
-<!--<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">-->
-<!--<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>-->
-<!--<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
-<!--<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" rel="stylesheet"-->
-
 <div class="container messagesContainer">
   <h3 class=" text-center">Messaging</h3>
   <div class="messaging">
@@ -19,10 +14,10 @@
                 type="text"
                 placeholder="Search author"
                 aria-label="Number"
-                [formControl]="myControl"
+                [formControl]="searchAuthor"
                 matInput
                 [matAutocomplete]="auto">
-              <mat-autocomplete class="userSelect" #auto="matAutocomplete" (optionSelected)="changeUser($event)">
+              <mat-autocomplete class="userSelect" #auto="matAutocomplete" (optionSelected)="changeUserInputHandler($event)">
                 <mat-option class="userSelectOption" *ngFor="let option of filteredOptions | async"
                             [value]="getFullName(option.firstName, option.lastName)" [id]="option.id.toString()">
                   {{getFullName(option.firstName, option.lastName)}}
@@ -33,7 +28,7 @@
           </div>
         </div>
         <div class="inbox_chat">
-          <div [ngClass]="getUserMessageStyle(userId)" *ngFor="let userId of getUsersFromMessages()" (click)="changeUser2(userId)">
+          <div [ngClass]="getUserMessageStyle(userId)" *ngFor="let userId of getUsersFromMessages()" (click)="changeUser(userId)">
             <div class="chat_people">
               <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
               <div class="chat_ib">
@@ -52,12 +47,12 @@
             <div class="received_msg mt-1 mb-1 overflow-hidden" *ngIf="message.incoming">
               <div class="received_withd_msg float-left">
                 <p class="chat_message">{{message.message}}</p>
-                <span class="time_date">{{message.sentDate | date:'dd MMM - HH:mm:ss'}}</span></div>
+                <span class="time_date text-left">{{message.sentDate | date:'dd MMM - HH:mm:ss'}}</span></div>
             </div>
             <div class="outgoing_msg mt-1 mb-1 overflow-hidden" *ngIf="!message.incoming">
-              <div class="sent_msg float-right">
+              <div class="sent_msg float-right mr-1">
                 <p class="chat_message">{{message.message}}</p>
-                <span class="time_date">{{message.sentDate | date:'dd MMM - HH:mm:ss'}}</span> </div>
+                <span class="time_date text-right">{{message.sentDate | date:'dd MMM - HH:mm:ss'}}</span> </div>
             </div>
           </div>
         </div>

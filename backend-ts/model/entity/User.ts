@@ -38,7 +38,7 @@ export class User extends BaseModel<User> {
     type: DataType.DATE,
     field: 'birth_date'
   })
-  birthDate: string;
+  birthDate: Date;
 
   @ForeignKey(() => UserStatus)
   @Column({
