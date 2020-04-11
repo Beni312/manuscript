@@ -18,7 +18,7 @@
     <div *ngFor="let item of selected" class="item">
       <div>
         <a (click)="remove(item)"><i class="material-icons">delete</i></a>
-        <span>{{ getDisplayProperty(item) }}</span>
+        <span class="displayedProperty">{{ getDisplayProperty(item) }}</span>
       </div>
     </div>
   </div>

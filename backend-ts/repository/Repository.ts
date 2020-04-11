@@ -100,7 +100,7 @@ export abstract class Repository<T extends Model> {
     }
   }
 
-  async create(values): Promise<T> {
+  async create(values: Partial<T>): Promise<T> {
     return this.model.create<T>(values);
   }
 

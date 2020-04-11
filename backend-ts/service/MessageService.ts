@@ -34,14 +34,9 @@ export class MessageService {
         mess.set(to, new Array<MessageDto>(messageDto));
       }
     });
-    // const groupBy
-    const grouped = this.utilsService.groupBy('to')(messages.map(m => new MessageDto(m.to === userId ? m.userId : m.to, m.message, m.creationDate, m.userId !== userId, m.isRead)));
-    console.log(grouped);
 
-    // let users: any[] = [];
-    // if (Array.from(mess.keys()).length > 0) {
-    //   users = await this.userRepository.findUsersByIds(Array.from(mess.keys()));
-    // }
+    const grouped = this.utilsService.groupBy('to')(messages.map(m => new MessageDto(m.to === userId ? m.userId : m.to, m.message, m.creationDate, m.userId !== userId, m.isRead)));
+
     const users = await this.userRepository.findUsers();
 
     return new MessagePreload(grouped, users.filter(u => u.id !== userId).map(u => new AuthorDto(u)));
@@ -52,7 +47,7 @@ export class MessageService {
   }
 
   signSeenMessage(userId: number, to: number) {
-    return this.messageRepository.signMessages(userId, to);
+    return this.messageRepository.signMessages(to, userId);
   }
 
 }

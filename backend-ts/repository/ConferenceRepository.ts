@@ -41,4 +41,14 @@ export class ConferenceRepository extends Repository<Conference> {
       ]
     });
   }
+
+  async createConference(submitterId: number, title: string, description: string, academicDisciplines: AcademicDiscipline[]): Promise<Conference> {
+    const conf = await this.create({
+      submitterId: submitterId,
+      title: title,
+      description: description
+    });
+    await conf.setAcademicDisciplines(academicDisciplines);
+    return conf.save();
+  }
 }

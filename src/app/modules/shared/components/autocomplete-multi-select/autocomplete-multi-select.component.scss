@@ -1,7 +1,10 @@
+@import "../../../../../styles";
+
 .selected {
   overflow-y: scroll;
   font-size: medium;
   margin-left: 2px;
+  background-color: unset;
 }
 
 .selected a {
@@ -28,13 +31,13 @@ ul {
 }
 
 ul li {
-  background-color: #fff;
+  background-color: $custom-ul-li-background-color;
   cursor: pointer;
   padding: 14px 4px 14px 5px;
 }
 
 li:hover {
-  background-color: #f1f1f1 !important;
+  background-color: $custom-ul-li-background-color-on-hover !important;
 }
 
 .item {
@@ -66,4 +69,8 @@ a:focus {
 
 mat-form-field {
   width: 100%;
+}
+
+.displayedProperty {
+  color: $my-custom-font-color;
 }

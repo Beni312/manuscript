@@ -7,7 +7,7 @@ export class ChangePasswordCommand {
   @ValidateNested({ each: true })
   @Type(() => PasswordDto)
   password: PasswordDto;
-  @Length(6, 200)
+  @Length(4, 200)
   oldPassword: string;
 
 }

@@ -1,14 +1,16 @@
 import { map, startWith } from "rxjs/operators";
 import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { getMessageState } from "../../../../store/message/MessageSelector";
 import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Author } from '../../../../models/author';
 import { ChatService } from '../../../../services/chat.service';
 import { FormControl } from "@angular/forms";
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { Message } from "../../../../models/message";
 import { MessageState } from "../../../../store/message/MessageReducer";
-import { Store } from "@ngrx/store";
-import { getMessageState } from "../../../../store/message/MessageSelector";
 import { Observable } from "rxjs";
+import { Store } from "@ngrx/store";
+import { SignMessageAsSeen } from '../../../../store/message/MessageActions';
 import { SocketService } from "../../../../services/socket.service";
 
 // import { MAT_DIALOG_DATA } from '@angular/material';
@@ -106,16 +108,44 @@ export class MessagesComponent implements OnInit {
     // });
   }
 
-  changeUser(userId: number) {
+  changeUser(event: MatAutocompleteSelectedEvent) {
+    this.changeUser2(Number(event.option.id));
+  }
+
+  changeUser2(userId: number) {
+    // console.log(event);
     this.selectedAuthor = userId;
-    this.messages = this.messagePreload.messages[userId];
+    this.messages = this.messagePreload.messages[this.selectedAuthor];
     if (!this.messages) {
       this.messages = [];
     }
-    // console.log(this.messagePreload);
-    // console.log(userId);
+
+    const messagesToUser: Array<Message> = this.messagePreload.messages[userId];
+    if (messagesToUser.filter(m => m.incoming && !m.seen).length > 0) {
+      this.socketService.markUserMessagesAsSeen({to: userId});
+      this.store.dispatch(new SignMessageAsSeen(userId));
+      // this.messagePreload.messages[userId] = [];
+      // messagesToUser.map(m => {
+      //   m.seen = true;
+      //   return m;
+      // })
+    }
+
     this.scrollDown();
   }
+
+  // changeUser2() {
+  //   // console.log(userId);
+  //   // this.selectedAuthor = userId;
+  //   console.log(this.selectedAuthor);
+  //   this.messages = this.messagePreload.messages[this.selectedAuthor];
+  //   if (!this.messages) {
+  //     this.messages = [];
+  //   }
+  //   // console.log(this.messagePreload);
+  //   // console.log(userId);
+  //   this.scrollDown();
+  // }
 
   scrollDown() {
     setTimeout(() => {
@@ -129,7 +159,12 @@ export class MessagesComponent implements OnInit {
   }
 
   private _filter(value: string): Author[] {
-    if (value.length < 3) {
+    // console.log(typeof value);
+    // console.log(value.constructor.name);
+    // if (typeof value === 'object') {
+    //   return [value];
+    // }
+    if (value.length < 2) {
       return [];
     }
     return this.messagePreload.users.filter(user => this.getFullName(user.firstName, user.lastName).toLowerCase().includes(value.toLowerCase()));
@@ -149,11 +184,29 @@ export class MessagesComponent implements OnInit {
     return messagesForUser[messagesForUser.length - 1].sentDate;
   }
 
+  getLatestMessageByUserId(userId: number) {
+    const messagesForUser: Message[] = this.messagePreload.messages[userId];
+    let message = messagesForUser[messagesForUser.length - 1].message;
+    if (message.length > 30) {
+      message = message.substring(0, 27) + '...';
+    }
+    return message;
+  }
+
   getUserById(userId: number) {
     return this.messagePreload.users.find(u => u.id === userId);
   }
 
   getUsersFromMessages(): number[] {
     return Object.keys(this.messagePreload.messages).map(item => Number(item));
+  }
+
+  getUserMessageStyle(userId: number) {
+    const mess: Array<Message> = this.messagePreload.messages[userId];
+    console.log(mess);
+    if (mess.filter(m => m.incoming && !m.seen).length > 0) {
+      return 'chat_list notSeenMessage';
+    }
+    return 'chat_list';
   }
 }

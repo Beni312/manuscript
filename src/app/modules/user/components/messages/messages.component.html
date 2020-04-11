@@ -7,38 +7,38 @@
   <h3 class=" text-center">Messaging</h3>
   <div class="messaging">
     <div class="inbox_msg d-flex">
-      <div class="inbox_people col-4">
-        <div class="headind_srch">
+      <div class="inbox_people col-4 pl-0 pr-0">
+        <div class="headind_srch d-flex align-items-center">
           <div class="recent_heading">
-            <h4>Recent</h4>
+            <h6 class="mb-0 ml-2">Recent</h6>
           </div>
           <div class="srch_bar">
             <div class="stylish-input-group">
-
-
-                <input type="text"
-                       placeholder="Search author"
-                       aria-label="Number"
-                       [formControl]="myControl"
-                       matInput
-                       [matAutocomplete]="auto">
-                <mat-autocomplete #auto="matAutocomplete">
-                  <mat-option (onSelectionChange)="changeUser(option.id)" *ngFor="let option of filteredOptions | async" [value]="getFullName(option.firstName, option.lastName)">
-                    {{getFullName(option.firstName, option.lastName)}}
-                  </mat-option>
-                </mat-autocomplete>
+              <input
+                class="w-100 searchAuthorInput pl-1"
+                type="text"
+                placeholder="Search author"
+                aria-label="Number"
+                [formControl]="myControl"
+                matInput
+                [matAutocomplete]="auto">
+              <mat-autocomplete class="userSelect" #auto="matAutocomplete" (optionSelected)="changeUser($event)">
+                <mat-option class="userSelectOption" *ngFor="let option of filteredOptions | async"
+                            [value]="getFullName(option.firstName, option.lastName)" [id]="option.id.toString()">
+                  {{getFullName(option.firstName, option.lastName)}}
+                </mat-option>
+              </mat-autocomplete>
 
             </div>
           </div>
         </div>
         <div class="inbox_chat">
-          <div class="chat_list" *ngFor="let userId of getUsersFromMessages()" (click)="changeUser(userId)">
+          <div [ngClass]="getUserMessageStyle(userId)" *ngFor="let userId of getUsersFromMessages()" (click)="changeUser2(userId)">
             <div class="chat_people">
               <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
               <div class="chat_ib">
                 <h5>{{getFullNameByUserId(userId)}} <span class="chat_date">{{getLatestMessageDateByUserId(userId) | date:'dd MMM'}}</span></h5>
-                <p>Test, which is a new approach to have all solutions
-                  astrology under one roof.</p>
+                <p>{{getLatestMessageByUserId(userId)}}</p>
               </div>
             </div>
           </div>
@@ -63,7 +63,7 @@
         </div>
         <div class="type_msg" *ngIf="selectedAuthor">
           <div class="input_msg_write">
-            <input type="text" class="write_msg" placeholder="Type a message" [(ngModel)]="actualMessage" (keyup.enter)="sendMessage()"/>
+            <input type="text" class="write_msg" placeholder="Type a message" [(ngModel)]="actualMessage" (keyup.enter)="sendMessage()" maxlength="200"/>
             <button mat-icon-button class="msg_send_btn" type="button">
               <mat-icon (click)="sendMessage()">send</mat-icon>
             </button>

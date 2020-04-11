@@ -2,6 +2,7 @@ import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasMany, Table 
 import { AcademicDiscipline } from './AcademicDiscipline';
 import { BaseModel } from './BaseModel';
 import { ConferenceAcademicDiscipline } from './ConferenceAcademicDiscipline';
+import { HasManySetAssociationsMixin } from 'sequelize';
 import { Submission } from './Submission';
 import { User } from './User';
 
@@ -31,4 +32,6 @@ export class Conference extends BaseModel<Conference> {
 
   @BelongsToMany(() => AcademicDiscipline, () => ConferenceAcademicDiscipline)
   academicDisciplines: AcademicDiscipline[];
+
+  public setAcademicDisciplines!: HasManySetAssociationsMixin<AcademicDiscipline, number>;
 }

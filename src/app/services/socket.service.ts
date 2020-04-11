@@ -30,6 +30,10 @@ export class SocketService {
     this.socket.emit('sendMessage', message, this.getOptions());
   }
 
+  public markUserMessagesAsSeen(message: any) {
+    this.socket.emit('signSeenMessage', message, this.getOptions());
+  }
+
   public send(endpoint: string, message: any): void {
     this.socket.emit(endpoint, message, this.getOptions());
   }

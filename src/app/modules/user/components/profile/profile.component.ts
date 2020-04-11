@@ -115,7 +115,7 @@ export class ProfileComponent extends PermissionHandler implements OnInit, After
 
   resetForm() {
     this.profileService.preload().subscribe(response => {
-      this.personalDataForm.reset(response);
+      this.personalDataForm.reset(response.user);
     });
   }
 

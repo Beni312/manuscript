@@ -77,9 +77,11 @@ export class SubmissionComponent extends PermissionHandler implements AfterViewI
   }
 
   filter(conferenceId: number) {
-    this.submissionService.getFilteredByConference(conferenceId).subscribe(submissions => {
-      this.dataSource.data = submissions;
-    });
+    if (conferenceId === -1) {
+      this.dataSource.data = this.preload.submissions;
+    } else {
+      this.dataSource.data = this.preload.submissions.filter((s) => s.conferenceId === conferenceId);
+    }
   }
 
   create() {

@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { SubmissionPreloadResponse } from '../models/submission.preload.response';
-import { Submission } from '../models/submission';
 import { UpsertSubmissionPreload } from '../modules/user/components/submission/submission.upsert/submission.upsert.component';
 
 @Injectable()
@@ -14,10 +13,6 @@ export class SubmissionService {
 
   preload(): Observable<SubmissionPreloadResponse> {
     return this.httpClient.post<SubmissionPreloadResponse>('/submission/preload', []);
-  }
-
-  getFilteredByConference(conferenceId: number): Observable<Submission[]> {
-    return this.httpClient.post<Submission[]>('/submission/conference', {conferenceId: conferenceId});
   }
 
   remove(id: string) {

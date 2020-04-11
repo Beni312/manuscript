@@ -1,4 +1,5 @@
 @import "../../../../../styles";
+
 .container {
   max-width: 1170px;
   margin: auto;
@@ -9,10 +10,8 @@ img {
 }
 
 .inbox_people {
-  //background: #f8f8f8 none repeat scroll 0 0;
   float: left;
   overflow: hidden;
-  //width: 40%;
   border-right: 1px solid $custom-border-color;
 }
 
@@ -28,18 +27,15 @@ img {
 
 
 .recent_heading {
-  float: left;
-  width: 40%;
+  width: 35%;
 }
 
 .srch_bar {
   display: inline-block;
-  text-align: right;
-  width: 60%;
 }
 
 .headind_srch {
-  padding: 10px 29px 10px 20px;
+  padding: 10px 0 8px 0;
   overflow: hidden;
   border-bottom: 1px solid $custom-border-color;
 }
@@ -53,8 +49,6 @@ img {
 .srch_bar input {
   border: 1px solid $custom-border-color;
   border-width: 0 0 1px 0;
-  width: 80%;
-  padding: 2px 0 4px 6px;
   background: none;
 }
 
@@ -62,7 +56,6 @@ img {
   background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
   border: medium none;
   padding: 0;
-  //color: #707070;
   font-size: 18px;
 }
 
@@ -72,7 +65,6 @@ img {
 
 .chat_ib h5 {
   font-size: 15px;
-  //color: #464646;
   margin: 0 0 8px 0;
 }
 
@@ -83,6 +75,7 @@ img {
 
 .chat_ib p {
   font-size: 14px;
+  overflow-wrap: break-word;
   color: #989898;
   margin: auto
 }
@@ -131,7 +124,6 @@ img {
   display: inline-block;
   padding: 0 0 0 10px;
   vertical-align: top;
-  //width: 92%;
 }
 
 .received_withd_msg p {
@@ -141,7 +133,6 @@ img {
   font-size: 14px;
   margin: 0;
   padding: 5px 10px 5px 12px;
-  //width: 100%;
 }
 
 .time_date {
@@ -151,11 +142,9 @@ img {
   margin: 8px 0 0;
 }
 
-//.received_withd_msg { width: 57%;}
 .mesgs {
   float: left;
   padding: 30px 15px 0 25px;
-  //width: 60%;
 }
 
 .sent_msg p {
@@ -165,21 +154,15 @@ img {
   margin: 0;
   color: #fff;
   padding: 5px 10px 5px 12px;
-  //width: 100%;
 }
 
 .sent_msg {
   margin-right: 8px;
 }
-//.outgoing_msg{ overflow:hidden; margin:26px 0 26px;}
-//.sent_msg {
-//  float: right;
-//  width: 46%;
-//}
+
 .input_msg_write input {
   background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
   border: medium none;
-  //color: #4c4c4c;
   color: white;
   font-size: 15px;
   min-height: 48px;
@@ -222,4 +205,21 @@ img {
 
 .messagesContainer  {
   width: 950px;
+}
+
+.userSelect mat-option {
+  padding: 0 5px !important;
+}
+
+.userSelectOption {
+  padding: 0 5px !important;
+}
+
+.searchAuthorInput {
+  color: $my-custom-font-color;
+  outline: none;
+}
+
+.notSeenMessage {
+  background-color: $custom-not-seen-message-color;
 }
