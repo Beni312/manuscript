@@ -1,195 +1,175 @@
 @import "../../../../../styles";
 
+.messagesContainer {
+  width: 950px;
+  .messaging {
+    padding: 0 0 50px 0;
+    .inbox_msg {
+      border: 1px solid $custom-border-color;
+      .inbox_people {
+        border-right: 1px solid $custom-border-color;
+        .headind_srch {
+          padding: 10px 0 8px 0;
+          border-bottom: 1px solid $custom-border-color;
+          .recent_heading {
+            width: 35%;
+          }
+          .srch_bar {
+            input {
+              border: 1px solid $custom-border-color;
+              border-width: 0 0 1px 0;
+              background: none;
+            }
+            .searchAuthorInput {
+              color: $my-custom-font-color;
+              outline: none;
+            }
+            .userSelect {
+              mat-option {
+                padding: 0 5px !important;
+              }
+              .userSelectOption {
+                padding: 0 5px !important;
+              }
+            }
+          }
+        }
+        .inbox_chat {
+          height: 550px;
+          overflow-y: scroll;
+          .chat_list {
+            border-bottom: 1px solid $custom-border-color;
+            margin: 0;
+            padding: 18px 16px 10px;
+            cursor: pointer;
+          }
+          .chat_people {
+            overflow: hidden;
+            clear: both;
+            .chat_img {
+              float: left;
+              width: 11%;
+            }
+            .chat_ib {
+              float: left;
+              padding: 0 0 0 15px;
+              width: 88%;
+              h5 {
+                font-size: 15px;
+                margin: 0 0 8px 0;
+                span {
+                  font-size: 13px;
+                  float: right;
+                }
+              }
+              p {
+                font-size: 14px;
+                overflow-wrap: anywhere;
+                color: #989898;
+                margin: auto
+              }
+            }
+          }
+        }
+      }
+      .mesgs {
+        padding: 30px 15px 0 25px;
+        .msg_history {
+          height: 516px;
+          overflow-y: auto;
+          .incoming_msg_img {
+            width: 6%;
+          }
+          .received_msg {
+            max-width: 75%;
+            padding: 0 0 0 10px;
+            .received_withd_msg {
+              p {
+                background: $custom-received-message-background-color none repeat scroll 0 0;
+                border-radius: 3px;
+                color: $custom-received-message-color;
+                font-size: 14px;
+                margin: 0;
+                padding: 5px 10px 5px 12px;
+              }
+              .chat_message {
+                overflow-wrap: anywhere;
+              }
+              .time_date {
+                color: $custom-message-sent-date-color;
+                display: block;
+                font-size: 12px;
+                margin: 8px 0 0;
+              }
+            }
+
+          }
+          .outgoing_msg {
+            .sent_msg {
+              max-width: 75%;
+              p {
+                background: $custom-sent-message-background-color none repeat scroll 0 0;
+                border-radius: 3px;
+                font-size: 14px;
+                margin: 0;
+                color: $custom-sent-message-color;
+                padding: 5px 10px 5px 12px;
+                overflow-wrap: anywhere;
+              }
+              .chat_message {
+                overflow-wrap: anywhere;
+              }
+              .time_date {
+                color: $custom-message-sent-date-color;
+                display: block;
+                font-size: 12px;
+                margin: 8px 0 0;
+              }
+            }
+          }
+        }
+        .type_msg {
+          border-top: 1px solid #c4c4c4;
+          position: relative;
+          .input_msg_write {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            input {
+              margin-left: 5px;
+              outline: none;
+            }
+            .write_msg {
+              width: 90%;
+              background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+              border: medium none;
+              color: white;
+              font-size: 15px;
+              min-height: 48px;
+              .msg_send_btn {
+                background: $custom-sent-message-background-color none repeat scroll 0 0;
+                border-radius: 50%;
+                height: 33px;
+                position: absolute;
+                right: 0;
+                top: 11px;
+                width: 33px;
+                mat-icon {
+                  position: absolute;
+                  left: 21%;
+                  top: 5px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 img {
   max-width: 100%;
-}
-
-.inbox_people {
-  border-right: 1px solid $custom-border-color;
-}
-
-.inbox_msg {
-  border: 1px solid $custom-border-color;
-}
-
-.top_spac {
-  margin: 20px 0 0;
-}
-
-.recent_heading {
-  width: 35%;
-}
-
-.headind_srch {
-  padding: 10px 0 8px 0;
-  border-bottom: 1px solid $custom-border-color;
-}
-
-.srch_bar input {
-  border: 1px solid $custom-border-color;
-  border-width: 0 0 1px 0;
-  background: none;
-}
-
-.srch_bar .input-group-addon button {
-  background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
-  border: medium none;
-  padding: 0;
-  font-size: 18px;
-}
-
-.srch_bar .input-group-addon {
-  margin: 0 0 0 -27px;
-}
-
-.chat_ib h5 {
-  font-size: 15px;
-  margin: 0 0 8px 0;
-}
-
-.chat_ib h5 span {
-  font-size: 13px;
-  float: right;
-}
-
-.chat_ib p {
-  font-size: 14px;
-  overflow-wrap: anywhere;
-  color: #989898;
-  margin: auto
-}
-
-.chat_img {
-  float: left;
-  width: 11%;
-}
-
-.chat_ib {
-  float: left;
-  padding: 0 0 0 15px;
-  width: 88%;
-}
-
-.chat_people {
-  overflow: hidden;
-  clear: both;
-}
-
-.chat_list {
-  border-bottom: 1px solid $custom-border-color;
-  margin: 0;
-  padding: 18px 16px 10px;
-}
-
-.inbox_chat {
-  height: 550px;
-  overflow-y: scroll;
-}
-
-.received_msg, .incoming_msg {
-  display: flex;
-  width: fit-content;
-  max-width: 75%;
-}
-
-.incoming_msg_img {
-  width: 6%;
-}
-
-.received_msg {
-  display: inline-block;
-  padding: 0 0 0 10px;
-  vertical-align: top;
-}
-
-.received_withd_msg p {
-  background: $custom-received-message-background-color none repeat scroll 0 0;
-  border-radius: 3px;
-  color: $custom-received-message-color;
-  font-size: 14px;
-  margin: 0;
-  padding: 5px 10px 5px 12px;
-}
-
-.time_date {
-  color: $custom-message-sent-date-color;
-  display: block;
-  font-size: 12px;
-  margin: 8px 0 0;
-}
-
-.mesgs {
-  padding: 30px 15px 0 25px;
-}
-
-.sent_msg p {
-  background: $custom-sent-message-background-color none repeat scroll 0 0;
-  border-radius: 3px;
-  font-size: 14px;
-  margin: 0;
-  color: $custom-sent-message-color;
-  padding: 5px 10px 5px 12px;
-  overflow-wrap: anywhere;
-}
-
-.sent_msg {
-  max-width: 75%;
-}
-
-.write_msg {
-  width: 90%;
-  background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
-  border: medium none;
-  color: white;
-  font-size: 15px;
-  min-height: 48px;
-}
-
-.type_msg {
-  border-top: 1px solid #c4c4c4;
-  position: relative;
-}
-
-.msg_send_btn {
-  background: $custom-sent-message-background-color none repeat scroll 0 0;
-  border-radius: 50%;
-  height: 33px;
-  position: absolute;
-  right: 0;
-  top: 11px;
-  width: 33px;
-}
-
-.messaging {
-  padding: 0 0 50px 0;
-}
-
-.msg_history {
-  height: 516px;
-  overflow-y: auto;
-}
-
-.msg_send_btn mat-icon {
-  position: absolute;
-  left: 21%;
-  top: 5px;
-}
-
-.messagesContainer  {
-  width: 950px;
-}
-
-.userSelect mat-option {
-  padding: 0 5px !important;
-}
-
-.userSelectOption {
-  padding: 0 5px !important;
-}
-
-.searchAuthorInput {
-  color: $my-custom-font-color;
-  outline: none;
 }
 
 .notSeenMessage {

@@ -4,7 +4,7 @@
       <mat-form-field #field>
         <input (focus)="showDropdown = true;" matInput type="search" placeholder="{{ placeholder }}" [(ngModel)]="query" (keyup)="filter()" autocomplete="off">
         <button mat-button *ngIf="query" matSuffix mat-icon-button aria-label="Clear" (click)="clearSearch()">
-          <mat-icon>close</mat-icon>
+          <mat-icon class="removeInputButton">close</mat-icon>
         </button>
       </mat-form-field>
     </div>

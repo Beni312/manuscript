@@ -2,9 +2,6 @@
 //@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
 @import '~bootstrap/dist/css/bootstrap.min.css';
 @import '~ngx-toastr/toastr.css';
-
-
-
 @import '~@angular/material/theming';
 @include mat-core();
 
@@ -23,6 +20,12 @@ $custom-received-message-color: #646464;
 $custom-sent-message-background-color: #05728f;
 $custom-sent-message-color: #fff;
 $custom-message-sent-date-color: #747474;
+$custom-remove-input-text-button-color: white;
+
+tag-input input {
+  background-color: unset !important;
+  color: $my-custom-font-color !important;
+}
 
 //$my-custom-theme: mat-light-theme($my-custom-primary, $my-custom-accent, $my-custom-warn);
 $my-custom-theme: mat-dark-theme($my-custom-primary, $my-custom-accent);
@@ -42,6 +45,7 @@ $my-custom-theme: mat-dark-theme($my-custom-primary, $my-custom-accent);
 ::-webkit-scrollbar-thumb {
   background-color: darkgrey;
   outline: 1px solid slategrey;
+  border-radius: 4px;
 }
 
 .mat-row:hover {
@@ -58,4 +62,12 @@ $my-custom-theme: mat-dark-theme($my-custom-primary, $my-custom-accent);
 
 .mat-row.expanded {
   background-color: #727272 !important;
+}
+
+* {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }

@@ -63,8 +63,16 @@ a:focus {
   color: #2780e3;
 }
 
+.removeInputButton {
+  color: $custom-remove-input-text-button-color;
+}
+
 .material-icons:hover {
   color: #165ba8;
+}
+
+.removeInputButton:hover {
+  color: $custom-remove-input-text-button-color;
 }
 
 mat-form-field {

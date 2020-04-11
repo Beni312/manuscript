@@ -2,10 +2,10 @@
   <form [formGroup]="submissionCreateForm">
       <div class="row">
         <mat-form-field class="col-12 mb-3">
-          <input matInput type="text" placeholder="Title" formControlName="title">
+          <input autocomplete="off" matInput type="text" placeholder="Title" formControlName="title">
         </mat-form-field>
         <mat-form-field class="col-12 mb-3">
-          <input matInput type="text" placeholder="Manuscript abstract" formControlName="manuscriptAbstract">
+          <input autocomplete="off" matInput type="text" placeholder="Manuscript abstract" formControlName="manuscriptAbstract">
         </mat-form-field>
 
         <mat-form-field class="col-12 mb-3">
@@ -19,7 +19,7 @@
 
       <div class="row">
 
-        <tag-input class="col-12 mb-3" formControlName="keywords" [placeholder]="'+keyword'" [identifyBy]="'keyword'" [displayBy]="'keyword'"></tag-input>
+        <tag-input class="col-12 mb-3 tags" formControlName="keywords" [placeholder]="'+keyword'" [identifyBy]="'keyword'" [displayBy]="'keyword'"></tag-input>
 
         <app-autocomplete-multi-select class="col-12 mb-3"
                                        [items]="preload.academicDisciplines"

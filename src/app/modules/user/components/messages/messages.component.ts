@@ -91,6 +91,9 @@ export class MessagesComponent implements OnInit {
   }
 
   sendMessage() {
+    if (!this.actualMessage || this.actualMessage.length === 0) {
+      return;
+    }
     this.socketService.sendMessage({message: this.actualMessage, to: this.selectedAuthor});
     this.actualMessage = '';
   }
@@ -119,8 +122,8 @@ export class MessagesComponent implements OnInit {
   getLatestMessageByUserId(userId: number) {
     const messagesForUser: Message[] = this.messagePreload.messages[userId];
     let message = messagesForUser[messagesForUser.length - 1].message;
-    if (message.length > 30) {
-      message = message.substring(0, 27) + '...';
+    if (message && message.length > 23) {
+      message = message.substring(0, 20) + '...';
     }
     return message;
   }

@@ -1,7 +1,6 @@
 import { inject } from 'inversify';
 import { isAuthenticated } from '../decorator/IsAuthenticated';
 import { validateBody } from '../decorator/ValidateBody';
-
 import { AcademicDisciplineDto } from '../model/dto/AcademicDisciplineDto';
 import { BasicResponse } from '../model/dto/BasicResponse';
 import { BaseHttpController, controller, httpPost, interfaces, principal, requestBody } from 'inversify-express-utils';
@@ -9,6 +8,7 @@ import { ChangePasswordCommand } from '../model/command/ChangePasswordCommand';
 import { ProfilePreload } from '../model/dto/ProfilePreload';
 import { ProfileService } from '../service/ProfileService';
 import { Principal } from '../model/Principal';
+import { RoleEnum } from '../model/enum/RoleEnum';
 import { SavePersonalDataCommand } from '../model/command/SavePersonalDataCommand';
 import { UpdateAcademicDisciplinesValidator } from '../validator/UpdateAcademicDisciplinesValidator';
 
@@ -44,7 +44,7 @@ export class ProfileController extends BaseHttpController implements interfaces.
       .withSuccessMessage('Your password has changed successfully!');
   }
 
-  @isAuthenticated('AUTHOR')
+  @isAuthenticated(RoleEnum.AUTHOR, RoleEnum.EDITOR, RoleEnum.REVIEWER)
   @httpPost('/update-academic-disciplines', UpdateAcademicDisciplinesValidator.name)
   async updateAcademicDisciplines(@principal() userPrincipal: Principal, @requestBody() academicDisciplines: Array<AcademicDisciplineDto>): Promise<BasicResponse> {
     await this.profileService.updateAcademicDisciplines(userPrincipal.details.id, academicDisciplines);
