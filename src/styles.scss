@@ -70,4 +70,5 @@ $my-custom-theme: mat-dark-theme($my-custom-primary, $my-custom-accent);
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  caret-color: $my-custom-font-color !important;
 }
