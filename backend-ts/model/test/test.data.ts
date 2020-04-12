@@ -15,6 +15,7 @@ import { SubmissionStatus } from '../enum/SubmissionStatus';
 import { SubmissionMessage } from '../entity/SubmissionMessage';
 import { ConferenceAcademicDiscipline } from '../entity/ConferenceAcademicDiscipline';
 import { Message } from '../entity/Message';
+import { Manuscript } from '../entity/Manuscript';
 
 export class TestData {
 
@@ -29,9 +30,9 @@ export class TestData {
     await this.createUser("reviewer", "reviewer@gmail.com", 1, "Mr.", "reviewer", "", "reviewer", null, 4, "reviewer");
     await this.addAcademicDisciplineToUser(2, 3);
     await this.createConference(2, "testConference", "testDescription");
-    await this.createSubmission("testSubmission", "nabzscahduaefhuhefosuhefs", 2, 1, SubmissionStatus.CREATED);
-    await this.createSubmission("testSubmission3", "lorem ipsum", 3, 1, SubmissionStatus.CREATED);
-    await this.createSubmission("testSubmission2", "lorem ipsum", 3, 1, SubmissionStatus.CREATED);
+    const submission = await this.createSubmission("testSubmission", "nabzscahduaefhuhefosuhefs", 2, 1, SubmissionStatus.CREATED);
+    const submission2 = await this.createSubmission("testSubmission3", "lorem ipsum", 3, 1, SubmissionStatus.CREATED);
+    const submission3 = await this.createSubmission("testSubmission2", "lorem ipsum", 3, 1, SubmissionStatus.CREATED);
     await this.createSubmissionMessage("submissionMessage", MessageType.INFO);
 
     await this.createMessage(user1.id, user.id, 'mess', new Date(2020, 1, 13, 13, 14, 20));
@@ -43,6 +44,15 @@ export class TestData {
     await this.createMessage(user.id, user1.id, 'mess', new Date(2020, 1, 13, 13, 14, 50));
     await this.createMessage(user.id, user1.id, 'mess', new Date(2020, 1, 13, 13, 15, 30));
     await this.createMessage(user.id, user2.id, 'mess', new Date(2020, 1, 13, 13, 17, 30));
+
+    this.createManuscript(3, submission3.id, 1, 'test.txt');
+    // this.createManuscript(3, submission2.id, 2, 'test2');
+    // this.createManuscript(3, submission2.id, 3, 'test3');
+    //
+    // this.createManuscript(2, submission.id, 1, 'test');
+    // this.createManuscript(2, submission.id, 2, 'test2');
+    // this.createManuscript(2, submission.id, 3, 'test3');
+    // this.createManuscript(2, submission.id, 4, 'test4');
   }
 
   static async createUser(username, email, statusId, title, firstName, lastName, job, birthDate, roleId, password): Promise<User> {
@@ -71,15 +81,16 @@ export class TestData {
     return user;
   }
 
-  static async createConference(userId, title, description) {
+  static async createConference(userId, title, description): Promise<Conference> {
     const conference = await Conference.create({title: title, description: description, submitterId: userId});
     await ConferenceAcademicDiscipline.create({
       conferenceId: conference.id,
       academicDisciplineId: 2
     });
+    return conference;
   }
 
-  static async createSubmission(title, manuscriptAbstract, userId, conferenceId, status) {
+  static async createSubmission(title, manuscriptAbstract, userId, conferenceId, status): Promise<Submission> {
     const submission = await Submission.create({
       title: title,
       manuscriptAbstract: manuscriptAbstract,
@@ -96,6 +107,8 @@ export class TestData {
     // await AuthorsSubmission.create({submissionId: submission.id, authorId: userId});
     await Keyword.create({submissionId: submission.id, keyword: 'lorem'});
     await Keyword.create({submissionId: submission.id, keyword: 'ipsum'});
+
+    return submission;
   }
 
   static async createSubmissionMessage(message, type) {
@@ -117,6 +130,15 @@ export class TestData {
       message: message,
       creationDate: creationDate,
       isRead: isRead
+    })
+  }
+
+  static createManuscript(userId: number, submissionId: number, version: number, filename: string): Promise<Manuscript> {
+    return Manuscript.create({
+      userId: userId,
+      submissionId: submissionId,
+      version: version,
+      filename: filename
     })
   }
 }

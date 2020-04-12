@@ -1,5 +1,5 @@
 import { AcademicDiscipline, Role, UserStatus } from "../model/index";
-import { academicDisciplineData } from "../resource/academic.discipline.data";
+import { academicDisciplineData } from "../resources/academic.discipline.data";
 import { roles } from "../model/enum/RoleEnum";
 
 export class InitialDatabaseUploadCommandService {

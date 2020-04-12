@@ -1,3 +1,4 @@
+import * as path from 'path';
 import { injectable } from 'inversify';
 
 @injectable()
@@ -9,4 +10,9 @@ export class UtilsService {
       objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
       return objectsByKeyValue;
     }, {});
+
+  getExtension(filename) {
+    var ext = path.extname(filename||'').split('.');
+    return ext[ext.length - 1];
+  }
 }

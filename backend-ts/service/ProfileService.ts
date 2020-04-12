@@ -1,10 +1,11 @@
 import * as bcrypt from 'bcrypt-nodejs';
+import { inject, injectable } from 'inversify';
 import { AcademicDisciplineDto } from '../model/dto/AcademicDisciplineDto';
 import { AuthorsAcademicDiscipline, User } from '../model';
 import { AuthorsAcademicDisciplineRepository } from '../repository/AuthorsAcademicDisciplineRepository';
 import { ChangePasswordCommand } from '../model/command/ChangePasswordCommand';
 import { ChangePasswordError } from '../model/error/ChangePasswordError';
-import { inject, injectable } from 'inversify';
+import { ImageResizer } from './ImageResizer';
 import { PasswordRepository } from '../repository/PasswordRepository';
 import { ProfilePreload } from '../model/dto/ProfilePreload';
 import { SavePersonalDataCommand } from '../model/command/SavePersonalDataCommand';
@@ -21,6 +22,9 @@ export class ProfileService {
 
   @inject(AuthorsAcademicDisciplineRepository.name)
   authorsAcademicDisciplineRepository: AuthorsAcademicDisciplineRepository;
+
+  @inject(ImageResizer.name)
+  imageResizer: ImageResizer;
 
   public async getPreload(userId): Promise<ProfilePreload> {
     return new ProfilePreload(await this.userRepository.findUserProfile(userId));
@@ -83,5 +87,17 @@ export class ProfileService {
         await AuthorsAcademicDiscipline.create({userId: userId, academicDisciplineId: userAcademicDisciplines[i].id});
       }
     }
+  }
+
+  uploadAvatar(userId: number, file: any) {
+    const filename: string = process.env.AVATAR_FOLDER! + userId;
+    this.imageResizer.resizeAvatar(file.buffer, filename)
+      .then(async () => {
+        console.log(filename);
+        console.log('SUCCESS');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 }

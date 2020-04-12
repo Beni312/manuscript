@@ -5,6 +5,8 @@ import * as express from 'express';
 import * as http from 'http';
 import * as passport from 'passport';
 import * as session from 'express-session';
+import { logger } from './service/logger';
+import { errorHandler } from './middleware/ErrorHandler';
 
 import 'reflect-metadata';
 import './controller/AuthenticationController';
@@ -24,13 +26,16 @@ import { AuthProvider } from './service/AuthProvider';
 import { ConferenceRepository } from './repository/ConferenceRepository';
 import { ConferenceService } from './service/ConferenceService';
 import { Container } from 'inversify';
-import { errorHandler } from './middleware/ErrorHandler';
 import { HasPermissionToDeleteSubmissionValidator } from './validator/HasPermissionToDeleteSubmissionValidator';
 import { HasPermissionToSubmitSubmissionValidator } from './validator/HasPermissionToSubmitSubmissionValidator';
+import { ImageResizer } from './service/ImageResizer';
 import { InternalServerError } from './model/error/InternalServerError';
 import { InversifyExpressServer } from 'inversify-express-utils';
 import { KeywordRepository } from './repository/KeywordRepository';
-import { logger } from './service/logger';
+import { ManuscriptService } from './service/ManuscriptService';
+import { ManuscriptRepository } from './repository/ManuscriptRepository';
+import { MessageService } from './service/MessageService';
+import { MessageRepository } from './repository/MessageRepository';
 import { Models } from './model';
 import { PasswordRepository } from './repository/PasswordRepository';
 import { ProfileService } from './service/ProfileService';
@@ -39,15 +44,13 @@ import { RoleRepository } from './repository/RoleRepository';
 import { SubmissionCreateValidator } from './validator/SubmissionCreateValidator';
 import { SubmissionRepository } from './repository/SubmissionRepository';
 import { SubmissionService } from './service/SubmissionService';
+import { SocketController } from "./controller/SocketController";
+import { SocketServer } from "./SocketServer";
+import { SocketService } from "./service/SocketService";
 import { UserManagementService } from './service/UserManagementService';
 import { UserRepository } from './repository/UserRepository';
 import { UpdateAcademicDisciplinesValidator } from './validator/UpdateAcademicDisciplinesValidator';
-import { MessageService } from './service/MessageService';
-import { MessageRepository } from './repository/MessageRepository';
 import { UtilsService } from './service/UtilsService';
-import { SocketServer } from "./SocketServer";
-import { SocketService } from "./service/SocketService";
-import { SocketController } from "./controller/SocketController";
 import { UserStatusRepository } from './repository/UserStatusRepository';
 
 export class Server {
@@ -104,6 +107,10 @@ export class Server {
     container.bind<UserStatusRepository>(UserStatusRepository.name).to(UserStatusRepository);
 
     container.bind<AuthProvider>(AuthProvider.name).to(AuthProvider);
+
+    container.bind<ImageResizer>(ImageResizer.name).to(ImageResizer);
+    container.bind<ManuscriptService>(ManuscriptService.name).to(ManuscriptService);
+    container.bind<ManuscriptRepository>(ManuscriptRepository.name).to(ManuscriptRepository);
 
     container.bind<HasPermissionToDeleteSubmissionValidator>(HasPermissionToDeleteSubmissionValidator.name).to(HasPermissionToDeleteSubmissionValidator);
     container.bind<HasPermissionToSubmitSubmissionValidator>(HasPermissionToSubmitSubmissionValidator.name).to(HasPermissionToSubmitSubmissionValidator);

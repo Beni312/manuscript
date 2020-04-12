@@ -1,12 +1,23 @@
+import * as express from 'express';
 import { inject } from 'inversify';
 import { isAuthenticated } from '../decorator/IsAuthenticated';
 import { validateBody } from '../decorator/ValidateBody';
+import { upload } from '../service/upload';
 import { AuthorDto } from '../model/dto/AuthorDto';
 import { BasicResponse } from '../model/dto/BasicResponse';
-import { BaseHttpController, controller, httpPost, interfaces, principal, requestBody } from 'inversify-express-utils';
+import {
+  BaseHttpController,
+  controller,
+  httpPost,
+  interfaces,
+  principal,
+  request,
+  requestBody
+} from 'inversify-express-utils';
 import { EditSubmissionDto } from '../model/dto/EditSubmissionDto';
 import { HasPermissionToDeleteSubmissionValidator } from '../validator/HasPermissionToDeleteSubmissionValidator';
 import { HasPermissionToSubmitSubmissionValidator } from '../validator/HasPermissionToSubmitSubmissionValidator';
+import { ManuscriptService } from '../service/ManuscriptService';
 import { Principal } from '../model/Principal';
 import { SubmissionCreateCommand } from '../model/command/SubmissionCreateCommand';
 import { SubmissionEvaluateCommand } from '../model/command/SubmissionEvaluateCommand';
@@ -21,6 +32,9 @@ export class SubmissionController extends BaseHttpController implements interfac
 
   @inject(SubmissionService.name)
   private submissionService: SubmissionService;
+
+  @inject(ManuscriptService.name)
+  private manuscriptService: ManuscriptService;
 
   @isAuthenticated()
   @httpPost('/getAuthors')
@@ -83,5 +97,14 @@ export class SubmissionController extends BaseHttpController implements interfac
     await this.submissionService.editSubmission(editSubmissionDto);
     return new BasicResponse()
       .withSuccessMessage('Successfully edited');
+  }
+
+  @isAuthenticated('AUTHOR')
+  @httpPost('/upload-manuscript', upload.single('manuscript'))
+  // @validateBody(UploadManuscriptDocumentToSubmissionCommand)
+  async uploadManuscriptDocument(@request() req: express.Request, @principal() userPrincipal: Principal): Promise<BasicResponse> {
+    await this.manuscriptService.saveAndCreateManuscript(userPrincipal.details.id, req.body.submissionId, req.file);
+    return new BasicResponse()
+      .withSuccessMessage('Manuscript successfully uploaded!')
   }
 }

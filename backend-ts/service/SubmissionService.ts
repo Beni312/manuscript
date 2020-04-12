@@ -1,8 +1,8 @@
+import { inject, injectable } from 'inversify';
 import { AcademicDiscipline, Conference, Keyword, Submission, User } from '../model';
 import { ApplicationService } from './ApplicationService';
 import { AuthorDto } from '../model/dto/AuthorDto';
 import { EditSubmissionDto } from '../model/dto/EditSubmissionDto';
-import { inject, injectable } from 'inversify';
 import { InternalServerError } from '../model/error/InternalServerError';
 import { KeywordRepository } from '../repository/KeywordRepository';
 import { MessageType } from '../model/enum/MessageType';
