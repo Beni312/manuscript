@@ -1,6 +1,8 @@
 import * as path from 'path';
 import { inject, injectable } from 'inversify';
 import { writeFileSync } from 'fs';
+import { Manuscript } from '../model/entity/Manuscript';
+import { ManuscriptDto } from '../model/dto/ManuscriptDto';
 import { ManuscriptRepository } from '../repository/ManuscriptRepository';
 import { UtilsService } from './UtilsService';
 
@@ -40,4 +42,13 @@ export class ManuscriptService {
     })
   }
 
+  async findManuscripts(): Promise<Array<ManuscriptDto>> {
+    const manuscripts: Array<Manuscript> = await this.manuscriptRepository.findManuscripts();
+    return manuscripts.map(m => new ManuscriptDto(m.id, m.submission.title, m.submission.manuscriptAbstract, m.creationDate, m.submissionId))
+  }
+
+  async getManuscriptFilenameById(manuscriptId: number) {
+    const manuscript = await this.manuscriptRepository._findByPk(manuscriptId);
+    return manuscript.filename;
+  }
 }

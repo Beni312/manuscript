@@ -1,4 +1,4 @@
-import { Column, DataType, ForeignKey, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, ForeignKey, Table } from 'sequelize-typescript';
 import { BaseModel } from './BaseModel';
 import { Submission } from './Submission';
 import { User } from './User';
@@ -27,4 +27,10 @@ export class Manuscript extends BaseModel<Manuscript> {
     field: 'user_id'
   })
   userId: number;
+
+  @BelongsTo(() => User)
+  user: User;
+
+  @BelongsTo(() => Submission)
+  submission: Submission;
 }

@@ -1,7 +1,9 @@
 import * as sequelize from 'sequelize';
+import { injectable } from 'inversify';
 import { Repository } from './Repository';
 import { Manuscript } from '../model/entity/Manuscript';
-import { injectable } from 'inversify';
+import { Submission, User } from '../model';
+import { SubmissionStatus } from '../model/enum/SubmissionStatus';
 
 @injectable()
 export class ManuscriptRepository extends Repository<Manuscript> {
@@ -27,5 +29,21 @@ export class ManuscriptRepository extends Repository<Manuscript> {
     });
 
     return value.dataValues.max;
+  }
+
+  findManuscripts(): Promise<Array<Manuscript>> {
+    return this.findAll({
+      include: [
+        {
+          model: Submission,
+          where: {
+            status: SubmissionStatus.ACCEPTED
+          }
+        },
+        {
+          model: User
+        }
+      ]
+    })
   }
 }
