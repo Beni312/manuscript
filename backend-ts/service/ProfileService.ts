@@ -1,14 +1,17 @@
 import * as bcrypt from 'bcrypt-nodejs';
 import { inject, injectable } from 'inversify';
+import { logger } from './logger';
 import { AcademicDisciplineDto } from '../model/dto/AcademicDisciplineDto';
 import { AuthorsAcademicDiscipline, User } from '../model';
 import { AuthorsAcademicDisciplineRepository } from '../repository/AuthorsAcademicDisciplineRepository';
 import { ChangePasswordCommand } from '../model/command/ChangePasswordCommand';
 import { ChangePasswordError } from '../model/error/ChangePasswordError';
 import { ImageResizer } from './ImageResizer';
+import { InternalServerError } from '../model/error/InternalServerError';
 import { PasswordRepository } from '../repository/PasswordRepository';
 import { ProfilePreload } from '../model/dto/ProfilePreload';
 import { SavePersonalDataCommand } from '../model/command/SavePersonalDataCommand';
+import { UserInfo } from '../model/dto/UserInfo';
 import { UserRepository } from '../repository/UserRepository';
 
 @injectable()
@@ -89,15 +92,16 @@ export class ProfileService {
     }
   }
 
-  uploadAvatar(userId: number, file: any) {
-    const filename: string = process.env.AVATAR_FOLDER! + userId;
-    this.imageResizer.resizeAvatar(file.buffer, filename)
-      .then(async () => {
-        console.log(filename);
-        console.log('SUCCESS');
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  async uploadAvatar(user: UserInfo, file: any): Promise<void> {
+    const filenameWithPath: string = process.env.AVATAR_FOLDER! + user.id;
+    try {
+      await this.imageResizer.resizeAvatar(file.buffer, filenameWithPath);
+      if (!user.avatar) {
+        await this.userRepository.updateAvatar(user.id)
+      }
+    } catch(err) {
+      logger.error(err);
+      throw new InternalServerError(err);
+    }
   }
 }

@@ -40,6 +40,9 @@ export class User extends BaseModel<User> {
   })
   birthDate: Date;
 
+  @Column(DataType.BOOLEAN)
+  avatar: boolean;
+
   @ForeignKey(() => UserStatus)
   @Column({
     type: DataType.INTEGER,

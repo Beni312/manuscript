@@ -75,4 +75,10 @@ export class UserRepository extends Repository<User> {
       }
     });
   }
+
+  updateAvatar(userId: number): Promise<User> {
+    return this.updateByPk(userId, {
+      avatar: true
+    });
+  }
 }

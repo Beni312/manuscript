@@ -36,7 +36,7 @@ export class Auth {
           }
         ]
       }).then((user: User) => {
-        done(null, new UserInfo(user.id, user.userAlias.username, user.role.name));
+        done(null, new UserInfo(user.id, user.userAlias.username, user.role.name, user.avatar));
         return null;
       }).catch(err => {
         done(err, {});
@@ -97,7 +97,7 @@ export class Auth {
             done(new AuthenticationError(Auth.USER_DISABLED_ERROR_MESSAGE_PATTERN));
             return null;
           } else {
-            done(null, new UserInfo(user.id, user.userAlias.username, user.role.name));
+            done(null, new UserInfo(user.id, user.userAlias.username, user.role.name, user.avatar));
             return null;
           }
         } else {

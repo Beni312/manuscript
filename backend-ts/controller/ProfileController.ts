@@ -1,9 +1,19 @@
+import * as express from 'express';
+import { upload } from '../service/upload';
 import { inject } from 'inversify';
 import { isAuthenticated } from '../decorator/IsAuthenticated';
 import { validateBody } from '../decorator/ValidateBody';
 import { AcademicDisciplineDto } from '../model/dto/AcademicDisciplineDto';
 import { BasicResponse } from '../model/dto/BasicResponse';
-import { BaseHttpController, controller, httpPost, interfaces, principal, requestBody } from 'inversify-express-utils';
+import {
+  BaseHttpController,
+  controller,
+  httpPost,
+  interfaces,
+  principal,
+  request,
+  requestBody
+} from 'inversify-express-utils';
 import { ChangePasswordCommand } from '../model/command/ChangePasswordCommand';
 import { ProfilePreload } from '../model/dto/ProfilePreload';
 import { ProfileService } from '../service/ProfileService';
@@ -51,5 +61,12 @@ export class ProfileController extends BaseHttpController implements interfaces.
 
     return new BasicResponse()
       .withSuccessMessage('Your academic disciplines has changed successfully!');
+  }
+
+  @isAuthenticated()
+  @httpPost('/upload-avatar', upload.single('avatar'))
+  async uploadAvatar(@request() req: express.Request, @principal() userPrincipal: Principal): Promise<void> {
+    const file = req.file;
+    await this.profileService.uploadAvatar(userPrincipal.details, file);
   }
 }
