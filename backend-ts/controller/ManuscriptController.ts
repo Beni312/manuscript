@@ -29,7 +29,7 @@ export class ManuscriptController {
   async downloadManuscript(@request() req: express.Request, @response() res: express.Response) {
     const filename = await this.manuscriptService.getManuscriptFilenameById(req.body.manuscriptId);
     const appDir = path.dirname(require.main!.filename);
-    const filePath = path.join(appDir, filename);
+    const filePath = path.join(appDir + process.env.MANUSCRIPT_FOLDER, filename);
     const stat = fs.statSync(filePath);
 
     res.writeHead(200, {
