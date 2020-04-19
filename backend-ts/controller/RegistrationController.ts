@@ -1,17 +1,18 @@
-import { BasicResponse } from '../model/dto/BasicResponse';
 import { controller, httpPost, interfaces, requestBody } from 'inversify-express-utils';
 import { inject } from 'inversify';
-import { RegistrationService } from '../service/RegistrationService';
-import { RegistrationCommand } from '../model/command/RegistrationCommand';
 import { validateBody } from '../decorator/ValidateBody';
+import { BasicResponse } from '../model/dto/BasicResponse';
+import { RegistrationCommand } from '../model/command/RegistrationCommand';
+import { RegistrationCommandValidator } from '../validator/RegistrationCommandValidator';
+import { RegistrationService } from '../service/RegistrationService';
 
 @controller('')
 export class RegistrationController implements interfaces.Controller{
 
   @inject(RegistrationService.name)
-  registrationService: RegistrationService;
+  private registrationService: RegistrationService;
 
-  @httpPost('/register')
+  @httpPost('/register', RegistrationCommandValidator.name)
   @validateBody(RegistrationCommand)
   async create(@requestBody() registrationCommand: RegistrationCommand): Promise<BasicResponse> {
     await this.registrationService.create(registrationCommand);

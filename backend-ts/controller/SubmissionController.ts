@@ -1,19 +1,11 @@
 import * as express from 'express';
+import { controller, httpGet, httpPost, principal, request, requestBody } from 'inversify-express-utils';
 import { inject } from 'inversify';
 import { isAuthenticated } from '../decorator/IsAuthenticated';
 import { validateBody } from '../decorator/ValidateBody';
-import { upload } from '../service/upload';
+import { upload } from '../middleware/upload';
 import { AuthorDto } from '../model/dto/AuthorDto';
 import { BasicResponse } from '../model/dto/BasicResponse';
-import {
-  BaseHttpController,
-  controller,
-  httpPost,
-  interfaces,
-  principal,
-  request,
-  requestBody
-} from 'inversify-express-utils';
 import { EditSubmissionDto } from '../model/dto/EditSubmissionDto';
 import { HasPermissionToDeleteSubmissionValidator } from '../validator/HasPermissionToDeleteSubmissionValidator';
 import { HasPermissionToSubmitSubmissionValidator } from '../validator/HasPermissionToSubmitSubmissionValidator';
@@ -28,7 +20,7 @@ import { SubmissionSubmitCommand } from '../model/command/SubmissionSubmitComman
 import { UpsertSubmissionPreload } from '../model/dto/UpsertSubmissionPreload';
 
 @controller('/submission')
-export class SubmissionController extends BaseHttpController implements interfaces.Controller {
+export class SubmissionController {
 
   @inject(SubmissionService.name)
   private submissionService: SubmissionService;
@@ -37,13 +29,13 @@ export class SubmissionController extends BaseHttpController implements interfac
   private manuscriptService: ManuscriptService;
 
   @isAuthenticated()
-  @httpPost('/getAuthors')
+  @httpGet('/get-authors')
   async getAuthors(): Promise<AuthorDto[]> {
     return await this.submissionService.getAuthors();
   }
 
   @isAuthenticated()
-  @httpPost('/preload')
+  @httpGet('/preload')
   async preload(@principal() userPrincipal: Principal): Promise<SubmissionPreload> {
     return await this.submissionService.preload(userPrincipal.details);
   }
@@ -105,6 +97,6 @@ export class SubmissionController extends BaseHttpController implements interfac
   async uploadManuscriptDocument(@request() req: express.Request, @principal() userPrincipal: Principal): Promise<BasicResponse> {
     await this.manuscriptService.saveAndCreateManuscript(userPrincipal.details.id, req.body.submissionId, req.file);
     return new BasicResponse()
-      .withSuccessMessage('Manuscript successfully uploaded!')
+      .withSuccessMessage('Manuscript successfully uploaded!');
   }
 }

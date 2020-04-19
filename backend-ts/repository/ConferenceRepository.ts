@@ -42,7 +42,7 @@ export class ConferenceRepository extends Repository<Conference> {
     });
   }
 
-  async createConference(submitterId: number, title: string, description: string, academicDisciplines: AcademicDiscipline[]): Promise<Conference> {
+  async createConference(submitterId: number, title: string, description: string, academicDisciplines: number[]): Promise<Conference> {
     const conf = await this.create({
       submitterId: submitterId,
       title: title,

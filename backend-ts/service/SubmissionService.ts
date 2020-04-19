@@ -5,6 +5,7 @@ import { AuthorDto } from '../model/dto/AuthorDto';
 import { EditSubmissionDto } from '../model/dto/EditSubmissionDto';
 import { InternalServerError } from '../model/error/InternalServerError';
 import { KeywordRepository } from '../repository/KeywordRepository';
+import { Manuscript } from '../model/entity/Manuscript';
 import { MessageType } from '../model/enum/MessageType';
 import { RoleEnum } from '../model/enum/RoleEnum';
 import { Roles } from '../auth/Roles';
@@ -23,16 +24,16 @@ import { UserRepository } from '../repository/UserRepository';
 export class SubmissionService {
 
   @inject(ApplicationService.name)
-  applicationService: ApplicationService;
+  private applicationService: ApplicationService;
 
   @inject(SubmissionRepository.name)
-  submissionRepository: SubmissionRepository;
+  private submissionRepository: SubmissionRepository;
 
   @inject(UserRepository.name)
-  userRepository: UserRepository;
+  private userRepository: UserRepository;
 
   @inject(KeywordRepository.name)
-  keywordRepository: KeywordRepository;
+  private keywordRepository: KeywordRepository;
 
   editableSubmissionStatuses = [
     SubmissionStatus.CREATED,
@@ -44,6 +45,9 @@ export class SubmissionService {
   async preload(user: UserInfo): Promise<SubmissionPreload> {
     const submissionOptions: any = {
       include: [
+        {
+          model: Manuscript
+        },
         {
           model: AcademicDiscipline,
           attributes: ['id', 'name'],
@@ -86,7 +90,8 @@ export class SubmissionService {
           this.hasPermissionToDelete(user, item),
           this.hasPermissionToEdit(user, item),
           this.hasPermissionToSubmit(user, item),
-          this.hasPermissionToEvaluate(user, item))),
+          this.hasPermissionToEvaluate(user, item),
+          this.hasPermissionToUploadNewManuscript(user, item))),
       conferenceIdNamePairs);
   }
 
@@ -109,8 +114,8 @@ export class SubmissionService {
     if the user is an admin or is an author of the submission, he can edit.
    */
   private hasPermissionToEdit(user: any, submission: Submission): boolean {
-    if ((submission.submitter.id === user.id) &&
-      this.editableSubmissionStatuses.indexOf(submission.status) != -1 || Roles.isAdmin(user.role)) {
+    if (((submission.submitter.id === user.id) &&
+      this.editableSubmissionStatuses.includes(submission.status)) || Roles.isAdmin(user.role)) {
       return true;
     }
 
@@ -118,7 +123,7 @@ export class SubmissionService {
   }
 
   private hasPermissionToSubmit(user: any, submission: Submission) {
-    if ((submission.submitter.id === user.id || Roles.isAdmin(user.role)) && submission.status == SubmissionStatus.CREATED) {
+    if ((submission.submitter.id === user.id || Roles.isAdmin(user.role)) && submission.status == SubmissionStatus.CREATED && submission.manuscripts.length > 0) {
       return true;
     }
     return false;
@@ -135,6 +140,13 @@ export class SubmissionService {
       return true;
     }
 
+    return false;
+  }
+
+  hasPermissionToUploadNewManuscript(user: any, submission: Submission) {
+    if (submission.submitterId === user.id && this.editableSubmissionStatuses.includes(submission.status)) {
+      return true;
+    }
     return false;
   }
 

@@ -1,4 +1,4 @@
-import { messageReducer } from "../../store/message/MessageReducer";
+import { messageReducer } from '../../store/message/MessageReducer';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { ConferenceComponent } from './components/conference/conference.component';
@@ -17,7 +17,7 @@ import { ProfileService } from '../../services/profile.service';
 import { RouterModule } from '@angular/router';
 import { RoleGuard } from '../../guards/role.guard';
 import { SharedModule } from '../shared/shared.module';
-import { StoreModule } from "@ngrx/store";
+import { StoreModule } from '@ngrx/store';
 import { SubmissionComponent } from './components/submission/submission.component';
 import { SubmissionUpsertComponent } from './components/submission/submission.upsert/submission.upsert.component';
 import { SubmissionDetailsComponent } from './components/submission/submission-details/submission.details.component';
@@ -29,7 +29,8 @@ import { UserComponent } from './user.component';
 import { UserManagementComponent } from './components/user.management/user.management.component';
 import { UserService } from '../../services/user.service';
 import { SubmissionEvaluateComponent } from './components/submission/submission.evaluate/submission.evaluate.component';
-import { NgxFileDropModule } from "ngx-file-drop";
+import { ManuscriptUploadModalComponent } from './components/submission/manuscript-upload-modal/manuscript-upload-modal.component';
+import { NgxFileDropModule } from 'ngx-file-drop';
 
 const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
   {
@@ -177,7 +178,8 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
     UserComponent,
     UserManagementComponent,
     ConferenceDetailsComponent,
-    MessagesComponent
+    MessagesComponent,
+    ManuscriptUploadModalComponent
   ],
   providers: [
     PersonalDataPreloadResolver,

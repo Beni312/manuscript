@@ -15,7 +15,7 @@ import { Principal } from '../model/Principal';
 export class ManuscriptController {
 
   @inject(ManuscriptService.name)
-  manuscriptService: ManuscriptService;
+  private manuscriptService: ManuscriptService;
 
   @isAuthenticated()
   @httpGet('/')

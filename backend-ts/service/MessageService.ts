@@ -12,13 +12,13 @@ import { Message } from "../model/entity/Message";
 export class MessageService {
 
   @inject(MessageRepository.name)
-  messageRepository: MessageRepository;
+  private messageRepository: MessageRepository;
 
   @inject(UtilsService.name)
-  utilsService: UtilsService;
+  private utilsService: UtilsService;
 
   @inject(UserRepository.name)
-  userRepository: UserRepository;
+  private userRepository: UserRepository;
 
   async findUserMessages(userId: number): Promise<MessagePreload> {
     const messages = await this.messageRepository.findUserMessages(userId);

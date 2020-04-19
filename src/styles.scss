@@ -71,4 +71,9 @@ $my-custom-theme: mat-dark-theme($my-custom-primary, $my-custom-accent);
   -ms-user-select: none;
   user-select: none;
   caret-color: $my-custom-font-color !important;
+  outline: none !important;
+}
+
+.mat-button.mat-primary {
+  color: $my-custom-font-color;
 }

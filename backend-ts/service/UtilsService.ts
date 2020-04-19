@@ -12,7 +12,7 @@ export class UtilsService {
     }, {});
 
   getExtension(filename) {
-    var ext = path.extname(filename||'').split('.');
+    const ext = path.extname(filename||'').split('.');
     return ext[ext.length - 1];
   }
 }

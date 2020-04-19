@@ -23,6 +23,7 @@ import { ApplicationService } from './service/ApplicationService';
 import { AuthorsAcademicDisciplineRepository } from './repository/AuthorsAcademicDisciplineRepository';
 import { Auth } from './auth/Auth';
 import { AuthProvider } from './service/AuthProvider';
+import { ChangePasswordValidator } from './validator/ChangePasswordValidator';
 import { ConferenceRepository } from './repository/ConferenceRepository';
 import { ConferenceService } from './service/ConferenceService';
 import { Container } from 'inversify';
@@ -37,7 +38,9 @@ import { ManuscriptRepository } from './repository/ManuscriptRepository';
 import { MessageService } from './service/MessageService';
 import { MessageRepository } from './repository/MessageRepository';
 import { Models } from './model';
+import { RegistrationCommandValidator } from './validator/RegistrationCommandValidator';
 import { PasswordRepository } from './repository/PasswordRepository';
+import { PasswordService } from './service/PasswordService';
 import { ProfileService } from './service/ProfileService';
 import { RegistrationService } from './service/RegistrationService';
 import { RoleRepository } from './repository/RoleRepository';
@@ -51,11 +54,13 @@ import { UserManagementService } from './service/UserManagementService';
 import { UserRepository } from './repository/UserRepository';
 import { UpdateAcademicDisciplinesValidator } from './validator/UpdateAcademicDisciplinesValidator';
 import { UtilsService } from './service/UtilsService';
+import { UserAliasRepository } from './repository/UserAliasRepository';
 import { UserStatusRepository } from './repository/UserStatusRepository';
 
 export class Server {
 
   public static inversifyServer: InversifyExpressServer;
+  public static container: Container;
 
   constructor() {
   }
@@ -84,54 +89,58 @@ export class Server {
   }
 
   private static initApplication(app: http.Server, container: Container) {
-    container.get<SocketServer>(SocketServer.name).init(app, container)
+    container.get<SocketServer>(SocketServer.name).init(app, container);
   }
 
   private static initInversify(): Container {
-    const container = new Container();
+    Server.container = new Container();
 
-    container.bind<ApplicationService>(ApplicationService.name).to(ApplicationService);
-    container.bind<ProfileService>(ProfileService.name).to(ProfileService);
-    container.bind<RegistrationService>(RegistrationService.name).to(RegistrationService);
-    container.bind<SubmissionService>(SubmissionService.name).to(SubmissionService);
-    container.bind<UserManagementService>(UserManagementService.name).to(UserManagementService);
-    container.bind<AcademicDisciplineRepository>(AcademicDisciplineRepository.name).to(AcademicDisciplineRepository);
-    container.bind<AuthorsAcademicDisciplineRepository>(AuthorsAcademicDisciplineRepository.name).to(AuthorsAcademicDisciplineRepository);
-    container.bind<KeywordRepository>(KeywordRepository.name).to(KeywordRepository);
-    container.bind<PasswordRepository>(PasswordRepository.name).to(PasswordRepository);
-    container.bind<RoleRepository>(RoleRepository.name).to(RoleRepository);
-    container.bind<SubmissionRepository>(SubmissionRepository.name).to(SubmissionRepository);
-    container.bind<UserRepository>(UserRepository.name).to(UserRepository);
-    container.bind<ConferenceService>(ConferenceService.name).to(ConferenceService);
-    container.bind<ConferenceRepository>(ConferenceRepository.name).to(ConferenceRepository);
-    container.bind<UserStatusRepository>(UserStatusRepository.name).to(UserStatusRepository);
+    Server.container.bind<ApplicationService>(ApplicationService.name).to(ApplicationService);
+    Server.container.bind<ProfileService>(ProfileService.name).to(ProfileService);
+    Server.container.bind<RegistrationService>(RegistrationService.name).to(RegistrationService);
+    Server.container.bind<SubmissionService>(SubmissionService.name).to(SubmissionService);
+    Server.container.bind<UserManagementService>(UserManagementService.name).to(UserManagementService);
+    Server.container.bind<AcademicDisciplineRepository>(AcademicDisciplineRepository.name).to(AcademicDisciplineRepository);
+    Server.container.bind<AuthorsAcademicDisciplineRepository>(AuthorsAcademicDisciplineRepository.name).to(AuthorsAcademicDisciplineRepository);
+    Server.container.bind<KeywordRepository>(KeywordRepository.name).to(KeywordRepository);
+    Server.container.bind<PasswordRepository>(PasswordRepository.name).to(PasswordRepository);
+    Server.container.bind<RoleRepository>(RoleRepository.name).to(RoleRepository);
+    Server.container.bind<SubmissionRepository>(SubmissionRepository.name).to(SubmissionRepository);
+    Server.container.bind<UserRepository>(UserRepository.name).to(UserRepository);
+    Server.container.bind<ConferenceService>(ConferenceService.name).to(ConferenceService);
+    Server.container.bind<ConferenceRepository>(ConferenceRepository.name).to(ConferenceRepository);
+    Server.container.bind<UserStatusRepository>(UserStatusRepository.name).to(UserStatusRepository);
+    Server.container.bind<UserAliasRepository>(UserAliasRepository.name).to(UserAliasRepository);
 
-    container.bind<AuthProvider>(AuthProvider.name).to(AuthProvider);
+    Server.container.bind<AuthProvider>(AuthProvider.name).to(AuthProvider);
+    Server.container.bind<PasswordService>(PasswordService.name).to(PasswordService);
 
-    container.bind<ImageResizer>(ImageResizer.name).to(ImageResizer);
-    container.bind<ManuscriptService>(ManuscriptService.name).to(ManuscriptService);
-    container.bind<ManuscriptRepository>(ManuscriptRepository.name).to(ManuscriptRepository);
+    Server.container.bind<ImageResizer>(ImageResizer.name).to(ImageResizer);
+    Server.container.bind<ManuscriptService>(ManuscriptService.name).to(ManuscriptService);
+    Server.container.bind<ManuscriptRepository>(ManuscriptRepository.name).to(ManuscriptRepository);
 
-    container.bind<HasPermissionToDeleteSubmissionValidator>(HasPermissionToDeleteSubmissionValidator.name).to(HasPermissionToDeleteSubmissionValidator);
-    container.bind<HasPermissionToSubmitSubmissionValidator>(HasPermissionToSubmitSubmissionValidator.name).to(HasPermissionToSubmitSubmissionValidator);
-    container.bind<SubmissionCreateValidator>(SubmissionCreateValidator.name).to(SubmissionCreateValidator);
-    container.bind<UpdateAcademicDisciplinesValidator>(UpdateAcademicDisciplinesValidator.name).to(UpdateAcademicDisciplinesValidator);
+    Server.container.bind<HasPermissionToDeleteSubmissionValidator>(HasPermissionToDeleteSubmissionValidator.name).to(HasPermissionToDeleteSubmissionValidator);
+    Server.container.bind<HasPermissionToSubmitSubmissionValidator>(HasPermissionToSubmitSubmissionValidator.name).to(HasPermissionToSubmitSubmissionValidator);
+    Server.container.bind<SubmissionCreateValidator>(SubmissionCreateValidator.name).to(SubmissionCreateValidator);
+    Server.container.bind<UpdateAcademicDisciplinesValidator>(UpdateAcademicDisciplinesValidator.name).to(UpdateAcademicDisciplinesValidator);
+    Server.container.bind<ChangePasswordValidator>(ChangePasswordValidator.name).to(ChangePasswordValidator);
+    Server.container.bind<RegistrationCommandValidator>(RegistrationCommandValidator.name).to(RegistrationCommandValidator);
 
-    container.bind<MessageService>(MessageService.name).to(MessageService);
-    container.bind<MessageRepository>(MessageRepository.name).to(MessageRepository);
-    container.bind<UtilsService>(UtilsService.name).to(UtilsService);
-    container.bind<SocketServer>(SocketServer.name).to(SocketServer);
-    container.bind<SocketService>(SocketService.name).to(SocketService);
-    container.bind<SocketController>(SocketController.name).to(SocketController);
+    Server.container.bind<MessageService>(MessageService.name).to(MessageService);
+    Server.container.bind<MessageRepository>(MessageRepository.name).to(MessageRepository);
+    Server.container.bind<UtilsService>(UtilsService.name).to(UtilsService);
+    Server.container.bind<SocketServer>(SocketServer.name).to(SocketServer);
+    Server.container.bind<SocketService>(SocketService.name).to(SocketService);
+    Server.container.bind<SocketController>(SocketController.name).to(SocketController);
 
-    Server.inversifyServer = new InversifyExpressServer(container, null, null, null, AuthProvider);
+    Server.inversifyServer = new InversifyExpressServer(Server.container, null, null, null, AuthProvider);
     Server.inversifyServer.setErrorConfig(app => app.use(errorHandler));
     Server.inversifyServer.setConfig((app: any) => {
       Server.initializeAuth();
       Server.configureApp(app);
     });
 
-    return container;
+    return Server.container;
   }
 
   private static async initializeDatabase() {

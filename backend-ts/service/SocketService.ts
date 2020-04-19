@@ -17,7 +17,6 @@ export class SocketService {
 
   init(io: SocketIO.Server) {
     SocketService.io = io;
-    // console.log(SocketService.io);
   }
 
   public connectUser(socketId: string, userInfo: UserInfo) {
@@ -56,7 +55,7 @@ export class SocketService {
   }
 
   public getConnectedUser(userId: number) {
-    return SocketService.connectedUsers.get(userId)
+    return SocketService.connectedUsers.get(userId);
   }
 
   public handleError(socket: Socket, error: any) {
@@ -65,7 +64,7 @@ export class SocketService {
       this.sendError(socket.id, error.message);
     }
 
-    this.sendError(socket.id, 'Internal server error')
+    this.sendError(socket.id, 'Internal server error');
   }
 
   sendError(socketId: string, message: any) {

@@ -3,11 +3,10 @@ import { Author } from '../../../../../models/author';
 import { Component, Inject, OnInit } from '@angular/core';
 import { ConferenceIdNamePair } from '../../../../../models/conference.id.name.pair';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-// import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Submission } from '../../../../../models/submission';
 
 import * as cloneDeep from 'lodash/cloneDeep';
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 export class UpsertSubmissionPreload {
   academicDisciplines: AcademicDiscipline[];

@@ -12,7 +12,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { MatFormField } from "@angular/material/form-field";
+import { MatFormField } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-autocomplete-multi-select',
@@ -117,7 +117,7 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
       this.sortByDisplayedProperty(this.selected);
     }
     this.query = '';
-    this.filteredList.splice(this.filteredList.indexOf(item), 1);
+    this.filter();
   }
 
   remove(item) {

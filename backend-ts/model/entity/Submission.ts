@@ -4,6 +4,7 @@ import { BelongsTo, BelongsToMany, Column, DataType, Default, ForeignKey, HasMan
 import { Conference } from './Conference';
 import { HasManySetAssociationsMixin } from 'sequelize';
 import { Keyword } from './Keyword';
+import { Manuscript } from './Manuscript';
 import { SubmissionAcademicDiscipline } from './SubmissionAcademicDiscipline';
 import { SubmissionStatus, SubmissionStatusEnumerator } from '../enum/SubmissionStatus';
 import { User } from './User';
@@ -51,6 +52,9 @@ export class Submission extends BaseModel<Submission> {
 
   @HasMany(() => Keyword)
   keywords: Keyword[];
+
+  @HasMany(() => Manuscript)
+  manuscripts: Manuscript[];
 
   public setAcademicDisciplines!: HasManySetAssociationsMixin<AcademicDiscipline, number>;
 }

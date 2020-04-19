@@ -1,20 +1,14 @@
 import * as express from 'express';
-import { upload } from '../service/upload';
 import { inject } from 'inversify';
 import { isAuthenticated } from '../decorator/IsAuthenticated';
 import { validateBody } from '../decorator/ValidateBody';
+import { upload } from '../middleware/upload';
 import { AcademicDisciplineDto } from '../model/dto/AcademicDisciplineDto';
 import { BasicResponse } from '../model/dto/BasicResponse';
-import {
-  BaseHttpController,
-  controller,
-  httpPost,
-  interfaces,
-  principal,
-  request,
-  requestBody
-} from 'inversify-express-utils';
+import { BaseHttpController, controller, httpPost, interfaces, principal, request, requestBody } from 'inversify-express-utils';
 import { ChangePasswordCommand } from '../model/command/ChangePasswordCommand';
+import { ChangePasswordValidator } from '../validator/ChangePasswordValidator';
+import { PasswordService } from '../service/PasswordService';
 import { ProfilePreload } from '../model/dto/ProfilePreload';
 import { ProfileService } from '../service/ProfileService';
 import { Principal } from '../model/Principal';
@@ -26,7 +20,10 @@ import { UpdateAcademicDisciplinesValidator } from '../validator/UpdateAcademicD
 export class ProfileController extends BaseHttpController implements interfaces.Controller {
 
   @inject(ProfileService.name)
-  profileService: ProfileService;
+  private profileService: ProfileService;
+
+  @inject(PasswordService.name)
+  private passwordService: PasswordService;
 
   @isAuthenticated()
   @httpPost('/preload')
@@ -45,10 +42,10 @@ export class ProfileController extends BaseHttpController implements interfaces.
   }
 
   @isAuthenticated()
-  @httpPost('/change-password')
+  @httpPost('/change-password', ChangePasswordValidator.name)
   @validateBody(ChangePasswordCommand)
   async changePassword(@principal() userPrincipal: Principal, @requestBody() changePasswordCommand: ChangePasswordCommand): Promise<BasicResponse> {
-    await this.profileService.changePassword(userPrincipal.details.id, changePasswordCommand);
+    await this.passwordService.modifyPassword(userPrincipal.details.id, changePasswordCommand.password.password);
 
     return new BasicResponse()
       .withSuccessMessage('Your password has changed successfully!');

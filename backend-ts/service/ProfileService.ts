@@ -1,14 +1,13 @@
-import * as bcrypt from 'bcrypt-nodejs';
 import { inject, injectable } from 'inversify';
 import { logger } from './logger';
 import { AcademicDisciplineDto } from '../model/dto/AcademicDisciplineDto';
-import { AuthorsAcademicDiscipline, User } from '../model';
+import { AuthorsAcademicDiscipline, Password, User } from '../model';
 import { AuthorsAcademicDisciplineRepository } from '../repository/AuthorsAcademicDisciplineRepository';
 import { ChangePasswordCommand } from '../model/command/ChangePasswordCommand';
-import { ChangePasswordError } from '../model/error/ChangePasswordError';
 import { ImageResizer } from './ImageResizer';
 import { InternalServerError } from '../model/error/InternalServerError';
 import { PasswordRepository } from '../repository/PasswordRepository';
+import { PasswordService } from './PasswordService';
 import { ProfilePreload } from '../model/dto/ProfilePreload';
 import { SavePersonalDataCommand } from '../model/command/SavePersonalDataCommand';
 import { UserInfo } from '../model/dto/UserInfo';
@@ -18,16 +17,19 @@ import { UserRepository } from '../repository/UserRepository';
 export class ProfileService {
 
   @inject(UserRepository.name)
-  userRepository: UserRepository;
+  private userRepository: UserRepository;
 
   @inject(PasswordRepository.name)
-  passwordRepository: PasswordRepository;
+  private passwordRepository: PasswordRepository;
 
   @inject(AuthorsAcademicDisciplineRepository.name)
-  authorsAcademicDisciplineRepository: AuthorsAcademicDisciplineRepository;
+  private authorsAcademicDisciplineRepository: AuthorsAcademicDisciplineRepository;
 
   @inject(ImageResizer.name)
-  imageResizer: ImageResizer;
+  private imageResizer: ImageResizer;
+
+  @inject(PasswordService.name)
+  private passwordService: PasswordService;
 
   public async getPreload(userId): Promise<ProfilePreload> {
     return new ProfilePreload(await this.userRepository.findUserProfile(userId));
@@ -43,24 +45,8 @@ export class ProfileService {
     });
   }
 
-  public async changePassword(userId: number, changePasswordCommand: ChangePasswordCommand): Promise<void> {
-    if (changePasswordCommand.password.password != changePasswordCommand.password.passwordAgain) {
-      throw new ChangePasswordError('The given passwords are not matched!');
-    }
-
-    const password = await this.passwordRepository._findOne({
-      where: {
-        userId: userId
-      }
-    });
-
-    const isMatch = bcrypt.compareSync(changePasswordCommand.oldPassword, password.password);
-    if (!isMatch) {
-      throw new ChangePasswordError('Your password is wrong.');
-    }
-
-    const salt = bcrypt.genSaltSync();
-    await this.passwordRepository.updateByPk(password.id, {password: bcrypt.hashSync(changePasswordCommand.password.password, salt), salt: salt});
+  public async changePassword(userId: number, changePasswordCommand: ChangePasswordCommand): Promise<Password> {
+    return this.passwordService.modifyPassword(userId, changePasswordCommand.password.password);
   }
 
   public async updateAcademicDisciplines(userId: number, userAcademicDisciplines: Array<AcademicDisciplineDto>): Promise<void> {
@@ -97,7 +83,7 @@ export class ProfileService {
     try {
       await this.imageResizer.resizeAvatar(file.buffer, filenameWithPath);
       if (!user.avatar) {
-        await this.userRepository.updateAvatar(user.id)
+        await this.userRepository.updateAvatar(user.id);
       }
     } catch(err) {
       logger.error(err);

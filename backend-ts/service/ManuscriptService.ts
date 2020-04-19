@@ -12,10 +12,10 @@ export class ManuscriptService {
   private static MANUSCRIPT_FILENAME_PATTERN: string = 'USERID_SUBMISSIONID_VERSION.EXT';
 
   @inject(ManuscriptRepository.name)
-  manuscriptRepository: ManuscriptRepository;
+  private manuscriptRepository: ManuscriptRepository;
 
   @inject(UtilsService.name)
-  utilsService: UtilsService;
+  private utilsService: UtilsService;
 
   public async saveAndCreateManuscript(userId, submissionId, file: Express.Multer.File) {
     let latestManuscriptVersion: number = await this.manuscriptRepository.findLatestVersionForSubmission(submissionId);
@@ -39,12 +39,12 @@ export class ManuscriptService {
       where: {
         submissionId: submissionId
       }
-    })
+    });
   }
 
   async findManuscripts(): Promise<Array<ManuscriptDto>> {
     const manuscripts: Array<Manuscript> = await this.manuscriptRepository.findManuscripts();
-    return manuscripts.map(m => new ManuscriptDto(m.id, m.submission.title, m.submission.manuscriptAbstract, m.creationDate, m.submissionId))
+    return manuscripts.map(m => new ManuscriptDto(m.id, m.submission.title, m.submission.manuscriptAbstract, m.creationDate, m.submissionId));
   }
 
   async getManuscriptFilenameById(manuscriptId: number) {

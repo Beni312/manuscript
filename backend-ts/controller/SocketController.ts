@@ -11,10 +11,10 @@ import { SignSeenMessageDto } from "../model/dto/SignSeenMessageDto";
 export class SocketController {
 
   @inject(SocketService.name)
-  socketService: SocketService;
+  private socketService: SocketService;
 
   @inject(MessageService.name)
-  messageService: MessageService;
+  private messageService: MessageService;
 
   initSocketEndpoints(socket: Socket) {
     socket.on('sendMessage', (msg: SendMessageCommand) => {
@@ -34,7 +34,7 @@ export class SocketController {
       })
       .catch(err => {
         this.socketService.handleError(socket, err);
-      })
+      });
   }
 
   signSeenMessages(socket: Socket, msg: SignSeenMessageCommand) {
@@ -44,6 +44,6 @@ export class SocketController {
       })
       .catch((err) => {
         this.socketService.handleError(socket, err);
-      })
+      });
   }
 }

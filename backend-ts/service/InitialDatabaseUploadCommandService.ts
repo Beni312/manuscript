@@ -17,9 +17,11 @@ export class InitialDatabaseUploadCommandService {
   }
 
   static async createAcademicDisciplines() {
+    const academicDisciplines: any[] = [];
     for (let i = 0; i < academicDisciplineData.length; i++) {
-      await AcademicDiscipline.create({name: academicDisciplineData[i].academicDisciplineName});
+      academicDisciplines.push({name: academicDisciplineData[i].academicDisciplineName});
     }
+    await AcademicDiscipline.bulkCreate(academicDisciplines);
   }
 
   static async createUserStatuses() {

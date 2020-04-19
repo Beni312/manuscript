@@ -1,10 +1,11 @@
 import * as express from 'express';
+import { inject, injectable } from 'inversify';
+import { next, request, response } from 'inversify-express-utils';
 import { AuthProvider } from '../service/AuthProvider';
 import { BaseValidator } from './BaseValidator';
-import { next, request, response } from 'inversify-express-utils';
-import { inject, injectable } from 'inversify';
-import { Principal } from '../model/Principal';
 import { PermissionError } from '../model/error/PermissionError';
+import { Principal } from '../model/Principal';
+import { RoleEnum } from '../model/enum/RoleEnum';
 import { SubmissionRepository } from '../repository/SubmissionRepository';
 import { Submission, User } from '../model';
 import { SubmissionRemoveCommand } from '../model/command/SubmissionRemoveCommand';
@@ -22,7 +23,7 @@ export class HasPermissionToDeleteSubmissionValidator extends BaseValidator {
     const submissionRemoveCommand: SubmissionRemoveCommand = req.body;
     const user: Principal = this.getPrincipal();
     this.submissionRepository._findByPk(submissionRemoveCommand.submissionId, {include: [{model: User, as: 'submitter'}]}).then((submission: Submission) => {
-          if (user.hasRole(['ADMIN'])) {
+          if (user.hasRole([RoleEnum.ADMIN])) {
             next();
             return;
           }

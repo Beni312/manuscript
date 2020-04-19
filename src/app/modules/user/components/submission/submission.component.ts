@@ -12,10 +12,11 @@ import { SubmissionService } from '../../../../services/submission.service';
 import { SubmissionUpsertComponent, UpsertSubmissionPreload } from './submission.upsert/submission.upsert.component';
 import { SubmissionEvaluateComponent } from './submission.evaluate/submission.evaluate.component';
 import { SubmissionCreate } from '../../../../models/submission.create';
-import { MatTable, MatTableDataSource } from "@angular/material/table";
-import { MatSort } from "@angular/material/sort";
-import { MatPaginator } from "@angular/material/paginator";
-import { MatDialog } from "@angular/material/dialog";
+import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatDialog } from '@angular/material/dialog';
+import { ManuscriptUploadModalComponent } from './manuscript-upload-modal/manuscript-upload-modal.component';
 
 @Component({
   selector: 'app-submission',
@@ -249,4 +250,20 @@ export class SubmissionComponent extends PermissionHandler implements AfterViewI
   //     }
   //   }
   // }
+
+  openUploadManuscriptPopup(submissionId: number) {
+    const dialogRef = this.dialog.open(ManuscriptUploadModalComponent, {
+      autoFocus: true,
+      data: {
+        submissionId: submissionId
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        return;
+      }
+      console.log(result);
+    });
+  }
 }

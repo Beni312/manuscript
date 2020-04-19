@@ -1,9 +1,8 @@
 import { ConfirmDialogComponent } from '../modules/shared/components/confirm-dialog/confirm-dialog.component';
 import { Injectable } from '@angular/core';
-// import { MatDialog, MatDialogRef } from '@angular/material';
 import { Observable } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
-import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Injectable()
 export class MessageService {

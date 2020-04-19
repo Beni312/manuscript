@@ -39,3 +39,15 @@ app-expand {
 #createSubmissionBtn mat-icon {
   font-size: 36px !important;
 }
+
+.statusColWidth {
+  flex: 0 0 150px !important;
+}
+
+.actionsColWidth {
+  flex: 0 0 200px !important;
+}
+
+.submitterColWidth {
+  flex: 0 0 200px !important;
+}

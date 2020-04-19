@@ -1,5 +1,4 @@
 import * as socketIo from 'socket.io-client';
-// import { ConfigurationService } from './configuration.service';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 

@@ -16,8 +16,9 @@ export class ManuscriptRepository extends Repository<Manuscript> {
     return this.create({
       userId: userId,
       submissionId: submissionId,
-      version: version
-    })
+      version: version,
+      filename: filename
+    });
   }
 
   async findLatestVersionForSubmission(submissionId: number): Promise<number> {
@@ -44,6 +45,6 @@ export class ManuscriptRepository extends Repository<Manuscript> {
           model: User
         }
       ]
-    })
+    });
   }
 }

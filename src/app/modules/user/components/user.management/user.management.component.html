@@ -31,6 +31,18 @@
       <mat-cell *matCellDef="let element">{{element.email}}</mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'justify-content-center pr-0'"> Actions </mat-header-cell>
+      <mat-cell *matCellDef="let element" class="ignore" [ngClass]="'pr-0'">
+        <button mat-icon-button (click)="openChangeUserPasswordModal(element.id)" matTooltip="Edit">
+          <mat-icon aria-label="Edit">edit</mat-icon>
+        </button>
+        <button mat-icon-button (click)="openCreateUserModal(element.id)" matTooltip="Submit">
+          <mat-icon aria-label="Submit">present_to_all</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;">
     </mat-row>

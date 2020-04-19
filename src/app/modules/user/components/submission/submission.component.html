@@ -37,18 +37,18 @@
     </ng-container>
 
     <ng-container matColumnDef="submitter">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> Submitter</mat-header-cell>
-      <mat-cell *matCellDef="let element">{{element.submitter.firstName + ' '  + element.submitter.lastName}}</mat-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'submitterColWidth'"> Submitter</mat-header-cell>
+      <mat-cell *matCellDef="let element" [ngClass]="'submitterColWidth'">{{element.submitter.firstName + ' '  + element.submitter.lastName}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="status">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
-      <mat-cell *matCellDef="let element">{{ element.status | titlecase }}</mat-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'statusColWidth'">Status</mat-header-cell>
+      <mat-cell *matCellDef="let element" [ngClass]="'statusColWidth'">{{ element.status | titlecase }}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="actions">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> Actions </mat-header-cell>
-      <mat-cell *matCellDef="let element" class="ignore">
+      <mat-header-cell #actionsHeader *matHeaderCellDef mat-sort-header [ngClass]="'justify-content-center pr-0 actionsColWidth'"> Actions </mat-header-cell>
+      <mat-cell #actionsCol *matCellDef="let element" class="ignore" [ngClass]="'actionsColWidth pr-0'">
         <button mat-icon-button (click)="confirmDelete(element.id)" *ngIf="element.canDelete" matTooltip="Delete">
           <mat-icon aria-label="Delete">delete</mat-icon>
         </button>
@@ -60,6 +60,9 @@
         </button>
         <button mat-icon-button (click)="evaluate(element.id)" matTooltip="Evaluate" *ngIf="element.canEvaluate">
           <mat-icon aria-label="Evaluate">check_circle</mat-icon>
+        </button>
+        <button mat-icon-button (click)="openUploadManuscriptPopup(element.id)" matTooltip="Upload manuscript" *ngIf="element.canEdit && hasPermission(['AUTHOR'])">
+          <mat-icon aria-label="Upload manuscript">cloud_upload</mat-icon>
         </button>
       </mat-cell>
     </ng-container>

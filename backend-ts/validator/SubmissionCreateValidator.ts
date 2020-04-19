@@ -1,8 +1,8 @@
 import * as express from 'express';
-import { AuthProvider } from '../service/AuthProvider';
-import { BaseValidator } from './BaseValidator';
 import { inject, injectable } from 'inversify';
 import { next, request, response } from 'inversify-express-utils';
+import { AuthProvider } from '../service/AuthProvider';
+import { BaseValidator } from './BaseValidator';
 
 @injectable()
 export class SubmissionCreateValidator extends BaseValidator {

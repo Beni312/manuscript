@@ -12,7 +12,7 @@ export class SubmissionService {
   }
 
   preload(): Observable<SubmissionPreloadResponse> {
-    return this.httpClient.post<SubmissionPreloadResponse>('/submission/preload', []);
+    return this.httpClient.get<SubmissionPreloadResponse>('/submission/preload');
   }
 
   remove(id: string) {
@@ -20,7 +20,7 @@ export class SubmissionService {
   }
 
   getAuthors() {
-    return this.httpClient.post('/submission/getAuthors', {});
+    return this.httpClient.get('/submission/get-authors');
   }
 
   create(submission): Observable<BasicResponse> {
