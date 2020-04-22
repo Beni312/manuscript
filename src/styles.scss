@@ -77,3 +77,11 @@ $my-custom-theme: mat-dark-theme($my-custom-primary, $my-custom-accent);
 .mat-button.mat-primary {
   color: $my-custom-font-color;
 }
+
+.mat-option-text {
+  color: $my-custom-font-color;
+}
+
+.mat-row.expandedRow:hover {
+  background-color: #424242 !important;
+}

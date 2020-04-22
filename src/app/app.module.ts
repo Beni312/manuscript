@@ -53,7 +53,7 @@ const Routes: ModuleWithProviders = RouterModule.forRoot([
     ToastrModule.forRoot(),
     UserModule
   ],
-  providers: [ { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
+  providers: [{provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'fill'}},
     MessageService,
     SocketService,
     ProgressSpinnerService,

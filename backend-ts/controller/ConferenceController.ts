@@ -7,6 +7,7 @@ import { ConferenceDto } from '../model/dto/ConferenceDto';
 import { ConferenceService } from '../service/ConferenceService';
 import { CreateConferenceCommand } from '../model/command/CreateConferenceCommand';
 import { EditConferenceCommand } from '../model/command/EditConferenceCommand';
+import { EditConferenceCommandValidator } from '../validator/EditConferenceCommandValidator';
 import { Principal } from '../model/Principal';
 
 @controller('/conference')
@@ -32,12 +33,12 @@ export class ConferenceController {
   }
 
   @isAuthenticated()
-  @httpPost('/edit')
+  @httpPost('/edit', EditConferenceCommandValidator.name)
   @validateBody(EditConferenceCommand)
   async editConference(@principal() userPrincipal: Principal, command: EditConferenceCommand): Promise<BasicResponse> {
     await this.conferenceService.editConference(command);
 
     return new BasicResponse()
-      .withSuccessMessage('Conference successfully edited!');
+      .withSuccessMessage('Conference successfully edited!')
   }
 }

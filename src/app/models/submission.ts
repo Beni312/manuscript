@@ -9,6 +9,7 @@ export class Submission {
   submitter: Author;
   status: string;
   conferenceId: number;
+  manuscripts: any[];
   creationDate: Date;
   updatedOn: Date;
   authors: Author[];
@@ -17,6 +18,7 @@ export class Submission {
   canDelete: boolean;
   canEdit: boolean;
   canEvaluate: boolean;
+  canUploadNewVersionManuscript: boolean;
 
 
   constructor() {

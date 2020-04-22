@@ -44,22 +44,29 @@ export class MatRowExpandDirective {
     let isExpandable = true;
 
     // TODO ezt megcsinálni normálisabban
+
+    // if (!isExpandable) {
+      event.target.parentElement.parentElement.parentElement.classList.forEach(item => {
+        if (item == 'ignore') {
+          isExpandable = false;
+        }
+      });
+      event.target.parentElement.classList.forEach(item => {
+        if (item == 'ignore') {
+          isExpandable = false;
+        }
+      });
+    // }
+
     for (let index = 0, count = event.target.classList.length; index < count; index++) {
       if (event.target.classList.item(index) && event.target.classList.item(index) == 'ignore') {
         isExpandable = false;
       }
+      if (event.target.classList.item(index) && event.target.classList.item(index) == 'nonIgnore') {
+        isExpandable = true;
+        break;
+      }
     }
-
-    event.target.parentElement.parentElement.parentElement.classList.forEach(item => {
-      if (item == 'ignore') {
-        isExpandable = false;
-      }
-    });
-    event.target.parentElement.classList.forEach(item => {
-      if (item == 'ignore') {
-        isExpandable = false;
-      }
-    });
 
     if (isExpandable || this.opened) {
       this.toggle();

@@ -30,7 +30,7 @@ export class SubmissionDto {
     this.submitter = submission.submitter;
     this.conferenceId = submission.conferenceId;
     this.keywords = submission.keywords;
-    this.manuscripts = submission.manuscripts.map(m => new PendingManuscriptDto(m.id, m.version, m.creationDate));
+    this.manuscripts = submission.manuscripts.map(m => new PendingManuscriptDto(m.id, m.version, m.filename, m.creationDate));
     this.creationDate = submission.creationDate;
     this.updatedOn = submission.updatedOn;
     this.canDelete = canDelete;

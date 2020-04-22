@@ -15,7 +15,7 @@ import { SubmissionEvaluateCommand } from '../model/command/SubmissionEvaluateCo
 import { SubmissionMessage } from '../model/entity/SubmissionMessage';
 import { SubmissionPreload } from '../model/dto/SubmissionPreload';
 import { SubmissionRepository } from '../repository/SubmissionRepository';
-import { SubmissionStatus } from '../model/enum/SubmissionStatus';
+import { SubmissionStatus, SubmissionStatusEnumerator } from '../model/enum/SubmissionStatus';
 import { UserInfo } from '../model/dto/UserInfo';
 import { UpsertSubmissionPreload } from '../model/dto/UpsertSubmissionPreload';
 import { UserRepository } from '../repository/UserRepository';
@@ -92,7 +92,8 @@ export class SubmissionService {
           this.hasPermissionToSubmit(user, item),
           this.hasPermissionToEvaluate(user, item),
           this.hasPermissionToUploadNewManuscript(user, item))),
-      conferenceIdNamePairs);
+      conferenceIdNamePairs,
+      new SubmissionStatusEnumerator().values as SubmissionStatus[]);
   }
 
   /*

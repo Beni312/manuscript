@@ -13,7 +13,6 @@ export class Principal implements interfaces.Principal {
   }
 
   isAuthenticated(): Promise<boolean> {
-    // TODO verify token
     const isAuthenticated: boolean = this.details && this.details.username !== null;
     return Promise.resolve(isAuthenticated);
   }
@@ -24,12 +23,10 @@ export class Principal implements interfaces.Principal {
 
   hasRole(roles: string[]): boolean {
     return roles.indexOf(this.details.role) !== -1;
-    // return roles.find(r => this.details.role === r) === null;
   }
 
   isResourceOwner(resource: Resource<any>): Promise<boolean> {
     // TODO ?
-
     return Promise.resolve(true);
   }
 }

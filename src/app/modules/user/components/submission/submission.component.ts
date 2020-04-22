@@ -1,5 +1,5 @@
 import { ActivatedRoute } from '@angular/router';
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Author } from '../../../../models/author';
 import { BasicResponse } from '../../../../models/basic.response';
 import { ConferenceIdNamePair } from '../../../../models/conference.id.name.pair';
@@ -16,7 +16,16 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
-import { ManuscriptUploadModalComponent } from './manuscript-upload-modal/manuscript-upload-modal.component';
+
+export class SubmissionStatus {
+  id: number;
+  status: string;
+
+  constructor(id: number, status: string) {
+    this.id = id;
+    this.status = status;
+  }
+}
 
 @Component({
   selector: 'app-submission',
@@ -24,14 +33,16 @@ import { ManuscriptUploadModalComponent } from './manuscript-upload-modal/manusc
   styleUrls: ['./submission.component.scss'],
   animations: [SlideRowAnimation]
 })
-export class SubmissionComponent extends PermissionHandler implements AfterViewInit {
+export class SubmissionComponent extends PermissionHandler implements OnInit, AfterViewInit {
 
   preload: SubmissionPreloadResponse;
   upsertSubmissionPreload: UpsertSubmissionPreload;
-  displayedColumns = ['title', 'creationDate', 'lastModifyDate', 'manuscriptAbstract', 'submitter', 'status', 'actions'];
+  displayedColumns = ['title', 'creationDate', 'lastModifyDate', 'submitter', 'status', 'actions'];
   dataSource: MatTableDataSource<Submission>;
   selectedConference: any;
+  selectedStatus: SubmissionStatus;
   filterConferences: ConferenceIdNamePair[] = [];
+  statuses: Array<SubmissionStatus> = new Array<SubmissionStatus>();
 
   authors: Author[];
 
@@ -63,7 +74,7 @@ export class SubmissionComponent extends PermissionHandler implements AfterViewI
 
           } else {
             console.log('conference: ' + urlSegment[urlSegment.length - 1]);
-            this.filter(+urlSegment[urlSegment.length - 1]);
+            this.filterByConference(+urlSegment[urlSegment.length - 1]);
           }
         });
       }
@@ -77,12 +88,26 @@ export class SubmissionComponent extends PermissionHandler implements AfterViewI
     }
   }
 
-  filter(conferenceId: number) {
+  filterByConference(conferenceId: number) {
     if (conferenceId === -1) {
       this.dataSource.data = this.preload.submissions;
     } else {
       this.dataSource.data = this.preload.submissions.filter((s) => s.conferenceId === conferenceId);
     }
+  }
+
+  // filterForStatus(status: SubmissionStatus) {
+  //   if (status.id === -1) {
+  //     this.filterByConference(this.selectedConference.id);
+  //   } else {
+  //     this.dataSource.data = this.dataSource.data.filter((s) => s.status === status.status);
+  //   }
+  // }
+
+  filter() {
+    this.dataSource.data = this.preload.submissions
+      .filter((s) => this.selectedConference.id === -1 || s.conferenceId === this.selectedConference.id)
+      .filter((s) => this.selectedStatus.id === -1 || s.status === this.selectedStatus.status);
   }
 
   create() {
@@ -224,6 +249,7 @@ export class SubmissionComponent extends PermissionHandler implements AfterViewI
     this.submissionService.preload().subscribe(resp => {
       this.dataSource = new MatTableDataSource<Submission>(resp.submissions);
       this.preload = resp;
+      this.filter();
     });
   }
 
@@ -251,19 +277,25 @@ export class SubmissionComponent extends PermissionHandler implements AfterViewI
   //   }
   // }
 
-  openUploadManuscriptPopup(submissionId: number) {
-    const dialogRef = this.dialog.open(ManuscriptUploadModalComponent, {
-      autoFocus: true,
-      data: {
-        submissionId: submissionId
-      }
-    });
+  // openUploadManuscriptPopup(submissionId: number) {
+  //   const dialogRef = this.dialog.open(ManuscriptUploadModalComponent, {
+  //     autoFocus: true,
+  //     data: {
+  //       submissionId: submissionId
+  //     }
+  //   });
+  //
+  //   dialogRef.afterClosed().subscribe(result => {
+  //     if (!result) {
+  //       return;
+  //     }
+  //     this.reload();
+  //   });
+  // }
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (!result) {
-        return;
-      }
-      console.log(result);
-    });
+  ngOnInit(): void {
+    this.selectedStatus = new SubmissionStatus(-1, 'All status');
+    this.statuses.push(this.selectedStatus);
+    this.preload.statuses.forEach((s, index) => this.statuses.push(new SubmissionStatus(index, s)));
   }
 }

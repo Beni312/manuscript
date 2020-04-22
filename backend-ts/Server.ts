@@ -17,6 +17,7 @@ import './controller/RegistrationController';
 import './controller/SubmissionController';
 import './controller/UserManagementController';
 import './controller/MessageController';
+import './controller/ManuscriptController';
 
 import { AcademicDisciplineRepository } from './repository/AcademicDisciplineRepository';
 import { ApplicationService } from './service/ApplicationService';
@@ -27,6 +28,7 @@ import { ChangePasswordValidator } from './validator/ChangePasswordValidator';
 import { ConferenceRepository } from './repository/ConferenceRepository';
 import { ConferenceService } from './service/ConferenceService';
 import { Container } from 'inversify';
+import { EditConferenceCommandValidator } from './validator/EditConferenceCommandValidator';
 import { HasPermissionToDeleteSubmissionValidator } from './validator/HasPermissionToDeleteSubmissionValidator';
 import { HasPermissionToSubmitSubmissionValidator } from './validator/HasPermissionToSubmitSubmissionValidator';
 import { ImageResizer } from './service/ImageResizer';
@@ -125,6 +127,7 @@ export class Server {
     Server.container.bind<UpdateAcademicDisciplinesValidator>(UpdateAcademicDisciplinesValidator.name).to(UpdateAcademicDisciplinesValidator);
     Server.container.bind<ChangePasswordValidator>(ChangePasswordValidator.name).to(ChangePasswordValidator);
     Server.container.bind<RegistrationCommandValidator>(RegistrationCommandValidator.name).to(RegistrationCommandValidator);
+    Server.container.bind<EditConferenceCommandValidator>(EditConferenceCommandValidator.name).to(EditConferenceCommandValidator);
 
     Server.container.bind<MessageService>(MessageService.name).to(MessageService);
     Server.container.bind<MessageRepository>(MessageRepository.name).to(MessageRepository);

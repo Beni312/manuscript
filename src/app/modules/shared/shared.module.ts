@@ -6,12 +6,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatRowExpandDirective } from './components/mat.row.expand.directive';
 import { MaterialModule } from '../material/material.module';
 import { NgModule } from '@angular/core';
+import { UnderscoreToSpacePipe } from './services/underscore-to-space.pipe';
 
 const declareExport = [
   AutocompleteMultiSelectComponent,
   ClickOutsideDirective,
   ConfirmDialogComponent,
-  MatRowExpandDirective
+  MatRowExpandDirective,
+  UnderscoreToSpacePipe
 ];
 
 @NgModule({

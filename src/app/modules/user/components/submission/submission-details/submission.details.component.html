@@ -1,4 +1,21 @@
 <div class="container-fluid mt-4">
+  <div class="row pb-3">
+    <div class="col-6">
+      <h3 class="ml-2">Manuscript abstract</h3>
+      <p class="manuscriptAbstractParagraph ml-3">{{data.manuscriptAbstract}}</p>
+    </div>
+    <div class="col-6" *ngIf="data.canUploadNewVersionManuscript">
+      <div class="center">
+        <ngx-file-drop dropZoneLabel="Drop files here" (onFileDrop)="dropped($event)"
+                       (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)">
+          <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+            <span>Drop manuscript document here, or click to browse:</span>
+            <button class="btn btn-dark ml-3" type="button" (click)="openFileSelector()">Browse Files</button>
+          </ng-template>
+        </ngx-file-drop>
+      </div>
+    </div>
+  </div>
   <div class="row">
     <div class="col-md-6">
       <h4>Academic disciplines</h4>
@@ -12,6 +29,40 @@
 
           <mat-header-row *matHeaderRowDef="displayedColumns2"></mat-header-row>
           <mat-row *matRowDef="let row; columns: displayedColumns2;" class="element-row"></mat-row>
+        </mat-table>
+      </div>
+    </div>
+    <div class="col-md-6" *ngIf="data.manuscripts && data.manuscripts.length > 0">
+      <h4>Uploaded manuscripts</h4>
+      <div class="mat-elevation-z8">
+        <mat-table [dataSource]="dataSource" matSort>
+
+          <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Id </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.id}}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="version">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Version </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.version}}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="creationDate">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Creation date </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.creationDate | date}}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="download">
+            <mat-header-cell [ngClass]="'downloadWidth'" *matHeaderCellDef mat-sort-header> Download </mat-header-cell>
+            <mat-cell [ngClass]="'downloadWidth justify-content-center'" *matCellDef="let element">
+              <button mat-icon-button (click)="download(element)" matTooltip="Download manuscript">
+                <mat-icon aria-label="Delete">get_app</mat-icon>
+              </button>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;" class="element-row"></mat-row>
         </mat-table>
       </div>
     </div>

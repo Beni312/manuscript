@@ -40,7 +40,7 @@ export class UserManagementController extends BaseHttpController implements inte
   async changeUserPassword(@requestBody() changePasswordCommand: ChangePasswordCommand): Promise<BasicResponse> {
     await this.passwordService.modifyPassword(changePasswordCommand.userId, changePasswordCommand.password.password);
     return new BasicResponse()
-      .withSuccessMessage(  'User password changed successfully!');
+      .withSuccessMessage('User password changed successfully!');
   }
 
   @isAuthenticated('ADMIN')

@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FileSystemFileEntry, NgxFileDropEntry } from 'ngx-file-drop';
-import { ManuscriptUploadService } from '../../../../../services/manuscript-upload.service';
+import { ManuscriptService } from '../../../../../services/manuscript.service';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -14,7 +14,8 @@ export class ManuscriptUploadModalComponent implements OnInit {
   public files: NgxFileDropEntry[] = [];
 
   constructor(@Inject(MAT_DIALOG_DATA) private data: any,
-              public manuscriptUploadService: ManuscriptUploadService,
+              public manuscriptUploadService: ManuscriptService,
+              private dialogRef: MatDialogRef<ManuscriptUploadModalComponent>,
               public toastrService: ToastrService) {
   }
 
@@ -34,6 +35,7 @@ export class ManuscriptUploadModalComponent implements OnInit {
           formData.append('submissionId', this.data.submissionId);
           this.manuscriptUploadService.uploadManuscript(formData).subscribe((resp) => {
             this.toastrService.success(resp.successMessage);
+            this.dialogRef.close(true);
           }, error => {
             this.toastrService.error(error);
           });

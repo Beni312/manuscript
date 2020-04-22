@@ -1,12 +1,22 @@
 <div class="filter" *ngIf="preload.submissions.length > 0">
-  <mat-form-field>
-    <mat-select placeholder="Filter for conference" [(ngModel)]="selectedConference" (selectionChange)="filter(selectedConference.id)">
-      <mat-option *ngFor="let pair of filterConferences" [value]="pair">
-        {{ pair.title }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-
+  <div>
+    <mat-form-field>
+      <mat-select placeholder="Filter for conference" [(ngModel)]="selectedConference"
+                  (selectionChange)="filter()">
+        <mat-option *ngFor="let pair of filterConferences" [value]="pair">
+          {{ pair.title }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="ml-3">
+      <mat-select placeholder="Filter for status" [(ngModel)]="selectedStatus"
+                  (selectionChange)="filter()">
+        <mat-option *ngFor="let status of statuses" [value]="status">
+          {{ status.status | titlecase | underscoreToSpace }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
   <button id="createSubmissionBtn" mat-icon-button (click)="create()" matTooltip="Create new submission">
     <mat-icon aria-label="Evaluate">add_box</mat-icon>
   </button>
@@ -31,24 +41,19 @@
       <mat-cell *matCellDef="let element">{{element.updatedOn | date:'dd/MM/yyyy hh:mm' }}</mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="manuscriptAbstract">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> Manuscript abstract</mat-header-cell>
-      <mat-cell *matCellDef="let element">{{element.manuscriptAbstract}}</mat-cell>
-    </ng-container>
-
     <ng-container matColumnDef="submitter">
-      <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'submitterColWidth'"> Submitter</mat-header-cell>
-      <mat-cell *matCellDef="let element" [ngClass]="'submitterColWidth'">{{element.submitter.firstName + ' '  + element.submitter.lastName}}</mat-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Submitter</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.submitter.firstName + ' '  + element.submitter.lastName}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="status">
-      <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'statusColWidth'">Status</mat-header-cell>
-      <mat-cell *matCellDef="let element" [ngClass]="'statusColWidth'">{{ element.status | titlecase }}</mat-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element.status | titlecase | underscoreToSpace }}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="actions">
-      <mat-header-cell #actionsHeader *matHeaderCellDef mat-sort-header [ngClass]="'justify-content-center pr-0 actionsColWidth'"> Actions </mat-header-cell>
-      <mat-cell #actionsCol *matCellDef="let element" class="ignore" [ngClass]="'actionsColWidth pr-0'">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'justify-content-center pr-0 actionsColWidth'"> Actions </mat-header-cell>
+      <mat-cell *matCellDef="let element" class="ignore" [ngClass]="'actionsColWidth pr-0'">
         <button mat-icon-button (click)="confirmDelete(element.id)" *ngIf="element.canDelete" matTooltip="Delete">
           <mat-icon aria-label="Delete">delete</mat-icon>
         </button>
@@ -60,9 +65,6 @@
         </button>
         <button mat-icon-button (click)="evaluate(element.id)" matTooltip="Evaluate" *ngIf="element.canEvaluate">
           <mat-icon aria-label="Evaluate">check_circle</mat-icon>
-        </button>
-        <button mat-icon-button (click)="openUploadManuscriptPopup(element.id)" matTooltip="Upload manuscript" *ngIf="element.canEdit && hasPermission(['AUTHOR'])">
-          <mat-icon aria-label="Upload manuscript">cloud_upload</mat-icon>
         </button>
       </mat-cell>
     </ng-container>
@@ -82,7 +84,7 @@
 </div>
 
 <ng-template #template let-element>
-  <div class="mat-row" [@detailExpand] style="overflow: hidden">
-    <app-expand [data]="element"></app-expand>
+  <div class="mat-row expandedRow" [@detailExpand] style="overflow: hidden">
+    <app-expand [data]="element" (onUploadNewManuscript)="reload()"></app-expand>
   </div>
 </ng-template>
