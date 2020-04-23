@@ -17,6 +17,7 @@ import { SubmissionPreload } from '../model/dto/SubmissionPreload';
 import { SubmissionRemoveCommand } from '../model/command/SubmissionRemoveCommand';
 import { SubmissionService } from '../service/SubmissionService';
 import { SubmissionSubmitCommand } from '../model/command/SubmissionSubmitCommand';
+import { PendingManuscriptDto } from '../model/dto/PendingManuscriptDto';
 import { UpsertSubmissionPreload } from '../model/dto/UpsertSubmissionPreload';
 
 @controller('/submission')
@@ -94,9 +95,7 @@ export class SubmissionController {
   @isAuthenticated('AUTHOR')
   @httpPost('/upload-manuscript', upload.single('manuscript'))
   // @validateBody(UploadManuscriptDocumentToSubmissionCommand)
-  async uploadManuscriptDocument(@request() req: express.Request, @principal() userPrincipal: Principal): Promise<BasicResponse> {
-    await this.manuscriptService.saveAndCreateManuscript(userPrincipal.details.id, req.body.submissionId, req.file);
-    return new BasicResponse()
-      .withSuccessMessage('Manuscript successfully uploaded!');
+  async uploadManuscriptDocument(@request() req: express.Request, @principal() userPrincipal: Principal): Promise<PendingManuscriptDto> {
+    return this.manuscriptService.saveAndCreateManuscript(userPrincipal.details.id, req.body.submissionId, req.file);
   }
 }

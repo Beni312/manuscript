@@ -4,6 +4,7 @@ import { writeFileSync } from 'fs';
 import { Manuscript } from '../model/entity/Manuscript';
 import { ManuscriptDto } from '../model/dto/ManuscriptDto';
 import { ManuscriptRepository } from '../repository/ManuscriptRepository';
+import { PendingManuscriptDto } from '../model/dto/PendingManuscriptDto';
 import { UtilsService } from './UtilsService';
 
 @injectable()
@@ -17,7 +18,7 @@ export class ManuscriptService {
   @inject(UtilsService.name)
   private utilsService: UtilsService;
 
-  public async saveAndCreateManuscript(userId, submissionId, file: Express.Multer.File) {
+  public async saveAndCreateManuscript(userId, submissionId, file: Express.Multer.File): Promise<PendingManuscriptDto> {
     let latestManuscriptVersion: number = await this.manuscriptRepository.findLatestVersionForSubmission(submissionId);
     if (!latestManuscriptVersion) {
       latestManuscriptVersion = 1;
@@ -31,7 +32,8 @@ export class ManuscriptService {
         .replace('EXT', this.utilsService.getExtension(file.originalname));
     const appDir = path.dirname(require.main!.filename);
     writeFileSync(appDir + process.env.MANUSCRIPT_FOLDER + '/' + filename, file.buffer);
-    await this.manuscriptRepository.createManuscript(userId, submissionId, filename, latestManuscriptVersion);
+    const manuscript = await this.manuscriptRepository.createManuscript(userId, submissionId, filename, latestManuscriptVersion);
+    return new PendingManuscriptDto(manuscript.id, manuscript.version, manuscript.filename, manuscript.creationDate);
   }
 
   findManuscriptsToSubmission(submissionId: number) {

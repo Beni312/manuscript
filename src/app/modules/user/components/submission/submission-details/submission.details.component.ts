@@ -1,5 +1,5 @@
 import * as fileSaver from 'file-saver';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { AcademicDiscipline } from '../../../../../models/academic.discipline';
 import { MatTableDataSource } from '@angular/material/table';
 import { ManuscriptService } from '../../../../../services/manuscript.service';
@@ -16,8 +16,6 @@ export class SubmissionDetailsComponent implements OnInit {
 
   @Input()
   data: Submission;
-  @Output()
-  onUploadNewManuscript: EventEmitter<void> = new EventEmitter<void>();
 
   dataSource: MatTableDataSource<any>;
   displayedColumns = ['id', 'version', 'creationDate', 'download'];
@@ -58,8 +56,9 @@ export class SubmissionDetailsComponent implements OnInit {
           formData.append('manuscript', file, droppedFile.relativePath);
           formData.append('submissionId', this.data.id.toString());
           this.manuscriptService.uploadManuscript(formData).subscribe((resp) => {
-            this.toastrService.success(resp.successMessage);
-            this.onUploadNewManuscript.emit();
+            this.toastrService.success('Manuscript successfully uploaded!');
+            this.data.manuscripts.push(resp);
+            this.dataSource = new MatTableDataSource<any>(this.data.manuscripts);
           }, error => {
             this.toastrService.error(error);
           });
