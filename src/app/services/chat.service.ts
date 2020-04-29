@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
-import { MessagePreload } from "../modules/user/components/messages/messages.component";
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { MessagePreload } from '../modules/user/components/messages/messages.component';
 
 @Injectable({
   providedIn: 'root'

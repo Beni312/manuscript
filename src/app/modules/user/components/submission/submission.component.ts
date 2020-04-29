@@ -52,6 +52,13 @@ export class SubmissionComponent extends PermissionHandler implements OnInit, Af
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
   @ViewChild(MatTable, {static: false}) table: MatTable<Submission>;
 
+  ngAfterViewInit(): void {
+    if (this.dataSource) {
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+    }
+  }
+
   constructor(private submissionService: SubmissionService,
               private activatedRoute: ActivatedRoute,
               private messageService: MessageService,
@@ -78,13 +85,6 @@ export class SubmissionComponent extends PermissionHandler implements OnInit, Af
           }
         });
       }
-    }
-  }
-
-  ngAfterViewInit(): void {
-    if (this.dataSource) {
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
     }
   }
 

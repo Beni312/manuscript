@@ -1,8 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { UserManagementService } from '../../../../services/user.management.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatDialog } from '@angular/material/dialog';
+import { ToastrService } from 'ngx-toastr';
+import { UserCreateComponent } from './user-create/user-create.component';
+import { UserManagementService } from '../../../../services/user.management.service';
 
 @Component({
   selector: 'app-user.management',
@@ -19,7 +22,9 @@ export class UserManagementComponent implements OnInit {
   @ViewChild(MatSort, {static: false}) sort: MatSort;
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
 
-  constructor(private userManagementService: UserManagementService) {
+  constructor(private dialog: MatDialog,
+              private userManagementService: UserManagementService,
+              private toastrService: ToastrService) {
   }
 
   ngOnInit() {
@@ -33,6 +38,21 @@ export class UserManagementComponent implements OnInit {
   openChangeUserPasswordModal(userId: number) {
   }
 
-  openCreateUserModal(userId: number) {
+  openCreateUserModal() {
+    const dialogRef = this.dialog.open(UserCreateComponent, {
+      autoFocus: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        return;
+      }
+      this.userManagementService.createUser(result).subscribe(resp => {
+        console.log(resp);
+        this.toastrService.success('User created!');
+      }, err => {
+        this.toastrService.error(err.error);
+      });
+    });
   }
 }

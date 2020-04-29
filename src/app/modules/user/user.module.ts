@@ -31,6 +31,8 @@ import { UserService } from '../../services/user.service';
 import { SubmissionEvaluateComponent } from './components/submission/submission.evaluate/submission.evaluate.component';
 import { ManuscriptUploadModalComponent } from './components/submission/manuscript-upload-modal/manuscript-upload-modal.component';
 import { NgxFileDropModule } from 'ngx-file-drop';
+import { UserCreateComponent } from './components/user.management/user-create/user-create.component';
+import { ChangeUserPasswordComponent } from './components/user.management/change-user-password/change-user-password.component';
 
 const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
   {
@@ -163,7 +165,6 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
     SecureRoutes,
     SharedModule,
     TagInputModule,
-    StoreModule.forRoot({}),
     StoreModule.forFeature('message', messageReducer)
   ],
   declarations: [
@@ -179,7 +180,9 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
     UserManagementComponent,
     ConferenceDetailsComponent,
     MessagesComponent,
-    ManuscriptUploadModalComponent
+    ManuscriptUploadModalComponent,
+    UserCreateComponent,
+    ChangeUserPasswordComponent
   ],
   providers: [
     PersonalDataPreloadResolver,

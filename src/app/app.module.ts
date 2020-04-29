@@ -13,10 +13,26 @@ import { PreloadAllModules, RouterModule } from '@angular/router';
 import { ProgressInterceptor, ProgressSpinnerService } from './services/progress.spinner.service';
 import { RegistrationComponent } from './modules/core/components/registration/registration.component';
 import { SharedModule } from './modules/shared/shared.module';
-import { SocketService } from "./services/socket.service";
+import { SocketService } from './services/socket.service';
 import { ToastrModule } from 'ngx-toastr';
 import { UserModule } from './modules/user/user.module';
-import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from "@angular/material/form-field";
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import { systemDataReducer, SystemDataState } from './store/system-data/SystemDataReducer';
+import { SystemDataService } from './services/system-data.service';
+import { StoreModule } from '@ngrx/store';
+
+export function systemDataProviderFactory(systemDataService: SystemDataService) {
+  return (): Promise<SystemDataState> => new Promise<SystemDataState>((resolve, reject) => {
+    systemDataService.getSystemData()
+      .toPromise()
+      .then((resp) => {
+        resolve(resp);
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+}
 
 const Routes: ModuleWithProviders = RouterModule.forRoot([
   {
@@ -51,7 +67,9 @@ const Routes: ModuleWithProviders = RouterModule.forRoot([
     Routes,
     SharedModule,
     ToastrModule.forRoot(),
-    UserModule
+    UserModule,
+    StoreModule.forRoot({}),
+    StoreModule.forFeature('systemData', systemDataReducer)
   ],
   providers: [{provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'fill'}},
     MessageService,

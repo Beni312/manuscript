@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ProgressSpinnerService } from './services/progress.spinner.service';
 
 @Component({
@@ -6,7 +6,7 @@ import { ProgressSpinnerService } from './services/progress.spinner.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
   progressSpinnerStatus: string;
 
@@ -16,8 +16,11 @@ export class AppComponent {
     });
   }
 
-  navLinks = [
-    {label: 'Login', path: 'login'},
-    {label: 'Registration', path: 'registration'}
-  ]
+  ngOnInit(): void {
+  }
+
+  // navLinks = [
+  //   {label: 'Login', path: 'login'},
+  //   {label: 'Registration', path: 'registration'}
+  // ];
 }

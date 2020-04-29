@@ -1,6 +1,6 @@
-import { Action } from "@ngrx/store";
-import { Message } from "../../models/message";
-import { MessagePreload } from "../../modules/user/components/messages/messages.component";
+import { Action } from '@ngrx/store';
+import { Message } from '../../models/message';
+import { MessagePreload } from '../../modules/user/components/messages/messages.component';
 
 export enum MessageActionTypes {
   InitUserMessages = 'Init user messages',
