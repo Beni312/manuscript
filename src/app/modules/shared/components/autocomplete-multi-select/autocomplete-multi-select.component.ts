@@ -116,13 +116,14 @@ export class AutocompleteMultiSelectComponent implements ControlValueAccessor, O
     if (this.toOrder) {
       this.sortByDisplayedProperty(this.selected);
     }
-    this.query = '';
     this.filter();
+    this.propagateChange(this.selected);
   }
 
   remove(item) {
     this.selected.splice(this.selected.indexOf(item), 1);
     this.filter();
+    this.propagateChange(this.selected);
   }
 
   setShowDropdown(clickOutside: boolean) {

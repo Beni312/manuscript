@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 import { Message } from '../../models/message';
-import { MessagePreload } from '../../modules/user/components/messages/messages.component';
+import { Messages } from '../../modules/user/components/messages/messages.component';
 
 export enum MessageActionTypes {
   InitUserMessages = 'Init user messages',
@@ -23,7 +23,7 @@ export class SignMessageAsSeen implements Action {
 export class InitUserMessages implements Action {
   readonly type = MessageActionTypes.InitUserMessages;
 
-  constructor(public payload: MessagePreload) {}
+  constructor(public payload: Messages) {}
 }
 
 export type MessageActions =

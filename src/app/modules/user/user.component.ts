@@ -3,7 +3,7 @@ import { MenuService } from '../../services/menu.service';
 import { SidebarItemDefinition } from '../../models/sidebar.item.definition';
 import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
-import { MessagePreload, MessagesComponent } from './components/messages/messages.component';
+import { Messages, MessagesComponent } from './components/messages/messages.component';
 import { ChatService } from '../../services/chat.service';
 import { SocketService } from '../../services/socket.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -11,6 +11,8 @@ import { Store } from '@ngrx/store';
 import { MessageState } from '../../store/message/MessageReducer';
 import { AddMessage, InitUserMessages } from '../../store/message/MessageActions';
 import { Message } from '../../models/message';
+import { UserState } from '../../store/user/UserReducer';
+import { InitUsers } from '../../store/user/UserActions';
 
 @Component({
   selector: 'app-user',
@@ -22,7 +24,6 @@ export class UserComponent implements OnInit {
 
   public static currentPage: string;
   public menuItems: SidebarItemDefinition[] = [];
-  private messagePreload: MessagePreload;
 
   constructor(private menuService: MenuService,
               private userService: UserService,
@@ -30,18 +31,22 @@ export class UserComponent implements OnInit {
               private dialog: MatDialog,
               private chatService: ChatService,
               private socketService: SocketService,
-              private readonly clientStore: Store<MessageState>) {
+              private readonly clientStore: Store<MessageState>,
+              private readonly userStore: Store<UserState>) {
   }
 
   ngOnInit(): void {
     this.socketService.initSocket();
     this.menuItems = this.menuService.getSidebarItemsDefinitions();
-    this.chatService.findUserMessages().subscribe((resp: MessagePreload) => {
+    this.chatService.findUserMessages().subscribe((resp: Messages) => {
       this.clientStore.dispatch(new InitUserMessages(resp));
+    });
+    this.userService.getAuthors().subscribe(authors => {
+      this.userStore.dispatch(new InitUsers({users: authors}));
     });
     this.socketService.onMessage().subscribe((resp: Message) => {
       this.clientStore.dispatch(new AddMessage(resp));
-    })
+    });
   }
 
   logout() {
@@ -49,11 +54,8 @@ export class UserComponent implements OnInit {
   }
 
   showMessages() {
-    const dialogRef = this.dialog.open(MessagesComponent, {
-      autoFocus: false,
-      data: {
-        messagePreload: this.messagePreload
-      }
+    this.dialog.open(MessagesComponent, {
+      autoFocus: false
     });
   }
 

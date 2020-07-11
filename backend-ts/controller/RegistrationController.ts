@@ -1,7 +1,7 @@
 import { controller, httpPost, interfaces, requestBody } from 'inversify-express-utils';
 import { inject } from 'inversify';
 import { validateBody } from '../decorator/ValidateBody';
-import { BasicResponse } from '../model/dto/BasicResponse';
+import { BasicResponse } from '../model/response/BasicResponse';
 import { RegistrationCommand } from '../model/command/RegistrationCommand';
 import { RegistrationCommandValidator } from '../validator/RegistrationCommandValidator';
 import { RegistrationService } from '../service/RegistrationService';

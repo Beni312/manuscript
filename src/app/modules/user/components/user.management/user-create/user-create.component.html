@@ -1,71 +1,71 @@
-<div class="modal-header">
-  <h5 class="modal-title"><i class="fa fa-lg fa-user-plus" aria-hidden="true"></i> Create user</h5>
-  <button type="button" class="close btn" data-dismiss="modal" aria-label="Close" (click)="cancel()">
-    <span aria-hidden="true"><i class="fa fa-times"></i></span>
-  </button>
-</div>
-
-<form [formGroup]="createUserForm">
-  <div formGroupName="user">
-    <div class="form-group">
-      <mat-form-field id="title">
-        <input matInput type="text" placeholder="Title" formControlName="title">
-      </mat-form-field>
-    </div>
-
-    <div class="form-group">
-      <mat-form-field id="firstName">
-        <input matInput type="text" placeholder="First name" formControlName="firstName">
-      </mat-form-field>
-    </div>
-    <div class="form-group">
-      <mat-form-field id="lastName">
-        <input matInput type="text" placeholder="Last name" formControlName="lastName">
-      </mat-form-field>
-    </div>
-    <div class="form-group">
-      <mat-form-field id="job">
-        <input matInput type="text" placeholder="Job" formControlName="job">
-      </mat-form-field>
-    </div>
-    <div class="form-group">
-      <mat-form-field id="email">
-        <input matInput type="text" placeholder="Enter email" formControlName="email">
-      </mat-form-field>
-    </div>
-    <div class="form-group">
-      <mat-form-field id="username">
-        <input matInput type="text" placeholder="Username" formControlName="username">
-      </mat-form-field>
-    </div>
-  </div>
-
-  <div formGroupName="password">
-    <mat-form-field id="password">
-      <input matInput type="password" placeholder="Password" formControlName="password">
-    </mat-form-field>
-
-    <mat-form-field id="passwordAgain">
-      <input matInput type="password" placeholder="Password again" formControlName="passwordAgain">
-    </mat-form-field>
-  </div>
-
-  <app-autocomplete-multi-select
-    [items]="academicDisciplines"
-    [property]="'name'"
-    formControlName="academicDisciplines"
-    [placeholder]="'Choose academic disciplines'"
-    [inputWidth]="'100%'">
-  </app-autocomplete-multi-select>
-
-  <button mat-raised-button color="primary" type="submit" (click)="register()" id="regBtn">
-    Register
-  </button>
-
-  <div class="modal-footer">
-    <button mat-raised-button color="primary" type="submit" (click)="create()">
-      Create
+<div class="container">
+  <div class="modal-header">
+    <h5 class="modal-title"><i class="fa fa-lg fa-user-plus" aria-hidden="true"></i> Create user</h5>
+    <button class="" mat-icon-button (click)="cancel()" matTooltip="Cancel">
+      <mat-icon class="" aria-label="Close">close</mat-icon>
     </button>
   </div>
 
-</form>
+  <form [formGroup]="createUserForm">
+    <div formGroupName="user">
+
+      <div class="row">
+        <mat-form-field class="col-2" id="title">
+          <input matInput type="text" placeholder="Title" formControlName="title">
+        </mat-form-field>
+
+        <mat-form-field class="col-5" id="firstName">
+          <input matInput type="text" placeholder="First name" formControlName="firstName">
+        </mat-form-field>
+
+
+        <mat-form-field class="col-5" id="lastName">
+          <input matInput type="text" placeholder="Last name" formControlName="lastName">
+        </mat-form-field>
+      </div>
+
+
+      <div class="row">
+        <mat-form-field class="col-6" id="username">
+          <input matInput type="text" placeholder="Username" formControlName="username">
+        </mat-form-field>
+
+        <mat-form-field class="col-6" id="job">
+          <input matInput type="text" placeholder="Job" formControlName="job">
+        </mat-form-field>
+
+      </div>
+      <div class="row">
+        <mat-form-field class="col-12" id="email">
+          <input matInput type="text" placeholder="Enter email" formControlName="email">
+        </mat-form-field>
+      </div>
+
+    </div>
+
+    <div class="row" formGroupName="password">
+      <mat-form-field class="col-6" id="password">
+        <input matInput type="password" placeholder="Password" formControlName="password">
+      </mat-form-field>
+
+      <mat-form-field class="col-6" id="passwordAgain">
+        <input matInput type="password" placeholder="Password again" formControlName="passwordAgain">
+      </mat-form-field>
+    </div>
+
+    <app-autocomplete-multi-select
+      [items]="academicDisciplines"
+      [property]="'name'"
+      formControlName="academicDisciplines"
+      [placeholder]="'Choose academic disciplines'"
+      [inputWidth]="'100%'">
+    </app-autocomplete-multi-select>
+
+    <div class="modal-footer">
+      <button mat-raised-button color="primary" type="submit" (click)="createUser()">
+        Create
+      </button>
+    </div>
+
+  </form>
+</div>

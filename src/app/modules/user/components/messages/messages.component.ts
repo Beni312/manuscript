@@ -1,25 +1,22 @@
-import { map, startWith } from "rxjs/operators";
+import { map, startWith } from 'rxjs/operators';
 import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
-import { getMessageState } from "../../../../store/message/MessageSelector";
-import { MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { getMessageState } from '../../../../store/message/MessageSelector';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Author } from '../../../../models/author';
 import { ChatService } from '../../../../services/chat.service';
-import { FormControl } from "@angular/forms";
+import { FormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { Message } from "../../../../models/message";
-import { MessageState } from "../../../../store/message/MessageReducer";
-import { Observable } from "rxjs";
-import { Store } from "@ngrx/store";
+import { Message } from '../../../../models/message';
+import { MessageState } from '../../../../store/message/MessageReducer';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
 import { SignMessageAsSeen } from '../../../../store/message/MessageActions';
-import { SocketService } from "../../../../services/socket.service";
+import { SocketService } from '../../../../services/socket.service';
+import { UserState } from '../../../../store/user/UserReducer';
+import { getUsersState } from '../../../../store/user/UserSelector';
 
-export class MessagePreload {
-  messages: Map<number, Message[]>;
-  users: Author[];
-
-  constructor() {
-    this.users = [];
-  }
+export class Messages {
+  [k: string]: Array<Message>
 }
 
 @Component({
@@ -31,8 +28,9 @@ export class MessagesComponent implements OnInit {
 
   @ViewChild('messageHistory') private myScrollContainer: ElementRef;
 
-  messagePreload: MessagePreload = new MessagePreload();
-  messages: Array<Message>;
+  allMessages: Messages;
+  actualMessages: Array<Message>;
+  authors: Array<Author>;
   selectedAuthor: number;
   actualMessage: string;
   filteredOptions: Observable<Author[]>;
@@ -41,17 +39,21 @@ export class MessagesComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
               private chatService: ChatService,
               private socketService: SocketService,
-              private readonly store: Store<MessageState>) {
+              private readonly messageStore: Store<MessageState>,
+              private readonly userStore: Store<UserState>) {
   }
 
   ngOnInit() {
-    this.messagePreload = this.data.messagePreload;
-    this.store.select(getMessageState).subscribe((state) => {
-      this.messagePreload = state;
+    this.messageStore.select(getMessageState).subscribe((state) => {
+      this.allMessages = state.messages;
       if (this.selectedAuthor) {
-        this.messages = state.messages[this.selectedAuthor];
+        this.actualMessages = state.messages[this.selectedAuthor];
         this.scrollDown();
       }
+    });
+
+    this.userStore.select(getUsersState).subscribe((usersState) => {
+      this.authors = usersState.users;
     });
 
     this.filteredOptions = this.searchAuthor.valueChanges
@@ -67,9 +69,9 @@ export class MessagesComponent implements OnInit {
 
   changeUser(userId: number) {
     this.selectedAuthor = userId;
-    this.messages = this.messagePreload.messages[this.selectedAuthor];
-    if (!this.messages) {
-      this.messages = [];
+    this.actualMessages = this.allMessages[this.selectedAuthor];
+    if (!this.actualMessages) {
+      this.actualMessages = [];
     }
 
     this.signMessagesAsSeenToUser(userId);
@@ -77,17 +79,17 @@ export class MessagesComponent implements OnInit {
   }
 
   signMessagesAsSeenToUser(userId: number) {
-    const messagesToUser: Array<Message> = this.messagePreload.messages[userId];
+    const messagesToUser: Array<Message> = this.allMessages[userId];
     if (messagesToUser && messagesToUser.filter(m => m.incoming && !m.seen).length > 0) {
       this.socketService.markUserMessagesAsSeen({to: userId});
-      this.store.dispatch(new SignMessageAsSeen(userId));
+      this.messageStore.dispatch(new SignMessageAsSeen(userId));
     }
   }
 
   scrollDown() {
     setTimeout(() => {
       this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
-    }, 1)
+    }, 1);
   }
 
   sendMessage() {
@@ -102,7 +104,7 @@ export class MessagesComponent implements OnInit {
     if (value.length < 2) {
       return [];
     }
-    return this.messagePreload.users.filter(user => this.getFullName(user.firstName, user.lastName).toLowerCase().includes(value.toLowerCase()));
+    return this.authors.filter(user => this.getFullName(user.firstName, user.lastName).toLowerCase().includes(value.toLowerCase()));
   }
 
   getFullName(firstName: string, lastName: string): string {
@@ -110,17 +112,17 @@ export class MessagesComponent implements OnInit {
   }
 
   getFullNameByUserId(userId: number): string {
-    const user = this.messagePreload.users.find(u => u.id === userId);
+    const user = this.authors.find(u => u.id === userId);
     return this.getFullName(user.firstName, user.lastName);
   }
 
   getLatestMessageDateByUserId(userId: number) {
-    const messagesForUser: Message[] = this.messagePreload.messages[userId];
+    const messagesForUser: Message[] = this.allMessages[userId];
     return messagesForUser[messagesForUser.length - 1].sentDate;
   }
 
   getLatestMessageByUserId(userId: number) {
-    const messagesForUser: Message[] = this.messagePreload.messages[userId];
+    const messagesForUser: Message[] = this.allMessages[userId];
     let message = messagesForUser[messagesForUser.length - 1].message;
     if (message && message.length > 23) {
       message = message.substring(0, 20) + '...';
@@ -129,15 +131,15 @@ export class MessagesComponent implements OnInit {
   }
 
   getUserById(userId: number) {
-    return this.messagePreload.users.find(u => u.id === userId);
+    return this.authors.find(u => u.id === userId);
   }
 
   getUsersFromMessages(): number[] {
-    return Object.keys(this.messagePreload.messages).map(item => Number(item));
+    return Object.keys(this.allMessages).map(item => Number(item));
   }
 
   getUserMessageStyle(userId: number) {
-    const mess: Array<Message> = this.messagePreload.messages[userId];
+    const mess: Array<Message> = this.allMessages[userId];
     if (mess.filter(m => m.incoming && !m.seen).length > 0) {
       return 'chat_list notSeenMessage';
     }

@@ -1,7 +1,7 @@
-import { AcademicDisciplineDto } from './AcademicDisciplineDto';
-import { AuthorDto } from './AuthorDto';
+import { AcademicDisciplineDto } from '../dto/AcademicDisciplineDto';
+import { AuthorDto } from '../dto/AuthorDto';
 import { ConferenceSubmissionDto } from './ConferenceSubmissionDto';
-import { UserDto } from './UserDto';
+import { UserDto } from '../dto/UserDto';
 
 export class ConferenceDto {
   title: string;

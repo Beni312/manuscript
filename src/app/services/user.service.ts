@@ -4,11 +4,13 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Preload } from '../models/preload';
 import { Router } from '@angular/router';
+import { Author } from '../models/author';
 
 @Injectable()
 export class UserService {
 
-  constructor(private httpClient: HttpClient, private router: Router) {
+  constructor(private httpClient: HttpClient,
+              private router: Router) {
   }
 
   static getPreload(): Preload {
@@ -54,5 +56,9 @@ export class UserService {
       localStorage.removeItem('currentUser');
       this.router.navigate(['login']);
     });
+  }
+
+  getAuthors(): Observable<Array<Author>> {
+    return this.httpClient.get<Array<Author>>('/user/authors');
   }
 }

@@ -2,8 +2,8 @@ import { controller, httpGet, httpPost, httpPut, principal, requestBody } from '
 import { inject } from 'inversify';
 import { isAuthenticated } from '../decorator/IsAuthenticated';
 import { validateBody } from '../decorator/ValidateBody';
-import { BasicResponse } from '../model/dto/BasicResponse';
-import { ConferenceDto } from '../model/dto/ConferenceDto';
+import { BasicResponse } from '../model/response/BasicResponse';
+import { ConferenceDto } from '../model/response/ConferenceDto';
 import { ConferenceService } from '../service/ConferenceService';
 import { CreateConferenceCommand } from '../model/command/CreateConferenceCommand';
 import { EditConferenceCommand } from '../model/command/EditConferenceCommand';
@@ -39,6 +39,6 @@ export class ConferenceController {
     await this.conferenceService.editConference(command);
 
     return new BasicResponse()
-      .withSuccessMessage('Conference successfully edited!')
+      .withSuccessMessage('Conference successfully edited!');
   }
 }

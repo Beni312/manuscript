@@ -2,15 +2,18 @@ import { AcademicDiscipline } from '../../../../models/academic.discipline';
 import { ActivatedRoute } from '@angular/router';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-// import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import { MessageService } from '../../../../services/message.service';
-import { PersonalDataPreload, ProfileService } from '../../../../services/profile.service';
+import { ProfileService } from '../../../../services/profile.service';
 import { PermissionHandler } from '../permission.handler';
 import { UpdateAcademicDisciplinesComponent } from './update.academic.disciplines/update.academic.disciplines.component';
-import { MatTableDataSource } from "@angular/material/table";
-import { MatSort } from "@angular/material/sort";
-import { MatPaginator } from "@angular/material/paginator";
-import { MatDialog } from "@angular/material/dialog";
+import { Store } from '@ngrx/store';
+import { SystemDataState } from '../../../../store/system-data/SystemDataReducer';
+import { getSystemData } from '../../../../store/system-data/SystemDataSelector';
+import { User } from '../../../../models/user';
 
 @Component({
   selector: 'app-profile',
@@ -19,11 +22,12 @@ import { MatDialog } from "@angular/material/dialog";
 })
 export class ProfileComponent extends PermissionHandler implements OnInit, AfterViewInit {
 
-  preload: PersonalDataPreload;
+  user: User;
   personalDataForm: FormGroup;
   changePasswordForm: FormGroup;
   displayedColumns = ['academicDisciplineName'];
   dataSource: MatTableDataSource<AcademicDiscipline>;
+  academicDisciplines: Array<AcademicDiscipline>;
 
   @ViewChild(MatSort, {static: false}) sort: MatSort;
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
@@ -33,27 +37,28 @@ export class ProfileComponent extends PermissionHandler implements OnInit, After
               private fb: FormBuilder,
               private activatedRoute: ActivatedRoute,
               private messageService: MessageService,
-              private dialog: MatDialog) {
+              private dialog: MatDialog,
+              private store: Store<SystemDataState>) {
     super();
-    this.preload = this.activatedRoute.snapshot.data['preload'];
-    this.dataSource = new MatTableDataSource<AcademicDiscipline>(this.preload.academicDisciplines);
+    this.user = this.activatedRoute.snapshot.data['preload'];
+    this.dataSource = new MatTableDataSource<AcademicDiscipline>(this.user.academicDisciplines);
   }
 
   ngOnInit() {
     this.personalDataForm = this.fb.group({
-      title: new FormControl(this.preload.user.title, {
+      title: new FormControl(this.user.title, {
         validators: [Validators.required]
       }),
-      firstName: new FormControl(this.preload.user.firstName, {
+      firstName: new FormControl(this.user.firstName, {
         validators: [Validators.required]
       }),
-      lastName: new FormControl(this.preload.user.lastName, {
+      lastName: new FormControl(this.user.lastName, {
         validators: [Validators.required]
       }),
-      job: new FormControl(this.preload.user.job, {
+      job: new FormControl(this.user.job, {
         validators: [Validators.required]
       }),
-      email: new FormControl(this.preload.user.email, {
+      email: new FormControl(this.user.email, {
         validators: [Validators.required, Validators.email]
       })
     });
@@ -64,6 +69,10 @@ export class ProfileComponent extends PermissionHandler implements OnInit, After
         passwordAgain: new FormControl('', {validators: [Validators.required, Validators.minLength(4)]})
       }),
       oldPassword: new FormControl('', {validators: [Validators.required, Validators.minLength(4)]})
+    });
+
+    this.store.select(getSystemData).subscribe((sd: SystemDataState) => {
+      this.academicDisciplines = sd.academicDisciplines;
     });
   }
 
@@ -91,24 +100,22 @@ export class ProfileComponent extends PermissionHandler implements OnInit, After
   }
 
   updateAcademicDisciplines() {
-    this.profileService.getAcademicDisciplines().subscribe(response => {
-      const dialogRef = this.dialog.open(UpdateAcademicDisciplinesComponent, {
-        width: '600px',
-        autoFocus: false,
-        data: {
-          all: response,
-          selected: this.preload.academicDisciplines
-        }
-      });
+    const dialogRef = this.dialog.open(UpdateAcademicDisciplinesComponent, {
+      width: '600px',
+      autoFocus: false,
+      data: {
+        all: this.academicDisciplines,
+        selected: this.user.academicDisciplines
+      }
+    });
 
-      dialogRef.afterClosed().subscribe(result => {
-        if (!result) {
-          return;
-        }
-        this.profileService.updateAcademicDisciplines(result).subscribe(response => {
-          this.reloadAcademicDisciplines();
-          this.messageService.success(response.successMessage);
-        });
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        return;
+      }
+      this.profileService.updateAcademicDisciplines(result).subscribe(response => {
+        this.reloadAcademicDisciplines();
+        this.messageService.success(response.successMessage);
       });
     });
   }
@@ -122,7 +129,7 @@ export class ProfileComponent extends PermissionHandler implements OnInit, After
   reloadAcademicDisciplines() {
     this.profileService.preload().subscribe(response => {
       this.dataSource.data = response.academicDisciplines;
-      this.preload.academicDisciplines = response.academicDisciplines;
+      this.user.academicDisciplines = response.academicDisciplines;
     });
   }
 }

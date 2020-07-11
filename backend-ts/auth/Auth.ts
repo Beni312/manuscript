@@ -90,25 +90,25 @@ export class Auth {
               user.userAlias.login.save();
             }
           }
+
+          if (bcrypt.compareSync(password, user.password.password)) {
+            if (user.status.status !== 'OK') {
+              done(new AuthenticationError(Auth.USER_DISABLED_ERROR_MESSAGE_PATTERN));
+              return null;
+            } else {
+              done(null, new UserInfo(user.id, user.userAlias.username, user.role.name, user.avatar));
+              return null;
+            }
+          }
         }
 
-        if (bcrypt.compareSync(password, user.password.password)) {
-          if (user.status.status !== 'OK') {
-            done(new AuthenticationError(Auth.USER_DISABLED_ERROR_MESSAGE_PATTERN));
-            return null;
-          } else {
-            done(null, new UserInfo(user.id, user.userAlias.username, user.role.name, user.avatar));
-            return null;
-          }
-        } else {
-          user.userAlias.login.failedLoginCounter++;
-          if (user.userAlias.login.failedLoginCounter > 2) {
-            user.userAlias.login.enabled = false;
-          }
-          user.userAlias.login.save();
-          done(null, false, new AuthenticationError(Auth.INVALID_USERNAME_OR_PASSWORD_ERROR_MESSAGE_PATTERN));
-          return null;
+        user.userAlias.login.failedLoginCounter++;
+        if (user.userAlias.login.failedLoginCounter > 2) {
+          user.userAlias.login.enabled = false;
         }
+        user.userAlias.login.save();
+        done(new AuthenticationError(Auth.INVALID_USERNAME_OR_PASSWORD_ERROR_MESSAGE_PATTERN));
+        return null;
       }).catch(err => {
         console.log(err);
       });
@@ -127,11 +127,3 @@ export class Auth {
     ));
   }
 }
-
-
-
-
-
-
-
-

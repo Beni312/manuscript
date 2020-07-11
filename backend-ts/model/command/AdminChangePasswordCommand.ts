@@ -1,11 +1,12 @@
-import { IsNumber, IsPositive, IsString } from 'class-validator';
+import { IsNumber, IsPositive, ValidateNested } from 'class-validator';
+import { PasswordDto } from '../dto/PasswordDto';
+import { Type } from 'class-transformer';
 
 export class AdminChangePasswordCommand {
   @IsNumber()
   @IsPositive()
   userId: number;
-  @IsString()
-  password: string;
-  @IsString()
-  passwordAgain: string;
+  @ValidateNested({ each: true })
+  @Type(() => PasswordDto)
+  password: PasswordDto;
 }

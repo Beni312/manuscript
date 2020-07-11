@@ -1,8 +1,8 @@
-import { AcademicDiscipline } from '../model';
-import { ApplicationService } from '../service/ApplicationService';
 import { controller, httpGet, httpPost, interfaces } from 'inversify-express-utils';
 import { inject } from 'inversify';
-import { SystemDataDto } from '../model/dto/SystemDataDto';
+import { AcademicDiscipline } from '../model';
+import { ApplicationService } from '../service/ApplicationService';
+import { SystemDataDto } from '../model/response/SystemDataDto';
 
 @controller('/application')
 export class ApplicationController implements interfaces.Controller {

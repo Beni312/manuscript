@@ -1,3 +1,8 @@
+<div class="row d-flex justify-content-end">
+  <button class="mb-2 mr-4 md-36" mat-icon-button (click)="openCreateUserModal()" matTooltip="Create">
+    <mat-icon class="material-icons md-36" aria-label="Submit">add_box</mat-icon>
+  </button>
+</div>
 <div class="mat-elevation-z8">
   <mat-table [dataSource]="dataSource" matSort class="text-left">
 
@@ -34,11 +39,14 @@
     <ng-container matColumnDef="actions">
       <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'justify-content-center pr-0'"> Actions </mat-header-cell>
       <mat-cell *matCellDef="let element" class="ignore" [ngClass]="'pr-0'">
-        <button mat-icon-button (click)="openChangeUserPasswordModal(element.id)" matTooltip="Edit">
+        <button mat-icon-button (click)="openChangeUserPasswordModal(element)" matTooltip="Change password">
           <mat-icon aria-label="Edit">edit</mat-icon>
         </button>
-        <button mat-icon-button (click)="openCreateUserModal(element.id)" matTooltip="Submit">
-          <mat-icon aria-label="Submit">present_to_all</mat-icon>
+        <button *ngIf="element.status === 'OK'" mat-icon-button (click)="disableUser(element)" matTooltip="Disable user">
+          <mat-icon aria-label="Edit">visibility_off</mat-icon>
+        </button>
+        <button *ngIf="element.status !== 'OK'" mat-icon-button (click)="enableUser(element)" matTooltip="Enable user">
+          <mat-icon aria-label="Edit">visibility</mat-icon>
         </button>
       </mat-cell>
     </ng-container>

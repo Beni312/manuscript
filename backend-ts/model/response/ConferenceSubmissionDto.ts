@@ -1,4 +1,4 @@
-import { AuthorDto } from './AuthorDto';
+import { AuthorDto } from '../dto/AuthorDto';
 import { SubmissionStatus } from '../enum/SubmissionStatus';
 
 export class ConferenceSubmissionDto {

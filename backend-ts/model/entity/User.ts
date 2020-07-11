@@ -9,7 +9,12 @@ import { UserAlias } from './UserAlias';
 import { UserStatus } from './UserStatus';
 
 @Table({
-  modelName: 'user'
+  modelName: 'user',
+  defaultScope: {include: [{
+      model: Role,
+      as: 'role'
+    }]
+  }
 })
 export class User extends BaseModel<User> {
 

@@ -12,12 +12,19 @@ export class UserManagementService {
     return this.httpClient.put('/user-management', user);
   }
 
-  changeUserPassword(changePassword: any) {
-    return this.httpClient.post('/user-management/change-password', changePassword);
+  changeUserPassword(userId: number, password: string, passwordAgain: string) {
+    return this.httpClient.post('/user-management/change-password', {
+      userId: userId,
+      password: password,
+      passwordAgain: passwordAgain
+    });
   }
 
-  changeUserStatus(changeUserStatusCommand): Observable<any> {
-    return this.httpClient.post('/user-management/change-user-status', changeUserStatusCommand);
+  changeUserStatus(userId: number, statusId: number): Observable<any> {
+    return this.httpClient.post('/user-management/change-user-status', {
+      userId: userId,
+      statusId: statusId
+    });
   }
 
   getUsers() {

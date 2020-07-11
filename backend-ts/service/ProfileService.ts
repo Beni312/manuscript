@@ -8,10 +8,10 @@ import { ImageResizer } from './ImageResizer';
 import { InternalServerError } from '../model/error/InternalServerError';
 import { PasswordRepository } from '../repository/PasswordRepository';
 import { PasswordService } from './PasswordService';
-import { ProfilePreload } from '../model/dto/ProfilePreload';
 import { SavePersonalDataCommand } from '../model/command/SavePersonalDataCommand';
 import { UserInfo } from '../model/dto/UserInfo';
 import { UserRepository } from '../repository/UserRepository';
+import { UserDto } from '../model/dto/UserDto';
 
 @injectable()
 export class ProfileService {
@@ -31,8 +31,8 @@ export class ProfileService {
   @inject(PasswordService.name)
   private passwordService: PasswordService;
 
-  public async getPreload(userId): Promise<ProfilePreload> {
-    return new ProfilePreload(await this.userRepository.findUserProfile(userId));
+  public async getPreload(userId): Promise<UserDto> {
+    return new UserDto(await this.userRepository.findUserProfile(userId), true);
   }
 
   public async saveProfile(userId, savePersonalDataCommand: SavePersonalDataCommand): Promise<User> {

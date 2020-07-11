@@ -41,7 +41,7 @@
       </div>
       <div class="mesgs col-8">
         <div class="msg_history" #messageHistory>
-          <div *ngFor="let message of messages" [ngClass]="message.incoming ? 'incoming_msg d-flex' : 'outgoing_msg'">
+          <div *ngFor="let message of actualMessages" [ngClass]="message.incoming ? 'incoming_msg d-flex' : 'outgoing_msg'">
             <div *ngIf="message.incoming" class="incoming_msg_img">
               <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil">
             </div>

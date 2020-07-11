@@ -1,14 +1,15 @@
 import { inject } from 'inversify';
 import { isAuthenticated } from '../decorator/IsAuthenticated';
 import { validateBody } from '../decorator/ValidateBody';
-import { AddUserCommand } from '../model/command/AddUserCommand';
+import { AdminChangePasswordCommand } from '../model/command/AdminChangePasswordCommand';
 import { BaseHttpController, controller, httpGet, httpPost, httpPut, interfaces, requestBody } from 'inversify-express-utils';
-import { BasicResponse } from '../model/dto/BasicResponse';
-import { ChangePasswordCommand } from '../model/command/ChangePasswordCommand';
+import { BasicResponse } from '../model/response/BasicResponse';
 import { ChangeUserStatusCommand } from '../model/command/ChangeUserStatusCommand';
 import { PasswordService } from '../service/PasswordService';
 import { UserManagementService } from '../service/UserManagementService';
-import { UserManagementDto } from '../model/dto/UserManagementDto';
+import { UserManagementDto } from '../model/response/UserManagementDto';
+import { RegistrationCommand } from '../model/command/RegistrationCommand';
+import { RegistrationCommandValidator } from '../validator/RegistrationCommandValidator';
 
 @controller('/user-management')
 export class UserManagementController extends BaseHttpController implements interfaces.Controller {
@@ -26,18 +27,17 @@ export class UserManagementController extends BaseHttpController implements inte
   }
 
   @isAuthenticated('ADMIN')
-  @httpPut('')
-  @validateBody(AddUserCommand)
-  async addUser(@requestBody() addUserCommand: AddUserCommand): Promise<BasicResponse> {
-    await this.userManagementService.createUser(addUserCommand);
-    return new BasicResponse()
-      .withSuccessMessage('User successfully created');
+  @httpPut('', RegistrationCommandValidator.name)
+  @validateBody(RegistrationCommand)
+  async addUser(@requestBody() addUserCommand: RegistrationCommand): Promise<UserManagementDto> {
+    const user = await this.userManagementService.createUser(addUserCommand);
+    return new UserManagementDto(user);
   }
 
   @isAuthenticated('ADMIN')
-  @httpPost('/change-user-password')
-  @validateBody(ChangePasswordCommand)
-  async changeUserPassword(@requestBody() changePasswordCommand: ChangePasswordCommand): Promise<BasicResponse> {
+  @httpPost('/change-password')
+  @validateBody(AdminChangePasswordCommand)
+  async changeUserPassword(@requestBody() changePasswordCommand: AdminChangePasswordCommand): Promise<BasicResponse> {
     await this.passwordService.modifyPassword(changePasswordCommand.userId, changePasswordCommand.password.password);
     return new BasicResponse()
       .withSuccessMessage('User password changed successfully!');

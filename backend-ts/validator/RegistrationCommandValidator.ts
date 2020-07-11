@@ -30,8 +30,8 @@ export class RegistrationCommandValidator extends BaseValidator {
         }
         next();
       })
-      .catch(error => {
-        next(error);
+      .catch(() => {
+        next();
       });
   }
 }

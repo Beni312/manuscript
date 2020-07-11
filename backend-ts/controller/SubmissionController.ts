@@ -4,9 +4,8 @@ import { inject } from 'inversify';
 import { isAuthenticated } from '../decorator/IsAuthenticated';
 import { validateBody } from '../decorator/ValidateBody';
 import { upload } from '../middleware/upload';
-import { AuthorDto } from '../model/dto/AuthorDto';
-import { BasicResponse } from '../model/dto/BasicResponse';
-import { EditSubmissionDto } from '../model/dto/EditSubmissionDto';
+import { BasicResponse } from '../model/response/BasicResponse';
+import { EditSubmissionDto } from '../model/response/EditSubmissionDto';
 import { HasPermissionToDeleteSubmissionValidator } from '../validator/HasPermissionToDeleteSubmissionValidator';
 import { HasPermissionToSubmitSubmissionValidator } from '../validator/HasPermissionToSubmitSubmissionValidator';
 import { ManuscriptService } from '../service/ManuscriptService';
@@ -18,7 +17,7 @@ import { SubmissionRemoveCommand } from '../model/command/SubmissionRemoveComman
 import { SubmissionService } from '../service/SubmissionService';
 import { SubmissionSubmitCommand } from '../model/command/SubmissionSubmitCommand';
 import { PendingManuscriptDto } from '../model/dto/PendingManuscriptDto';
-import { UpsertSubmissionPreload } from '../model/dto/UpsertSubmissionPreload';
+import { UpsertSubmissionPreload } from '../model/response/UpsertSubmissionPreload';
 
 @controller('/submission')
 export class SubmissionController {
@@ -28,12 +27,6 @@ export class SubmissionController {
 
   @inject(ManuscriptService.name)
   private manuscriptService: ManuscriptService;
-
-  @isAuthenticated()
-  @httpGet('/get-authors')
-  async getAuthors(): Promise<AuthorDto[]> {
-    return await this.submissionService.getAuthors();
-  }
 
   @isAuthenticated()
   @httpGet('/preload')

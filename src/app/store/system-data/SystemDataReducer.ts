@@ -4,7 +4,7 @@ import { SystemDataActions, SystemDataActionTypes } from './SystemDataActions';
 
 export interface SystemDataState {
   academicDisciplines: AcademicDiscipline[];
-  roles?: Role[];
+  roles: Role[];
 }
 
 export const initialState: SystemDataState = {
@@ -14,9 +14,12 @@ export const initialState: SystemDataState = {
 
 export function systemDataReducer(state: SystemDataState = initialState, action: SystemDataActions): SystemDataState {
   switch (action.type) {
-    case SystemDataActionTypes.INIT_SYSTEM_DATA: return {
-      ...action.payload
-    };
+    case SystemDataActionTypes.INIT_SYSTEM_DATA:
+      return {
+        ...state,
+        academicDisciplines: action.payload.academicDisciplines,
+        roles: action.payload.roles
+      };
+    default: return state;
   }
 }
-

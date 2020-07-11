@@ -1,7 +1,7 @@
 import { IsEmail, Length } from 'class-validator';
 
 export class RegistrationCommandUserDto {
-  @Length(5, 50)
+  @Length(0, 50)
   title: string;
   @Length(2, 50)
   firstName: string;

@@ -1,12 +1,13 @@
 import { inject, injectable } from 'inversify';
-import { AddUserCommand } from '../model/command/AddUserCommand';
 import { PasswordService } from './PasswordService';
 import { RoleEnum } from '../model/enum/RoleEnum';
 import { RoleRepository } from '../repository/RoleRepository';
 import { User } from '../model';
 import { UserAliasRepository } from '../repository/UserAliasRepository';
-import { UserManagementDto } from '../model/dto/UserManagementDto';
+import { UserManagementDto } from '../model/response/UserManagementDto';
 import { UserRepository } from '../repository/UserRepository';
+import { RegistrationCommand } from '../model/command/RegistrationCommand';
+import { LoginRepository } from '../repository/LoginRepository';
 
 @injectable()
 export class UserManagementService {
@@ -23,6 +24,9 @@ export class UserManagementService {
   @inject(UserAliasRepository.name)
   private userAliasRepository: UserAliasRepository;
 
+  @inject(LoginRepository.name)
+  private loginRepository: LoginRepository;
+
   async getUsers(): Promise<UserManagementDto[]> {
     const users = await this.userRepository.findUsers();
     return users.map(user => new UserManagementDto(user));
@@ -32,24 +36,30 @@ export class UserManagementService {
     return this.userRepository.changeUserStatusById(userId, statusId);
   }
 
-  async createUser(command: AddUserCommand): Promise<User> {
+  async createUser(command: RegistrationCommand): Promise<User> {
     const role = await this.roleRepository._findOne({where: {name: RoleEnum.AUTHOR}});
-    const user = await this.userRepository.create({
+    const user: User = await this.userRepository.create({
       roleId: role.id,
-      title: command.title,
-      firstName: command.firstName,
-      lastName: command.lastName,
-      email: command.email
+      title: command.user.title,
+      firstName: command.user.firstName,
+      lastName: command.user.lastName,
+      email: command.user.email,
+      statusId: 1
     });
     await user.setAcademicDisciplines(command.academicDisciplines);
     await user.save();
 
     await this.userAliasRepository.create({
       userId: user.id,
-      username: command.username
+      username: command.user.username
     });
-    await this.passwordService.createPassword(user.id, command.password);
+    const password = await this.passwordService.createPassword(user.id, command.password.password);
 
-    return user;
+    await this.loginRepository.create({
+      username: command.user.username,
+      passwordId: password.id
+    });
+
+    return this.userRepository.findUserById(user.id);
   }
 }

@@ -63,7 +63,7 @@ export class UserRepository extends Repository<User> {
   changeUserStatusById(userId: number, statusId: number) {
     return this.updateByPk(userId, {
       statusId: statusId
-    })
+    });
   }
 
   findUsersByIds(userIds: number[]): Promise<User[]> {
@@ -73,6 +73,22 @@ export class UserRepository extends Repository<User> {
           [Op.in]: userIds
         }
       }
+    });
+  }
+
+  findUserById(userId: number): Promise<User> {
+    return this._findByPk(userId, {
+      include: [
+        {
+          model: UserAlias
+        },
+        {
+          model: Role
+        },
+        {
+          model: UserStatus
+        }
+      ]
     });
   }
 

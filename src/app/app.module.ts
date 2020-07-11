@@ -2,7 +2,7 @@ import { AuthenticationGuard } from './guards/authentication.guard';
 import { AppComponent } from './app.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { CoreModule } from './modules/core/core.module';
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { APP_INITIALIZER, ModuleWithProviders, NgModule } from '@angular/core';
 import { HttpErrorInterceptor } from './services/http.error.interceptor';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { JwtInterceptor } from './services/jwt.interceptor';
@@ -20,18 +20,10 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { systemDataReducer, SystemDataState } from './store/system-data/SystemDataReducer';
 import { SystemDataService } from './services/system-data.service';
 import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 export function systemDataProviderFactory(systemDataService: SystemDataService) {
-  return (): Promise<SystemDataState> => new Promise<SystemDataState>((resolve, reject) => {
-    systemDataService.getSystemData()
-      .toPromise()
-      .then((resp) => {
-        resolve(resp);
-      })
-      .catch(err => {
-        reject(err);
-      });
-  });
+  return (): Promise<void> => systemDataService.initSystemData();
 }
 
 const Routes: ModuleWithProviders = RouterModule.forRoot([
@@ -69,12 +61,22 @@ const Routes: ModuleWithProviders = RouterModule.forRoot([
     ToastrModule.forRoot(),
     UserModule,
     StoreModule.forRoot({}),
-    StoreModule.forFeature('systemData', systemDataReducer)
+    StoreModule.forFeature('systemData', systemDataReducer),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25, // Retains last 25 states
+      // logOnly: environment.production, // Restrict extension to log-only mode
+    })
   ],
   providers: [{provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'fill'}},
     MessageService,
     SocketService,
     ProgressSpinnerService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: systemDataProviderFactory,
+      deps: [SystemDataService],
+      multi: true
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ProgressInterceptor,

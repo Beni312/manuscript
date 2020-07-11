@@ -1,6 +1,6 @@
-import { AcademicDisciplineDto } from "./AcademicDisciplineDto";
-import { UserDto } from "../../model/dto/UserDto";
-import { User } from "../../model";
+import { AcademicDisciplineDto } from "../dto/AcademicDisciplineDto";
+import { UserDto } from "../dto/UserDto";
+import { User } from "../index";
 
 export class ProfilePreload {
 

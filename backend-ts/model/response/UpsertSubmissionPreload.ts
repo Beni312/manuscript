@@ -1,5 +1,5 @@
 import { AcademicDiscipline } from '..';
-import { AuthorDto } from './AuthorDto';
+import { AuthorDto } from '../dto/AuthorDto';
 
 export class UpsertSubmissionPreload {
   academicDisciplines: AcademicDiscipline[];

@@ -1,4 +1,4 @@
 import { createFeatureSelector } from '@ngrx/store';
-import { MessageState } from '../message/MessageReducer';
+import { SystemDataState } from './SystemDataReducer';
 
-export const getSystemData = createFeatureSelector<MessageState>('systemData');
+export const getSystemData = createFeatureSelector<SystemDataState>('systemData');

@@ -33,6 +33,7 @@ import { ManuscriptUploadModalComponent } from './components/submission/manuscri
 import { NgxFileDropModule } from 'ngx-file-drop';
 import { UserCreateComponent } from './components/user.management/user-create/user-create.component';
 import { ChangeUserPasswordComponent } from './components/user.management/change-user-password/change-user-password.component';
+import { userReducer } from '../../store/user/UserReducer';
 
 const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
   {
@@ -165,7 +166,8 @@ const SecureRoutes: ModuleWithProviders = RouterModule.forChild([
     SecureRoutes,
     SharedModule,
     TagInputModule,
-    StoreModule.forFeature('message', messageReducer)
+    StoreModule.forFeature('message', messageReducer),
+    StoreModule.forFeature('users', userReducer)
   ],
   declarations: [
     ConferenceComponent,

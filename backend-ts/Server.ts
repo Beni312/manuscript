@@ -18,6 +18,7 @@ import './controller/SubmissionController';
 import './controller/UserManagementController';
 import './controller/MessageController';
 import './controller/ManuscriptController';
+import './controller/UserController';
 
 import { AcademicDisciplineRepository } from './repository/AcademicDisciplineRepository';
 import { ApplicationService } from './service/ApplicationService';
@@ -35,6 +36,7 @@ import { ImageResizer } from './service/ImageResizer';
 import { InternalServerError } from './model/error/InternalServerError';
 import { InversifyExpressServer } from 'inversify-express-utils';
 import { KeywordRepository } from './repository/KeywordRepository';
+import { LoginRepository } from './repository/LoginRepository';
 import { ManuscriptService } from './service/ManuscriptService';
 import { ManuscriptRepository } from './repository/ManuscriptRepository';
 import { MessageService } from './service/MessageService';
@@ -57,6 +59,7 @@ import { UserRepository } from './repository/UserRepository';
 import { UpdateAcademicDisciplinesValidator } from './validator/UpdateAcademicDisciplinesValidator';
 import { UtilsService } from './service/UtilsService';
 import { UserAliasRepository } from './repository/UserAliasRepository';
+import { UserService } from './service/UserService';
 import { UserStatusRepository } from './repository/UserStatusRepository';
 
 export class Server {
@@ -102,6 +105,8 @@ export class Server {
     Server.container.bind<RegistrationService>(RegistrationService.name).to(RegistrationService);
     Server.container.bind<SubmissionService>(SubmissionService.name).to(SubmissionService);
     Server.container.bind<UserManagementService>(UserManagementService.name).to(UserManagementService);
+    Server.container.bind<UserService>(UserService.name).to(UserService);
+
     Server.container.bind<AcademicDisciplineRepository>(AcademicDisciplineRepository.name).to(AcademicDisciplineRepository);
     Server.container.bind<AuthorsAcademicDisciplineRepository>(AuthorsAcademicDisciplineRepository.name).to(AuthorsAcademicDisciplineRepository);
     Server.container.bind<KeywordRepository>(KeywordRepository.name).to(KeywordRepository);
@@ -113,6 +118,7 @@ export class Server {
     Server.container.bind<ConferenceRepository>(ConferenceRepository.name).to(ConferenceRepository);
     Server.container.bind<UserStatusRepository>(UserStatusRepository.name).to(UserStatusRepository);
     Server.container.bind<UserAliasRepository>(UserAliasRepository.name).to(UserAliasRepository);
+    Server.container.bind<LoginRepository>(LoginRepository.name).to(LoginRepository);
 
     Server.container.bind<AuthProvider>(AuthProvider.name).to(AuthProvider);
     Server.container.bind<PasswordService>(PasswordService.name).to(PasswordService);

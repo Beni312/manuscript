@@ -1,15 +1,13 @@
-import { Author } from '../../models/author';
 import { Message } from '../../models/message';
 import { MessageActions, MessageActionTypes } from './MessageActions';
+import { Messages } from '../../modules/user/components/messages/messages.component';
 
 export interface MessageState {
-  messages: Map<number, Array<Message>>;
-  users: Author[];
+  messages: Messages;
 }
 
 const initialState: MessageState = {
-  messages: new Map<number, Array<Message>>(),
-  users: []
+  messages: new Messages()
 };
 
 export function messageReducer(state: MessageState = initialState, action: MessageActions): MessageState {
@@ -37,8 +35,8 @@ export function messageReducer(state: MessageState = initialState, action: Messa
     case MessageActionTypes.InitUserMessages:
       return {
         ...state,
-        messages: action.payload.messages,
-        users: action.payload.users
+        messages: action.payload
       };
+    default: return state;
   }
 }

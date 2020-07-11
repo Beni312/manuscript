@@ -1,5 +1,5 @@
-import { AcademicDisciplineDto } from './AcademicDisciplineDto';
-import { RoleDto } from './RoleDto';
+import { AcademicDisciplineDto } from '../dto/AcademicDisciplineDto';
+import { RoleDto } from '../dto/RoleDto';
 
 export class SystemDataDto {
   academicDisciplines: Array<AcademicDisciplineDto>;

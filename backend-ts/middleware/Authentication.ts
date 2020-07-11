@@ -1,6 +1,6 @@
 import * as jwt from 'jsonwebtoken';
 import * as passport from 'passport';
-import { PreloadDto } from '../model/dto/PreloadDto';
+import { PreloadDto } from '../model/response/PreloadDto';
 
 export const authentication = () => {
   return async (req, res, next) => {

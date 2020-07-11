@@ -1,8 +1,7 @@
 import { inject, injectable } from 'inversify';
 import { AcademicDiscipline, Conference, Keyword, Submission, User } from '../model';
 import { ApplicationService } from './ApplicationService';
-import { AuthorDto } from '../model/dto/AuthorDto';
-import { EditSubmissionDto } from '../model/dto/EditSubmissionDto';
+import { EditSubmissionDto } from '../model/response/EditSubmissionDto';
 import { InternalServerError } from '../model/error/InternalServerError';
 import { KeywordRepository } from '../repository/KeywordRepository';
 import { Manuscript } from '../model/entity/Manuscript';
@@ -17,8 +16,9 @@ import { SubmissionPreload } from '../model/dto/SubmissionPreload';
 import { SubmissionRepository } from '../repository/SubmissionRepository';
 import { SubmissionStatus, SubmissionStatusEnumerator } from '../model/enum/SubmissionStatus';
 import { UserInfo } from '../model/dto/UserInfo';
-import { UpsertSubmissionPreload } from '../model/dto/UpsertSubmissionPreload';
+import { UpsertSubmissionPreload } from '../model/response/UpsertSubmissionPreload';
 import { UserRepository } from '../repository/UserRepository';
+import { UserService } from './UserService';
 
 @injectable()
 export class SubmissionService {
@@ -34,6 +34,9 @@ export class SubmissionService {
 
   @inject(KeywordRepository.name)
   private keywordRepository: KeywordRepository;
+
+  @inject(UserService.name)
+  private userService: UserService;
 
   editableSubmissionStatuses = [
     SubmissionStatus.CREATED,
@@ -151,12 +154,6 @@ export class SubmissionService {
     return false;
   }
 
-  async getAuthors(): Promise<AuthorDto[]> {
-    return (await this.userRepository.findAuthors())
-      .map(user => new AuthorDto(user)
-      );
-  }
-
   async remove(submissionId): Promise<void> {
     await this.submissionRepository.deleteByPk(submissionId);
   }
@@ -250,7 +247,7 @@ export class SubmissionService {
   }
 
   async getUpsertSubmissionPreload(): Promise<UpsertSubmissionPreload> {
-    return new UpsertSubmissionPreload(await this.applicationService.getAcademicDisciplines(), await this.getAuthors());
+    return new UpsertSubmissionPreload(await this.applicationService.getAcademicDisciplines(), await this.userService.getAuthors());
   }
 
   async submitSubmission(submissionId: number) {
